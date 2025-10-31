@@ -1,0 +1,16 @@
+# Build artifacts
+/target/
+/dist/
+/coverage/
+
+# Node
+/node_modules/
+
+# Anchor
+/.anchor/
+
+# OS
+.DS_Store
+
+# Env
+.env

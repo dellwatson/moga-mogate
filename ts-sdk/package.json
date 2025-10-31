@@ -1,0 +1,14 @@
+{
+  "name": "@moga/rwa-raffle-sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "TypeScript SDK for RWA Raffle (bun compatible)",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun"
+  },
+  "peerDependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/web3.js": "^1.95.3"
+  }
+}

@@ -1,0 +1,9 @@
+[workspace]
+members = [
+  "programs/rwa_raffle",
+  "encrypted-ixs",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
