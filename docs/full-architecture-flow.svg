@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1200" viewBox="0 0 1400 1200">
+  <defs>
+    <style>
+      .box { fill:#ffffff; stroke:#111827; stroke-width:2; }
+      .box-primary { fill:#3b82f6; stroke:#1e40af; stroke-width:2; }
+      .box-success { fill:#10b981; stroke:#059669; stroke-width:2; }
+      .box-warning { fill:#f59e0b; stroke:#d97706; stroke-width:2; }
+      .box-danger { fill:#ef4444; stroke:#dc2626; stroke-width:2; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; fill:#111827; }
+      .title-white { font-family: Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; fill:#ffffff; }
+      .text { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#374151; }
+      .text-white { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#ffffff; }
+      .text-small { font-family: Arial, Helvetica, sans-serif; font-size:11px; font-weight:400; fill:#6b7280; }
+      .line { stroke:#6b7280; stroke-width:2; fill:none; }
+      .line-thick { stroke:#111827; stroke-width:3; fill:none; }
+      .header { font-family: Arial, Helvetica, sans-serif; font-size:24px; font-weight:700; fill:#111827; }
+      .section-header { font-family: Arial, Helvetica, sans-serif; font-size:18px; font-weight:600; fill:#1e40af; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280" />
+    </marker>
+    <marker id="arrow-thick" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L12,4 z" fill="#111827" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="header" x="500" y="40">RWA Raffle - Full Architecture Flow</text>
+  
+  <!-- LAYER 1: FRONTEND & CLIENT -->
+  <text class="section-header" x="40" y="80">Layer 1: Client &amp; Frontend</text>
+  <rect class="box-primary" x="40" y="100" width="280" height="120" rx="8" ry="8" />
+  <text class="title-white" x="60" y="125">Web/Mobile Client</text>
+  <text class="text-white" x="60" y="150">• TypeScript SDK (Bun)</text>
+  <text class="text-white" x="60" y="170">• @solana/web3.js</text>
+  <text class="text-white" x="60" y="190">• @coral-xyz/anchor</text>
+  <text class="text-white" x="60" y="210">• Wallet integration</text>
+
+  <!-- LAYER 2: SOLANA PROGRAM -->
+  <text class="section-header" x="40" y="260">Layer 2: Solana Program (Anchor)</text>
+  
+  <!-- Main Program Box -->
+  <rect class="box" x="40" y="280" width="600" height="280" rx="8" ry="8" />
+  <text class="title" x="60" y="305">RWA Raffle Program</text>
+  
+  <!-- Program Components -->
+  <rect class="box-primary" x="60" y="320" width="260" height="220" rx="6" ry="6" />
+  <text class="title-white" x="75" y="340">Core Instructions</text>
+  <text class="text-white" x="75" y="365">1. initialize_raffle</text>
+  <text class="text-white" x="75" y="385">2. deposit / deposit_compressed</text>
+  <text class="text-white" x="75" y="405">3. request_draw</text>
+  <text class="text-white" x="75" y="425">4. request_draw_arcium</text>
+  <text class="text-white" x="75" y="445">5. draw_callback (Arcium)</text>
+  <text class="text-white" x="75" y="465">6. settle_draw</text>
+  <text class="text-white" x="75" y="485">7. claim_refund</text>
+  <text class="text-white" x="75" y="505">8. claim_win</text>
+  <text class="text-white" x="75" y="525">9. set_prize_nft / claim_prize</text>
+
+  <rect class="box-success" x="350" y="320" width="270" height="100" rx="6" ry="6" />
+  <text class="title-white" x="365" y="340">State Accounts</text>
+  <text class="text-white" x="365" y="365">• Raffle (PDA)</text>
+  <text class="text-white" x="365" y="385">• Ticket (PDA or Compressed)</text>
+  <text class="text-white" x="365" y="405">• Escrow ATA (owned by Raffle)</text>
+
+  <rect class="box-warning" x="350" y="440" width="270" height="100" rx="6" ry="6" />
+  <text class="title-white" x="365" y="460">Dependencies</text>
+  <text class="text-white" x="365" y="485">• anchor-lang 0.31.1</text>
+  <text class="text-white" x="365" y="505">• anchor-spl 0.31.1</text>
+  <text class="text-white" x="365" y="525">• Token Interface (SPL + Token-2022)</text>
+
+  <!-- LAYER 3: INTEGRATIONS -->
+  <text class="section-header" x="40" y="600">Layer 3: Protocol Integrations</text>
+  
+  <!-- Arcium MPC -->
+  <rect class="box" x="40" y="620" width="380" height="200" rx="8" ry="8" />
+  <text class="title" x="60" y="645">Arcium MPC (Verifiable Randomness)</text>
+  <text class="text" x="60" y="675">Dependencies:</text>
+  <text class="text-small" x="60" y="695">• arcium-anchor 0.3.0</text>
+  <text class="text-small" x="60" y="710">• arcium-client 0.3.0</text>
+  <text class="text-small" x="60" y="725">• arcium-macros 0.3.0</text>
+  <text class="text-small" x="60" y="740">• arcis-imports 0.3.0 (encrypted-ixs)</text>
+  
+  <text class="text" x="60" y="765">Flow:</text>
+  <text class="text-small" x="60" y="780">1. init_draw_comp_def() - Setup</text>
+  <text class="text-small" x="60" y="795">2. queue_computation() - Request RNG</text>
+  <text class="text-small" x="60" y="810">3. draw_callback() - Settle winner</text>
+
+  <!-- Light Protocol -->
+  <rect class="box" x="450" y="620" width="380" height="200" rx="8" ry="8" />
+  <text class="title" x="470" y="645">Light Protocol (ZK Compression)</text>
+  <text class="text" x="470" y="675">Dependencies:</text>
+  <text class="text-small" x="470" y="695">• light-sdk 0.16.0</text>
+  <text class="text-small" x="470" y="710">• light-hasher 5.0.0</text>
+  
+  <text class="text" x="470" y="735">Features:</text>
+  <text class="text-small" x="470" y="750">• Compressed ticket accounts</text>
+  <text class="text-small" x="470" y="765">• Merkle tree state proofs</text>
+  <text class="text-small" x="470" y="780">• Batch claim operations</text>
+  <text class="text-small" x="470" y="795">• Scalable to 1000s of participants</text>
+  <text class="text-small" x="470" y="810">• V1 (mainnet) / V2 (dev)</text>
+
+  <!-- LAYER 4: TOKEN LAYER -->
+  <text class="section-header" x="40" y="860">Layer 4: Token &amp; Asset Layer</text>
+  
+  <rect class="box-success" x="40" y="880" width="280" height="120" rx="8" ry="8" />
+  <text class="title-white" x="60" y="905">MOGA Token</text>
+  <text class="text-white" x="60" y="930">• SPL Token OR Token-2022</text>
+  <text class="text-white" x="60" y="950">• Flexible decimals</text>
+  <text class="text-white" x="60" y="970">• 1 whole token = 1 ticket</text>
+  <text class="text-white" x="60" y="990">• Held in escrow ATA</text>
+
+  <rect class="box-warning" x="350" y="880" width="280" height="120" rx="8" ry="8" />
+  <text class="title-white" x="370" y="905">Prize NFT (Optional)</text>
+  <text class="text-white" x="370" y="930">• NFT (decimals = 0)</text>
+  <text class="text-white" x="370" y="950">• Escrowed to raffle PDA</text>
+  <text class="text-white" x="370" y="970">• Transferred to winner</text>
+  <text class="text-white" x="370" y="990">• RWA tokenization ready</text>
+
+  <!-- LAYER 5: OFFCHAIN -->
+  <text class="section-header" x="40" y="1040">Layer 5: Offchain Infrastructure</text>
+  
+  <rect class="box-danger" x="40" y="1060" width="380" height="100" rx="8" ry="8" />
+  <text class="title-white" x="60" y="1085">Offchain Worker</text>
+  <text class="text-white" x="60" y="1110">• Event listener (program logs)</text>
+  <text class="text-white" x="60" y="1130">• Orchestrates Arcium computations</text>
+  <text class="text-white" x="60" y="1150">• Manages Light proof generation</text>
+
+  <!-- RIGHT SIDE: FLOW ARROWS -->
+  <text class="section-header" x="900" y="80">Data Flow</text>
+  
+  <!-- Flow 1: Client to Program -->
+  <line class="line-thick" x1="180" y1="220" x2="180" y2="280" marker-end="url(#arrow-thick)" />
+  <text class="text" x="190" y="255">Transactions</text>
+  
+  <!-- Flow 2: Program to Arcium -->
+  <line class="line-thick" x1="230" y1="560" x2="230" y2="620" marker-end="url(#arrow-thick)" />
+  <text class="text" x="240" y="595">RNG Request</text>
+  
+  <!-- Flow 3: Arcium Callback -->
+  <path class="line-thick" d="M 230 620 Q 150 600 150 560" marker-end="url(#arrow-thick)" />
+  <text class="text" x="100" y="590">Callback</text>
+  
+  <!-- Flow 4: Program to Light -->
+  <line class="line-thick" x1="450" y1="560" x2="640" y2="620" marker-end="url(#arrow-thick)" />
+  <text class="text" x="520" y="595">Compress</text>
+  
+  <!-- Flow 5: Token Escrow -->
+  <line class="line-thick" x1="340" y1="560" x2="180" y2="880" marker-end="url(#arrow-thick)" />
+  <text class="text" x="250" y="720">Escrow</text>
+  
+  <!-- Flow 6: Worker monitoring -->
+  <line class="line-thick" x1="230" y1="560" x2="230" y2="1060" marker-end="url(#arrow-thick)" />
+  <text class="text" x="240" y="810">Events</text>
+
+  <!-- Legend -->
+  <rect class="box" x="900" y="120" width="450" height="200" rx="8" ry="8" />
+  <text class="title" x="920" y="145">Architecture Summary</text>
+  <text class="text" x="920" y="175">• NO Pinocchio needed - Using Anchor 0.31.1</text>
+  <text class="text" x="920" y="195">• Anchor + Metaplex (future) + Arcium + Light</text>
+  <text class="text" x="920" y="215">• Modular design with separate crates</text>
+  <text class="text" x="920" y="235">• Token Interface supports SPL + Token-2022</text>
+  <text class="text" x="920" y="255">• Compressed accounts for scalability</text>
+  <text class="text" x="920" y="275">• Verifiable randomness via Arcium MPC</text>
+  <text class="text" x="920" y="295">• Ready for RWA NFT prizes</text>
+</svg>

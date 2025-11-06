@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <defs>
+    <style>
+      .box { fill:#ffffff; stroke:#111827; stroke-width:2; }
+      .pda-box { fill:#8b5cf6; stroke:#6d28d9; stroke-width:3; }
+      .derive-box { fill:#06b6d4; stroke:#0891b2; stroke-width:2; }
+      .sign-box { fill:#f59e0b; stroke:#d97706; stroke-width:2; }
+      .retrieve-box { fill:#10b981; stroke:#059669; stroke-width:2; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; fill:#ffffff; text-anchor:middle; }
+      .title-dark { font-family: Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; fill:#111827; text-anchor:middle; }
+      .text { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#ffffff; }
+      .text-dark { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#374151; }
+      .text-small { font-family: Arial, Helvetica, sans-serif; font-size:11px; font-weight:400; fill:#ffffff; }
+      .code { font-family: 'Courier New', monospace; font-size:11px; font-weight:400; fill:#ffffff; }
+      .header { font-family: Arial, Helvetica, sans-serif; font-size:28px; font-weight:700; fill:#111827; text-anchor:middle; }
+      .section { font-family: Arial, Helvetica, sans-serif; font-size:20px; font-weight:600; fill:#6d28d9; }
+      .line { stroke:#6b7280; stroke-width:2; fill:none; }
+      .line-thick { stroke:#111827; stroke-width:3; fill:none; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280" />
+    </marker>
+    <marker id="arrow-thick" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L12,4 z" fill="#111827" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="header" x="800" y="40">PDA Operations - Derivation, Retrieval &amp; Signing</text>
+
+  <!-- SECTION 1: PDA ACCOUNTS -->
+  <text class="section" x="40" y="80">1. PDA Account Types</text>
+
+  <!-- Raffle PDA -->
+  <rect class="pda-box" x="40" y="100" width="450" height="180" rx="8" ry="8" />
+  <text class="title" x="265" y="130">Raffle PDA</text>
+  <text class="text" x="60" y="160">Seeds:</text>
+  <text class="code" x="60" y="180">["raffle", mint_pubkey, organizer_pubkey]</text>
+  <text class="text" x="60" y="210">Derivation:</text>
+  <text class="code" x="60" y="230">#[account(</text>
+  <text class="code" x="70" y="245">  seeds = [RAFFLE_SEED, mint.key().as_ref(),</text>
+  <text class="code" x="70" y="260">           organizer.key().as_ref()], bump</text>
+  <text class="code" x="60" y="275">)]</text>
+
+  <!-- Ticket PDA -->
+  <rect class="pda-box" x="520" y="100" width="500" height="180" rx="8" ry="8" />
+  <text class="title" x="770" y="130">Ticket PDA</text>
+  <text class="text" x="540" y="160">Seeds:</text>
+  <text class="code" x="540" y="180">["ticket", raffle_pubkey, owner_pubkey, start_index_le8]</text>
+  <text class="text" x="540" y="210">Derivation:</text>
+  <text class="code" x="540" y="230">#[account(</text>
+  <text class="code" x="550" y="245">  seeds = [TICKET_SEED, raffle.key().as_ref(),</text>
+  <text class="code" x="550" y="260">           payer.key().as_ref(), &amp;start_index.to_le_bytes()],</text>
+  <text class="code" x="550" y="275">  bump</text>
+  <text class="code" x="540" y="290">)]</text>
+
+  <!-- Light CPI Signer -->
+  <rect class="pda-box" x="1050" y="100" width="500" height="180" rx="8" ry="8" />
+  <text class="title" x="1300" y="130">Light CPI Signer PDA</text>
+  <text class="text" x="1070" y="160">Seeds:</text>
+  <text class="code" x="1070" y="180">Derived from program ID</text>
+  <text class="text" x="1070" y="210">Derivation:</text>
+  <text class="code" x="1070" y="230">pub const LIGHT_CPI_SIGNER: CpiSigner =</text>
+  <text class="code" x="1080" y="245">  derive_light_cpi_signer!(</text>
+  <text class="code" x="1090" y="260">    "RwaRafLe1111111111111111111111111111111111111"</text>
+  <text class="code" x="1080" y="275">  );</text>
+
+  <!-- SECTION 2: PDA OPERATIONS BY INSTRUCTION -->
+  <text class="section" x="40" y="330">2. PDA Operations by Instruction</text>
+
+  <!-- Initialize Raffle -->
+  <rect class="derive-box" x="40" y="360" width="480" height="140" rx="8" ry="8" />
+  <text class="title" x="280" y="390">initialize_raffle</text>
+  <text class="text" x="60" y="420">PDA Derived:</text>
+  <text class="text-small" x="70" y="440">✓ Raffle PDA (created with init)</text>
+  <text class="text" x="60" y="470">PDA Retrieved:</text>
+  <text class="text-small" x="70" y="490">✓ None (first time creation)</text>
+
+  <!-- Deposit -->
+  <rect class="derive-box" x="550" y="360" width="480" height="140" rx="8" ry="8" />
+  <text class="title" x="790" y="390">deposit</text>
+  <text class="text" x="570" y="420">PDA Derived:</text>
+  <text class="text-small" x="580" y="440">✓ Ticket PDA (created with init)</text>
+  <text class="text" x="570" y="470">PDA Retrieved:</text>
+  <text class="text-small" x="580" y="490">✓ Raffle PDA (mut, for counter updates)</text>
+
+  <!-- Deposit Compressed -->
+  <rect class="derive-box" x="1060" y="360" width="500" height="140" rx="8" ry="8" />
+  <text class="title" x="1310" y="390">deposit_compressed</text>
+  <text class="text" x="1080" y="420">PDA Derived:</text>
+  <text class="text-small" x="1090" y="440">✓ Compressed address (Light Protocol)</text>
+  <text class="text-small" x="1090" y="460">✓ Light CPI Signer (for signing)</text>
+  <text class="text" x="1080" y="485">PDA Retrieved:</text>
+  <text class="text-small" x="1090" y="505">✓ Raffle PDA (mut)</text>
+
+  <!-- Claim Refund -->
+  <rect class="sign-box" x="40" y="530" width="480" height="160" rx="8" ry="8" />
+  <text class="title" x="280" y="560">claim_refund</text>
+  <text class="text" x="60" y="590">PDA Retrieved:</text>
+  <text class="text-small" x="70" y="610">✓ Raffle PDA (mut, needs signing authority)</text>
+  <text class="text-small" x="70" y="630">✓ Ticket PDA (mut, to mark refunded)</text>
+  <text class="text" x="60" y="660">PDA Signing:</text>
+  <text class="text-small" x="70" y="680">✓ Raffle PDA signs token transfer from escrow</text>
+
+  <!-- Claim Win -->
+  <rect class="retrieve-box" x="550" y="530" width="480" height="160" rx="8" ry="8" />
+  <text class="title" x="790" y="560">claim_win</text>
+  <text class="text" x="570" y="590">PDA Retrieved:</text>
+  <text class="text-small" x="580" y="610">✓ Raffle PDA (immutable, check winner)</text>
+  <text class="text-small" x="580" y="630">✓ Ticket PDA (mut, mark claimed_win)</text>
+  <text class="text" x="570" y="660">PDA Signing:</text>
+  <text class="text-small" x="580" y="680">✓ None (no token transfer)</text>
+
+  <!-- Claim Prize -->
+  <rect class="sign-box" x="1060" y="530" width="500" height="160" rx="8" ry="8" />
+  <text class="title" x="1310" y="560">claim_prize</text>
+  <text class="text" x="1080" y="590">PDA Retrieved:</text>
+  <text class="text-small" x="1090" y="610">✓ Raffle PDA (mut, mark prize_claimed)</text>
+  <text class="text-small" x="1090" y="630">✓ Ticket PDA (check claimed_win)</text>
+  <text class="text" x="1080" y="660">PDA Signing:</text>
+  <text class="text-small" x="1090" y="680">✓ Raffle PDA signs NFT transfer to winner</text>
+
+  <!-- SECTION 3: PDA SIGNING EXAMPLES -->
+  <text class="section" x="40" y="730">3. PDA Signing Patterns</text>
+
+  <!-- Signing Pattern 1 -->
+  <rect class="box" x="40" y="760" width="730" height="300" rx="8" ry="8" />
+  <text class="title-dark" x="405" y="790">Pattern 1: Raffle PDA Signs Token Transfer</text>
+  <text class="text-dark" x="60" y="820" text-anchor="start">Used in: claim_refund, claim_prize</text>
+  
+  <text class="code" x="60" y="850" text-anchor="start" fill="#374151">// Derive signer seeds</text>
+  <text class="code" x="60" y="865" text-anchor="start" fill="#374151">let seeds: &amp;[&amp;[u8]] = &amp;[</text>
+  <text class="code" x="70" y="880" text-anchor="start" fill="#374151">    RAFFLE_SEED,</text>
+  <text class="code" x="70" y="895" text-anchor="start" fill="#374151">    raffle.mint.as_ref(),</text>
+  <text class="code" x="70" y="910" text-anchor="start" fill="#374151">    raffle.organizer.as_ref(),</text>
+  <text class="code" x="70" y="925" text-anchor="start" fill="#374151">    &amp;[raffle.bump],  // ← Stored bump</text>
+  <text class="code" x="60" y="940" text-anchor="start" fill="#374151">];</text>
+  <text class="code" x="60" y="955" text-anchor="start" fill="#374151">let signer = &amp;[seeds];</text>
+  
+  <text class="code" x="60" y="985" text-anchor="start" fill="#374151">// Use PDA as authority</text>
+  <text class="code" x="60" y="1000" text-anchor="start" fill="#374151">token::transfer_checked(</text>
+  <text class="code" x="70" y="1015" text-anchor="start" fill="#374151">    CpiContext::new_with_signer(cpi_program, cpi_accounts, signer),</text>
+  <text class="code" x="70" y="1030" text-anchor="start" fill="#374151">    amount, decimals</text>
+  <text class="code" x="60" y="1045" text-anchor="start" fill="#374151">)?;</text>
+
+  <!-- Signing Pattern 2 -->
+  <rect class="box" x="800" y="760" width="760" height="300" rx="8" ry="8" />
+  <text class="title-dark" x="1180" y="790">Pattern 2: Light CPI Signer for Compressed Accounts</text>
+  <text class="text-dark" x="820" y="820" text-anchor="start">Used in: deposit_compressed</text>
+  
+  <text class="code" x="820" y="850" text-anchor="start" fill="#374151">// Constant CPI signer derived at compile time</text>
+  <text class="code" x="820" y="865" text-anchor="start" fill="#374151">pub const LIGHT_CPI_SIGNER: CpiSigner =</text>
+  <text class="code" x="830" y="880" text-anchor="start" fill="#374151">    derive_light_cpi_signer!("RwaRafLe111...");</text>
+  
+  <text class="code" x="820" y="910" text-anchor="start" fill="#374151">// Create CPI accounts with signer</text>
+  <text class="code" x="820" y="925" text-anchor="start" fill="#374151">let light_cpi_accounts = CpiAccounts::new(</text>
+  <text class="code" x="830" y="940" text-anchor="start" fill="#374151">    ctx.accounts.signer.as_ref(),</text>
+  <text class="code" x="830" y="955" text-anchor="start" fill="#374151">    ctx.remaining_accounts,</text>
+  <text class="code" x="830" y="970" text-anchor="start" fill="#374151">    crate::LIGHT_CPI_SIGNER,  // ← PDA signer</text>
+  <text class="code" x="820" y="985" text-anchor="start" fill="#374151">);</text>
+  
+  <text class="code" x="820" y="1015" text-anchor="start" fill="#374151">// Invoke Light System Program with PDA authority</text>
+  <text class="code" x="820" y="1030" text-anchor="start" fill="#374151">LightSystemProgramCpi::new_cpi(LIGHT_CPI_SIGNER, proof)</text>
+  <text class="code" x="830" y="1045" text-anchor="start" fill="#374151">.invoke(light_cpi_accounts)?;</text>
+
+  <!-- Legend -->
+  <rect class="pda-box" x="40" y="20" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="80" y="35" text-anchor="start">PDA Account</text>
+  
+  <rect class="derive-box" x="200" y="20" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="240" y="35" text-anchor="start">Derive/Create</text>
+  
+  <rect class="retrieve-box" x="370" y="20" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="410" y="35" text-anchor="start">Retrieve Only</text>
+  
+  <rect class="sign-box" x="540" y="20" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="580" y="35" text-anchor="start">Retrieve + Sign</text>
+</svg>

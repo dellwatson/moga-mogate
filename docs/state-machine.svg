@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <style>
+      .state { fill:#dbeafe; stroke:#3b82f6; stroke-width:3; }
+      .state-active { fill:#fef3c7; stroke:#f59e0b; stroke-width:3; }
+      .state-success { fill:#d1fae5; stroke:#10b981; stroke-width:3; }
+      .state-error { fill:#fee2e2; stroke:#ef4444; stroke-width:3; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size:18px; font-weight:700; fill:#111827; text-anchor:middle; }
+      .text { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#374151; text-anchor:middle; }
+      .header { font-family: Arial, Helvetica, sans-serif; font-size:28px; font-weight:700; fill:#111827; text-anchor:middle; }
+      .line { stroke:#6b7280; stroke-width:2; fill:none; }
+      .line-success { stroke:#10b981; stroke-width:3; fill:none; }
+      .line-error { stroke:#ef4444; stroke-width:3; fill:none; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280" />
+    </marker>
+    <marker id="arrow-success" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L12,4 z" fill="#10b981" />
+    </marker>
+    <marker id="arrow-error" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L12,4 z" fill="#ef4444" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="header" x="600" y="40">Raffle State Machine</text>
+
+  <!-- State 0: Selling -->
+  <rect class="state" x="100" y="150" width="300" height="180" rx="12" ry="12" />
+  <text class="title" x="250" y="185">STATE 0: SELLING</text>
+  <text class="text" x="250" y="215">Active Period</text>
+  
+  <text class="text" x="250" y="245" text-anchor="start" transform="translate(-100, 0)">Conditions:</text>
+  <text class="text" x="250" y="265" text-anchor="start" transform="translate(-90, 0)">• tickets_sold &lt; required_tickets</text>
+  <text class="text" x="250" y="285" text-anchor="start" transform="translate(-90, 0)">• current_time ≤ deadline</text>
+  
+  <text class="text" x="250" y="310" text-anchor="start" transform="translate(-100, 0)">Actions:</text>
+  <text class="text" x="250" y="325" text-anchor="start" transform="translate(-90, 0)">• deposit() / deposit_compressed()</text>
+
+  <!-- State 1: Drawing -->
+  <rect class="state-active" x="500" y="150" width="300" height="180" rx="12" ry="12" />
+  <text class="title" x="650" y="185">STATE 1: DRAWING</text>
+  <text class="text" x="650" y="215">Randomness Phase</text>
+  
+  <text class="text" x="650" y="245" text-anchor="start" transform="translate(-100, 0)">Conditions:</text>
+  <text class="text" x="650" y="265" text-anchor="start" transform="translate(-90, 0)">• tickets_sold == required_tickets</text>
+  
+  <text class="text" x="650" y="290" text-anchor="start" transform="translate(-100, 0)">Actions:</text>
+  <text class="text" x="650" y="305" text-anchor="start" transform="translate(-90, 0)">• request_draw()</text>
+  <text class="text" x="650" y="320" text-anchor="start" transform="translate(-90, 0)">• request_draw_arcium()</text>
+
+  <!-- State 2: Completed -->
+  <rect class="state-success" x="900" y="150" width="250" height="180" rx="12" ry="12" />
+  <text class="title" x="1025" y="185">STATE 2: COMPLETED</text>
+  <text class="text" x="1025" y="215">Winner Selected</text>
+  
+  <text class="text" x="1025" y="245" text-anchor="start" transform="translate(-80, 0)">Conditions:</text>
+  <text class="text" x="1025" y="265" text-anchor="start" transform="translate(-70, 0)">• winner_ticket set</text>
+  
+  <text class="text" x="1025" y="290" text-anchor="start" transform="translate(-80, 0)">Actions:</text>
+  <text class="text" x="1025" y="305" text-anchor="start" transform="translate(-70, 0)">• claim_win()</text>
+  <text class="text" x="1025" y="320" text-anchor="start" transform="translate(-70, 0)">• claim_prize()</text>
+
+  <!-- State 3: Refunding -->
+  <rect class="state-error" x="100" y="450" width="300" height="180" rx="12" ry="12" />
+  <text class="title" x="250" y="485">STATE 3: REFUNDING</text>
+  <text class="text" x="250" y="515">Deadline Passed</text>
+  
+  <text class="text" x="250" y="545" text-anchor="start" transform="translate(-100, 0)">Conditions:</text>
+  <text class="text" x="250" y="565" text-anchor="start" transform="translate(-90, 0)">• tickets_sold &lt; required_tickets</text>
+  <text class="text" x="250" y="585" text-anchor="start" transform="translate(-90, 0)">• current_time &gt; deadline</text>
+  
+  <text class="text" x="250" y="610" text-anchor="start" transform="translate(-100, 0)">Actions:</text>
+  <text class="text" x="250" y="625" text-anchor="start" transform="translate(-90, 0)">• claim_refund()</text>
+
+  <!-- Transition: Selling -> Drawing -->
+  <line class="line-success" x1="400" y1="240" x2="500" y2="240" marker-end="url(#arrow-success)" />
+  <text class="text" x="450" y="230" fill="#10b981">Threshold reached</text>
+  <text class="text" x="450" y="250" fill="#10b981">tickets_sold == required</text>
+
+  <!-- Transition: Drawing -> Completed -->
+  <line class="line-success" x1="800" y1="240" x2="900" y2="240" marker-end="url(#arrow-success)" />
+  <text class="text" x="850" y="230" fill="#10b981">Winner drawn</text>
+  <text class="text" x="850" y="250" fill="#10b981">settle_draw()</text>
+
+  <!-- Transition: Selling -> Refunding -->
+  <line class="line-error" x1="250" y1="330" x2="250" y2="450" marker-end="url(#arrow-error)" />
+  <text class="text" x="340" y="390" fill="#ef4444">Deadline passed</text>
+  <text class="text" x="340" y="410" fill="#ef4444">threshold not met</text>
+
+  <!-- Data Flow Box -->
+  <rect class="state" x="500" y="450" width="650" height="300" rx="12" ry="12" />
+  <text class="title" x="825" y="485">State Transition Details</text>
+  
+  <!-- Transition Table -->
+  <text class="text" x="520" y="520" text-anchor="start" font-weight="600">From → To</text>
+  <text class="text" x="720" y="520" text-anchor="start" font-weight="600">Trigger</text>
+  <text class="text" x="980" y="520" text-anchor="start" font-weight="600">Instruction</text>
+  
+  <line class="line" x1="520" y1="530" x2="1130" y2="530" />
+  
+  <!-- Row 1 -->
+  <text class="text" x="520" y="555" text-anchor="start">SELLING → DRAWING</text>
+  <text class="text" x="720" y="555" text-anchor="start">Threshold met</text>
+  <text class="text" x="980" y="555" text-anchor="start">deposit()</text>
+  
+  <!-- Row 2 -->
+  <text class="text" x="520" y="580" text-anchor="start">DRAWING → COMPLETED</text>
+  <text class="text" x="720" y="580" text-anchor="start">RNG complete</text>
+  <text class="text" x="980" y="580" text-anchor="start">settle_draw()</text>
+  
+  <!-- Row 3 -->
+  <text class="text" x="520" y="605" text-anchor="start">DRAWING → COMPLETED</text>
+  <text class="text" x="720" y="605" text-anchor="start">Arcium callback</text>
+  <text class="text" x="980" y="605" text-anchor="start">draw_callback()</text>
+  
+  <!-- Row 4 -->
+  <text class="text" x="520" y="630" text-anchor="start">SELLING → REFUNDING</text>
+  <text class="text" x="720" y="630" text-anchor="start">Deadline passed</text>
+  <text class="text" x="980" y="630" text-anchor="start">claim_refund()</text>
+  
+  <line class="line" x1="520" y1="645" x2="1130" y2="645" />
+  
+  <!-- State Values -->
+  <text class="text" x="520" y="675" text-anchor="start" font-weight="600">State Enum Values:</text>
+  <text class="text" x="520" y="700" text-anchor="start">• Selling = 0</text>
+  <text class="text" x="520" y="720" text-anchor="start">• Drawing = 1</text>
+  <text class="text" x="720" y="700" text-anchor="start">• Completed = 2</text>
+  <text class="text" x="720" y="720" text-anchor="start">• Refunding = 3</text>
+
+  <!-- Legend -->
+  <rect class="state" x="50" y="700" width="30" height="20" rx="4" ry="4" />
+  <text class="text" x="100" y="715" text-anchor="start">Initial/Active State</text>
+  
+  <rect class="state-active" x="250" y="700" width="30" height="20" rx="4" ry="4" />
+  <text class="text" x="300" y="715" text-anchor="start">Processing State</text>
+  
+  <rect class="state-success" x="50" y="730" width="30" height="20" rx="4" ry="4" />
+  <text class="text" x="100" y="745" text-anchor="start">Success State</text>
+  
+  <rect class="state-error" x="250" y="730" width="30" height="20" rx="4" ry="4" />
+  <text class="text" x="300" y="745" text-anchor="start">Refund State</text>
+</svg>

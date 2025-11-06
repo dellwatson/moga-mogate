@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .box { fill:#ffffff; stroke:#111827; stroke-width:2; }
+      .arcium { fill:#8b5cf6; stroke:#6d28d9; stroke-width:2; }
+      .light { fill:#06b6d4; stroke:#0891b2; stroke-width:2; }
+      .anchor { fill:#14b8a6; stroke:#0d9488; stroke-width:2; }
+      .token { fill:#f59e0b; stroke:#d97706; stroke-width:2; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; fill:#ffffff; }
+      .title-dark { font-family: Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; fill:#111827; }
+      .text { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#ffffff; }
+      .text-dark { font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:400; fill:#374151; }
+      .text-small { font-family: Arial, Helvetica, sans-serif; font-size:11px; font-weight:400; fill:#ffffff; }
+      .header { font-family: Arial, Helvetica, sans-serif; font-size:28px; font-weight:700; fill:#111827; }
+      .section { font-family: Arial, Helvetica, sans-serif; font-size:20px; font-weight:600; fill:#111827; }
+      .line { stroke:#6b7280; stroke-width:2; fill:none; }
+      .line-thick { stroke:#111827; stroke-width:3; fill:none; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280" />
+    </marker>
+    <marker id="arrow-thick" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L12,4 z" fill="#111827" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="header" x="500" y="40">Protocol Integration Architecture</text>
+
+  <!-- CENTER: Main Program -->
+  <rect class="anchor" x="500" y="350" width="400" height="200" rx="12" ry="12" />
+  <text class="title" x="700" y="385" text-anchor="middle">RWA RAFFLE PROGRAM</text>
+  <text class="title" x="700" y="410" text-anchor="middle">(Anchor 0.31.1)</text>
+  <text class="text" x="520" y="445">Core Instructions:</text>
+  <text class="text-small" x="520" y="465">• initialize_raffle, deposit, deposit_compressed</text>
+  <text class="text-small" x="520" y="480">• request_draw, request_draw_arcium, draw_callback</text>
+  <text class="text-small" x="520" y="495">• settle_draw, claim_refund, claim_win</text>
+  <text class="text-small" x="520" y="510">• set_prize_nft, claim_prize</text>
+  <text class="text" x="520" y="535">Program ID: RwaRafLe111...</text>
+
+  <!-- TOP LEFT: Arcium -->
+  <rect class="arcium" x="50" y="50" width="380" height="250" rx="12" ry="12" />
+  <text class="title" x="240" y="85" text-anchor="middle">ARCIUM MPC</text>
+  <text class="title" x="240" y="110" text-anchor="middle">Verifiable Randomness</text>
+  
+  <text class="text" x="70" y="145">Dependencies:</text>
+  <text class="text-small" x="70" y="165">• arcium-anchor: 0.3.0</text>
+  <text class="text-small" x="70" y="180">• arcium-client: 0.3.0</text>
+  <text class="text-small" x="70" y="195">• arcium-macros: 0.3.0</text>
+  <text class="text-small" x="70" y="210">• arcis-imports: 0.3.0</text>
+  
+  <text class="text" x="70" y="240">Integration Points:</text>
+  <text class="text-small" x="70" y="260">1. #[arcium_program] macro on module</text>
+  <text class="text-small" x="70" y="275">2. init_draw_comp_def() - Setup computation</text>
+
+  <!-- Arcium Flow Box -->
+  <rect class="box" x="70" y="150" width="340" height="130" rx="6" ry="6" fill="#7c3aed" />
+  <text class="text" x="90" y="175">Encrypted Instruction (draw):</text>
+  <text class="text-small" x="90" y="195">fn draw(required_tickets: u64) -> u64 {</text>
+  <text class="text-small" x="100" y="210">  let rnd = ArcisRNG::random_u64();</text>
+  <text class="text-small" x="100" y="225">  let winner = 1 + (rnd % required_tickets);</text>
+  <text class="text-small" x="100" y="240">  winner.reveal()</text>
+  <text class="text-small" x="90" y="255">}</text>
+
+  <!-- TOP RIGHT: Light Protocol -->
+  <rect class="light" x="970" y="50" width="380" height="250" rx="12" ry="12" />
+  <text class="title" x="1160" y="85" text-anchor="middle">LIGHT PROTOCOL</text>
+  <text class="title" x="1160" y="110" text-anchor="middle">ZK Compression</text>
+  
+  <text class="text" x="990" y="145">Dependencies:</text>
+  <text class="text-small" x="990" y="165">• light-sdk: 0.16.0 (with anchor feature)</text>
+  <text class="text-small" x="990" y="180">• light-hasher: 5.0.0 (with solana feature)</text>
+  
+  <text class="text" x="990" y="210">Features:</text>
+  <text class="text-small" x="990" y="230">• Compressed account storage</text>
+  <text class="text-small" x="990" y="245">• Merkle tree state proofs</text>
+  <text class="text-small" x="990" y="260">• ValidityProof verification</text>
+  <text class="text-small" x="990" y="275">• Batch operations support</text>
+
+  <!-- BOTTOM LEFT: Anchor SPL -->
+  <rect class="anchor" x="50" y="600" width="380" height="250" rx="12" ry="12" />
+  <text class="title" x="240" y="635" text-anchor="middle">ANCHOR SPL</text>
+  <text class="title" x="240" y="660" text-anchor="middle">Token Interface</text>
+  
+  <text class="text" x="70" y="695">Dependencies:</text>
+  <text class="text-small" x="70" y="715">• anchor-spl: 0.31.1</text>
+  <text class="text-small" x="70" y="730">  - token, token-2022, associated-token</text>
+  
+  <text class="text" x="70" y="760">Supports:</text>
+  <text class="text-small" x="70" y="780">• SPL Token (legacy)</text>
+  <text class="text-small" x="70" y="795">• Token-2022 (Token Extensions)</text>
+  <text class="text-small" x="70" y="810">• Unified TokenInterface trait</text>
+  <text class="text-small" x="70" y="825">• TransferChecked for safety</text>
+
+  <!-- BOTTOM RIGHT: Token Layer -->
+  <rect class="token" x="970" y="600" width="380" height="250" rx="12" ry="12" />
+  <text class="title" x="1160" y="635" text-anchor="middle">TOKEN LAYER</text>
+  
+  <text class="text" x="990" y="675">MOGA Token:</text>
+  <text class="text-small" x="990" y="695">• SPL Token OR Token-2022</text>
+  <text class="text-small" x="990" y="710">• Flexible decimals (6, 9, etc.)</text>
+  <text class="text-small" x="990" y="725">• 1 whole token = 1 raffle ticket</text>
+  <text class="text-small" x="990" y="740">• Held in escrow ATA (owned by raffle PDA)</text>
+  
+  <text class="text" x="990" y="770">Prize NFT (Optional):</text>
+  <text class="text-small" x="990" y="790">• NFT with decimals = 0</text>
+  <text class="text-small" x="990" y="805">• Escrowed to raffle PDA</text>
+  <text class="text-small" x="990" y="820">• Transferred to winner on completion</text>
+
+  <!-- ARROWS: Arcium to Program -->
+  <line class="line-thick" x1="350" y1="300" x2="550" y2="380" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="400" y="340">queue_computation()</text>
+  
+  <line class="line-thick" x1="550" y1="420" x2="350" y2="280" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="400" y="360">draw_callback()</text>
+
+  <!-- ARROWS: Light to Program -->
+  <line class="line-thick" x1="1050" y1="300" x2="850" y2="380" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="920" y="340">ValidityProof</text>
+  
+  <line class="line-thick" x1="850" y1="420" x2="1050" y2="280" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="920" y="360">LightSystemProgramCpi</text>
+
+  <!-- ARROWS: Anchor SPL to Program -->
+  <line class="line-thick" x1="350" y1="600" x2="600" y2="550" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="420" y="575">Token Interface</text>
+
+  <!-- ARROWS: Token to Program -->
+  <line class="line-thick" x1="1050" y1="600" x2="800" y2="550" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="880" y="575">Escrow ATA</text>
+
+  <!-- ARROWS: Anchor SPL to Token -->
+  <line class="line-thick" x1="430" y1="725" x2="970" y2="725" marker-end="url(#arrow-thick)" />
+  <text class="text-dark" x="650" y="715">TransferChecked</text>
+
+  <!-- Bottom Info Box -->
+  <rect class="box" x="500" y="600" width="400" height="250" rx="12" ry="12" />
+  <text class="title-dark" x="700" y="635" text-anchor="middle">Integration Summary</text>
+  
+  <text class="text-dark" x="520" y="670">✓ NO Pinocchio SDK needed</text>
+  <text class="text-dark" x="520" y="690">✓ Anchor 0.31.1 is the latest stable</text>
+  <text class="text-dark" x="520" y="710">✓ All dependencies are current:</text>
+  <text class="text-dark" x="540" y="730">• Arcium 0.3.0 (latest)</text>
+  <text class="text-dark" x="540" y="750">• Light SDK 0.16.0 (latest)</text>
+  <text class="text-dark" x="540" y="770">• Anchor SPL 0.31.1 (latest)</text>
+  
+  <text class="text-dark" x="520" y="800">✓ Modular architecture:</text>
+  <text class="text-dark" x="540" y="820">• programs/rwa_raffle (main)</text>
+  <text class="text-dark" x="540" y="840">• encrypted-ixs (Arcium circuits)</text>
+
+  <!-- Legend -->
+  <rect class="arcium" x="50" y="350" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="90" y="365">Arcium MPC</text>
+  
+  <rect class="light" x="50" y="380" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="90" y="395">Light Protocol</text>
+  
+  <rect class="anchor" x="50" y="410" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="90" y="425">Anchor/SPL</text>
+  
+  <rect class="token" x="50" y="440" width="30" height="20" rx="4" ry="4" />
+  <text class="text-dark" x="90" y="455">Token Layer</text>
+</svg>

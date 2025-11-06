@@ -242,32 +242,14 @@ pub mod rwa_raffle {
         require!(ticket.owner == ctx.accounts.payer.key(), RaffleError::Unauthorized);
         require!(!ticket.refunded, RaffleError::AlreadyRefunded);
 
-        // refund base units for the ticket count (whole tokens)
-        let unit = 10u64.pow(ctx.accounts.mint.decimals as u32);
-        let amount = ticket
-            .count
-            .checked_mul(unit)
-            .ok_or(RaffleError::Overflow)?;
-
-        // Transfer from escrow (owned by raffle PDA) back to payer
-        let seeds: &[&[u8]] = &[
-            RAFFLE_SEED,
-            raffle.mint.as_ref(),
-            raffle.organizer.as_ref(),
-            &[raffle.bump],
-        ];
-        let signer = &[seeds];
-        let cpi_accounts = TransferChecked {
-            from: ctx.accounts.escrow_ata.to_account_info(),
-            to: ctx.accounts.payer_ata.to_account_info(),
-            mint: ctx.accounts.mint.to_account_info(),
-            authority: ctx.accounts.raffle.to_account_info(),
-        };
-        let cpi_program = ctx.accounts.token_program.to_account_info();
-        token::transfer_checked(CpiContext::new_with_signer(cpi_program, cpi_accounts, signer), amount, ctx.accounts.mint.decimals)?;
-
+        // Mark refunded and emit refund ticket request event for offchain minting.
         ticket.refunded = true;
-        emit!(Refunded { raffle: raffle.key(), owner: ticket.owner, amount });
+        emit!(RefundTicketsRequested {
+            raffle: raffle.key(),
+            owner: ticket.owner,
+            start: ticket.start,
+            count: ticket.count,
+        });
         Ok(())
     }
 
@@ -674,6 +656,14 @@ pub struct Refunded {
     pub raffle: Pubkey,
     pub owner: Pubkey,
     pub amount: u64,
+}
+
+#[event]
+pub struct RefundTicketsRequested {
+    pub raffle: Pubkey,
+    pub owner: Pubkey,
+    pub start: u64,
+    pub count: u64,
 }
 
 #[event]

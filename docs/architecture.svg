@@ -16,7 +16,7 @@
   <rect class="box" x="40" y="60" width="210" height="100" rx="8" ry="8" />
   <text class="title" x="55" y="85">Client (Web/Mobile)</text>
   <text class="text" x="55" y="110">- Bun + TS SDK</text>
-  <text class="text" x="55" y="130">- Sign & submit txs</text>
+  <text class="text" x="55" y="130">- Sign &amp; submit txs</text>
 
   <!-- Raffle Program -->
   <rect class="box" x="320" y="40" width="280" height="140" rx="8" ry="8" />
@@ -27,7 +27,7 @@
 
   <!-- MOGA Mint & Escrow -->
   <rect class="box" x="320" y="220" width="280" height="120" rx="8" ry="8" />
-  <text class="title" x="335" y="245">MOGA Mint & Escrow</text>
+  <text class="title" x="335" y="245">MOGA Mint &amp; Escrow</text>
   <text class="text" x="335" y="270">- SPL Token / Token-2022</text>
   <text class="text" x="335" y="290">- Escrow ATA (raffle owner)</text>
 
