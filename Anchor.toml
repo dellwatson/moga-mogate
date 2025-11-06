@@ -3,13 +3,16 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-rwa_raffle = "RwaRafLe1111111111111111111111111111111111111"
+rwa_raffle = "5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M"
+
+[programs.devnet]
+rwa_raffle = "5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "Localnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

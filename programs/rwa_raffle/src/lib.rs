@@ -12,14 +12,15 @@ use light_sdk::{
 };
 use light_sdk::cpi::{v1::LightSystemProgramCpi, InvokeLightSystemProgram, LightCpiInstruction};
 
-// NOTE: Replace this with your generated program id (anchor keys).
-declare_id!("RwaRafLe1111111111111111111111111111111111111");
+// NOTE: Devnet program id
+declare_id!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
 
 const RAFFLE_SEED: &[u8] = b"raffle";
 const TICKET_SEED: &[u8] = b"ticket";
+const SLOTS_SEED: &[u8] = b"slots";
 
 pub const LIGHT_CPI_SIGNER: CpiSigner =
-    derive_light_cpi_signer!("RwaRafLe1111111111111111111111111111111111111");
+    derive_light_cpi_signer!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
 
 const COMP_DEF_OFFSET_DRAW: u32 = comp_def_offset("draw");
 
@@ -58,6 +59,14 @@ pub mod rwa_raffle {
             required_tickets,
             deadline_unix_ts,
         });
+
+        // Initialize RaffleSlots PDA for per-slot state
+        let slots_acc = &mut ctx.accounts.slots;
+        slots_acc.raffle = raffle.key();
+        slots_acc.required_slots = required_tickets as u32;
+        let bitmap_len = ((required_tickets + 7) / 8) as usize;
+        slots_acc.bitmap = vec![0u8; bitmap_len];
+        slots_acc.owners = vec![Pubkey::default(); required_tickets as usize];
         Ok(())
     }
 
@@ -415,6 +424,14 @@ pub struct InitializeRaffle<'info> {
         bump,
     )]
     pub raffle: Account<'info, Raffle>,
+    #[account(
+        init,
+        payer = organizer,
+        space = 8 + RaffleSlots::space(required_tickets),
+        seeds = [SLOTS_SEED, raffle.key().as_ref()],
+        bump,
+    )]
+    pub slots: Account<'info, RaffleSlots>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, TokenInterface>,
 }
@@ -629,6 +646,23 @@ pub struct Ticket {
     pub refunded: bool,
     pub claimed_win: bool,
     pub bump: u8,
+}
+
+#[account]
+pub struct RaffleSlots {
+    pub raffle: Pubkey,
+    pub required_slots: u32,
+    pub bitmap: Vec<u8>,
+    pub owners: Vec<Pubkey>,
+}
+
+impl RaffleSlots {
+    pub fn space(required_slots: u64) -> usize {
+        // discriminator (8) added by caller; this returns struct size only
+        let s = required_slots as usize;
+        let bitmap_bytes = (s + 7) / 8;
+        32 + 4 + 4 + bitmap_bytes + 4 + (32 * s)
+    }
 }
 
 impl Ticket {

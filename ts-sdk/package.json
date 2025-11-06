@@ -5,7 +5,8 @@
   "description": "TypeScript SDK for RWA Raffle (bun compatible)",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target bun"
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
+    "test": "bun test"
   },
   "peerDependencies": {
     "@coral-xyz/anchor": "^0.31.1",
