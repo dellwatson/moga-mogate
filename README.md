@@ -48,6 +48,7 @@ See `docs/architecture.md` and `docs/architecture.svg` for the flow.
    - Update offchain worker to listen for `RefundTicketsRequested` and mint compressed NFTs (Bubblegum)
    - Define and enforce MRFT collection address; users cannot burn (recycle via platform)
    - Implement `join_with_ticket` to accept refund NFTs (no MOGA combination in one tx)
+   - Add `refund_batch` (permissionless crank) and schedule offchain automation to run at deadlines
 
 3. Randomness & Settlement
    - Keep Arcium draw flow; add scheduled reveal support (optional)
@@ -61,6 +62,7 @@ See `docs/architecture.md` and `docs/architecture.svg` for the flow.
    - Review `docs/SIMPLIFIED_FLOW.md`
    - Use `docs/decision-flow-v2.svg` as the canonical user flow
    - See `docs/REFUND_TICKET_SPEC.md` and `docs/ZK_COMPRESSION_USAGE.md`
+   - Cleanup deprecated docs (remove legacy `decision-flow.svg`, unused guides) after approval
 
 Links:
 - `docs/SIMPLIFIED_FLOW.md`

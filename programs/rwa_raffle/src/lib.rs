@@ -253,6 +253,31 @@ pub mod rwa_raffle {
         Ok(())
     }
 
+    /// Batch-mark tickets as refunded and emit refund ticket requests for offchain minting.
+    /// Caller passes Ticket accounts as remaining_accounts; safe to call by anyone.
+    pub fn refund_batch(ctx: Context<RefundBatch>) -> Result<()> {
+        let clock = Clock::get()?;
+        let raffle = &mut ctx.accounts.raffle;
+        require!(raffle.status == RaffleStatus::Selling as u8 || raffle.status == RaffleStatus::Refunding as u8, RaffleError::WrongStatus);
+        require!(clock.unix_timestamp > raffle.deadline, RaffleError::NotRefundableYet);
+        // Enter refunding state
+        raffle.status = RaffleStatus::Refunding as u8;
+
+        for acc in ctx.remaining_accounts.iter() {
+            let mut ticket: Account<Ticket> = Account::try_from(acc)?;
+            if ticket.raffle != raffle.key() { continue; }
+            if ticket.refunded { continue; }
+            ticket.refunded = true;
+            emit!(RefundTicketsRequested {
+                raffle: raffle.key(),
+                owner: ticket.owner,
+                start: ticket.start,
+                count: ticket.count,
+            });
+        }
+        Ok(())
+    }
+
     /// Winner can mark claim on-chain; offchain RWA delivery handled externally.
     pub fn claim_win(ctx: Context<ClaimWin>) -> Result<()> {
         let raffle = &mut ctx.accounts.raffle;
@@ -392,6 +417,13 @@ pub struct InitializeRaffle<'info> {
     pub raffle: Account<'info, Raffle>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, TokenInterface>,
+}
+
+#[derive(Accounts)]
+pub struct RefundBatch<'info> {
+    pub caller: Signer<'info>,
+    #[account(mut)]
+    pub raffle: Account<'info, Raffle>,
 }
 
 #[queue_computation_accounts("draw", payer)]
