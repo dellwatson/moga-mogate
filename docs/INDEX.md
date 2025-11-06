@@ -1,3 +1,6 @@
+### SDK Docs
+
+- `ts-sdk/docs/DEVNET_SETUP.md` - Devnet token setup and SDK usage examples
 # RWA Raffle Documentation Index
 
 ## 📋 Quick Reference
@@ -21,6 +24,8 @@
 - **[usage.md](./usage.md)** - How to use the program
 - **[roadmap.md](./roadmap.md)** - Development roadmap
  - **[REFUND_TICKET_SPEC.md](./REFUND_TICKET_SPEC.md)** - Refund NFT spec (tradeable, non-burnable by user)
+ - **[RAFFLE_OPTIONS.md](./RAFFLE_OPTIONS.md)** - Automation vs self-service options (draw, refunds, notifications)
+ - **[PROGRAM_STRUCTURE.md](./PROGRAM_STRUCTURE.md)** - Accounts, instructions, events, and roadmap
 
 ### Visual Diagrams (SVG)
 

@@ -69,3 +69,30 @@ Links:
 - `docs/decision-flow-v2.svg`
 - `docs/REFUND_TICKET_SPEC.md`
 - `docs/ZK_COMPRESSION_USAGE.md`
+
+---
+
+## Automation Options
+
+See `docs/RAFFLE_OPTIONS.md` for full details. Summary:
+
+- **Draw Triggers**
+  - Auto on full (client-chained): append `request_draw_arcium` after join
+  - Auto on full (worker): worker calls `request_draw_arcium` on `ThresholdReached`
+  - Scheduled reveal: worker waits until `reveal_time_unix_ts`
+  - Manual: any payer can call when `status == Drawing`
+
+- **Refund Modes**
+  - Auto (worker crank): call `refund_batch()` at deadline; mint MRFT from events
+  - Self-service: users call `claim_refund()`; worker mints MRFT
+  - Hybrid: both enabled
+
+- **Notifications**
+  - Winners: after `draw_callback`
+  - Refunds: after `RefundTicketsRequested` / mint
+
+- **Config (to add)**
+  - `auto_draw_on_full: bool`
+  - `reveal_time_unix_ts: Option<i64>`
+  - `refund_mode: enum { Auto, SelfService, Hybrid }`
+  - `prize_mode: enum { PreEscrow, MintOnClaim }`

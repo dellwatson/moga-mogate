@@ -28,6 +28,9 @@ const COMP_DEF_OFFSET_DRAW: u32 = comp_def_offset("draw");
 pub mod rwa_raffle {
     use super::*;
 
+    /// Initialize a new raffle. Escrow mint is the stable coin (e.g. USDC) and
+    /// escrow ATA must be owned by the raffle PDA. This path requires only the
+    /// organizer signature.
     pub fn initialize_raffle(
         ctx: Context<InitializeRaffle>,
         required_tickets: u64,
@@ -46,6 +49,7 @@ pub mod rwa_raffle {
         raffle.deadline = deadline_unix_ts;
         raffle.status = RaffleStatus::Selling as u8;
         raffle.winner_ticket = 0;
+        raffle.proceeds_collected = false;
         raffle.bump = ctx.bumps.raffle;
 
         // Basic invariants for escrow
@@ -67,6 +71,176 @@ pub mod rwa_raffle {
         let bitmap_len = ((required_tickets + 7) / 8) as usize;
         slots_acc.bitmap = vec![0u8; bitmap_len];
         slots_acc.owners = vec![Pubkey::default(); required_tickets as usize];
+        Ok(())
+    }
+
+/// Accounts for the organizer to collect proceeds after raffle completion.
+#[derive(Accounts)]
+pub struct CollectProceeds<'info> {
+    /// The organizer who created the raffle and is authorized to collect proceeds.
+    #[account(mut)]
+    pub organizer: Signer<'info>,
+    
+    /// The raffle account. Must be in Completed status and match the organizer.
+    #[account(mut, has_one = mint, constraint = raffle.organizer == organizer.key(), constraint = raffle.escrow == escrow_ata.key())]
+    pub raffle: Account<'info, Raffle>,
+    
+    /// The escrow mint (USDC). Used for transfer_checked validation.
+    pub mint: InterfaceAccount<'info, Mint>,
+    
+    /// The organizer's token account (USDC) where proceeds will be sent.
+    #[account(mut, constraint = organizer_ata.owner == organizer.key(), constraint = organizer_ata.mint == mint.key())]
+    pub organizer_ata: InterfaceAccount<'info, TokenAccount>,
+    
+    /// The raffle's escrow token account (USDC) holding all participant deposits.
+    /// Owned by the raffle PDA, which will sign the transfer.
+    #[account(mut, constraint = escrow_ata.owner == raffle.key(), constraint = escrow_ata.mint == mint.key())]
+    pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
+    
+    /// SPL Token program for the transfer.
+    pub token_program: Program<'info, TokenInterface>,
+}
+
+    /// **Organizer collects USDC proceeds from the raffle escrow after completion.**
+    ///
+    /// # What it does
+    /// - Transfers the entire USDC balance from the raffle's escrow account to the organizer's token account.
+    /// - Marks `proceeds_collected` to prevent double-collection.
+    ///
+    /// # When to call
+    /// - After the raffle is `Completed` (winner selected and claimed).
+    /// - Only the organizer can call this (enforced by account constraints).
+    ///
+    /// # Security
+    /// - Raffle PDA signs the transfer using its bump seed.
+    /// - Single-use: `proceeds_collected` flag prevents re-entrancy.
+    /// - Status check: only works when `status == Completed`.
+    ///
+    /// # Example flow
+    /// 1. Raffle completes → winner claims prize.
+    /// 2. Organizer calls `collect_proceeds()` → all USDC moved to organizer's wallet.
+    pub fn collect_proceeds(ctx: Context<CollectProceeds>) -> Result<()> {
+        let raffle = &mut ctx.accounts.raffle;
+        
+        // 1. Verify raffle is completed (winner selected)
+        require!(raffle.status == RaffleStatus::Completed as u8, RaffleError::WrongStatus);
+        
+        // 2. Prevent double-collection
+        require!(!raffle.proceeds_collected, RaffleError::AlreadyCollected);
+
+        // 3. Get the full escrow balance (all participant USDC deposits)
+        let amount = ctx.accounts.escrow_ata.amount;
+        require!(amount > 0, RaffleError::InvalidAmount);
+
+        // 4. Prepare the transfer: escrow → organizer
+        let cpi_accounts = TransferChecked {
+            from: ctx.accounts.escrow_ata.to_account_info(),
+            to: ctx.accounts.organizer_ata.to_account_info(),
+            mint: ctx.accounts.mint.to_account_info(),
+            authority: ctx.accounts.raffle.to_account_info(), // Raffle PDA signs
+        };
+        let cpi_program = ctx.accounts.token_program.to_account_info();
+        
+        // 5. Derive PDA signer seeds (raffle PDA owns the escrow)
+        let seeds: &[&[u8]] = &[
+            RAFFLE_SEED,
+            ctx.accounts.mint.key().as_ref(),
+            ctx.accounts.organizer.key().as_ref(),
+        ];
+        let bump = [raffle.bump];
+        let signer_seeds: &[&[u8]] = &[seeds[0], seeds[1], seeds[2], &bump];
+        
+        // 6. Execute the transfer with PDA signature
+        token::transfer_checked(
+            CpiContext::new_with_signer(cpi_program, cpi_accounts, &[signer_seeds]),
+            amount,
+            ctx.accounts.mint.decimals,
+        )?;
+
+        // 7. Mark as collected to prevent re-entrancy
+        raffle.proceeds_collected = true;
+        Ok()
+    }
+
+#[derive(Accounts)]
+#[instruction(required_tickets: u64, deadline_unix_ts: i64, _permit_nonce: [u8; 16], _permit_expiry_unix_ts: i64)]
+pub struct InitializeRaffleWithPermit<'info> {
+    #[account(mut)]
+    pub organizer: Signer<'info>,
+    pub mint: InterfaceAccount<'info, Mint>,
+    /// Escrow token account must be owned by raffle PDA and match the mint.
+    pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
+    #[account(
+        init,
+        payer = organizer,
+        space = 8 + Raffle::LEN,
+        seeds = [RAFFLE_SEED, mint.key().as_ref(), organizer.key().as_ref()],
+        bump,
+    )]
+    pub raffle: Account<'info, Raffle>,
+    #[account(
+        init,
+        payer = organizer,
+        space = 8 + RaffleSlots::space(required_tickets),
+        seeds = [SLOTS_SEED, raffle.key().as_ref()],
+        bump,
+    )]
+    pub slots: Account<'info, RaffleSlots>,
+    /// CHECK: Instructions sysvar, used to verify ed25519 instruction
+    #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
+    pub instructions_sysvar: AccountInfo<'info>,
+    pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, TokenInterface>,
+}
+
+    /// Initialize a new raffle with an off-chain organizer permit (ed25519-like).
+    /// This mirrors `initialize_raffle` but includes the instructions sysvar so
+    /// we can verify an `ed25519` signature instruction emitted by the client.
+    /// NOTE: Signature verification is TODO; current implementation behaves like
+    /// `initialize_raffle` and will be upgraded to enforce the permit.
+    pub fn initialize_raffle_with_permit(
+        ctx: Context<InitializeRaffleWithPermit>,
+        required_tickets: u64,
+        deadline_unix_ts: i64,
+        _permit_nonce: [u8; 16],
+        _permit_expiry_unix_ts: i64,
+    ) -> Result<()> {
+        let organizer = &ctx.accounts.organizer;
+        let raffle = &mut ctx.accounts.raffle;
+        raffle.organizer = organizer.key();
+        raffle.mint = ctx.accounts.mint.key();
+        raffle.escrow = ctx.accounts.escrow_ata.key();
+        raffle.required_tickets = required_tickets;
+        raffle.tickets_sold = 0;
+        raffle.next_ticket_index = 1;
+        raffle.deadline = deadline_unix_ts;
+        raffle.status = RaffleStatus::Selling as u8;
+        raffle.winner_ticket = 0;
+        raffle.prize_set = false;
+        raffle.prize_claimed = false;
+        raffle.proceeds_collected = false;
+        raffle.bump = ctx.bumps.raffle;
+
+        require_keys_eq!(ctx.accounts.escrow_ata.mint, raffle.mint);
+        require_keys_eq!(ctx.accounts.escrow_ata.owner, ctx.accounts.raffle.key());
+
+        emit!(RaffleInitialized {
+            raffle: raffle.key(),
+            organizer: raffle.organizer,
+            mint: raffle.mint,
+            required_tickets,
+            deadline_unix_ts,
+        });
+
+        // Initialize RaffleSlots PDA for per-slot state
+        let slots_acc = &mut ctx.accounts.slots;
+        slots_acc.raffle = raffle.key();
+        slots_acc.required_slots = required_tickets as u32;
+        let bitmap_len = ((required_tickets + 7) / 8) as usize;
+        slots_acc.bitmap = vec![0u8; bitmap_len];
+        slots_acc.owners = vec![Pubkey::default(); required_tickets as usize];
+
+        // TODO: Verify ed25519 signature in instructions sysvar for the organizer permit.
         Ok(())
     }
 
@@ -156,8 +330,9 @@ pub mod rwa_raffle {
         Ok(())
     }
 
-    /// Deposit raw token amount (base units) and receive a ticket range [start, start+amount-1].
-    /// Client must pass `start_index = raffle.next_ticket_index` observed just before sending txn.
+    /// Deposit raw token amount (no swap; assumes payer holds the escrow mint, e.g. USDC) and
+    /// receive a ticket range [start, start+count-1]. For devnet/legacy tests. Clients must pass
+    /// `start_index = raffle.next_ticket_index` observed just before sending the transaction.
     pub fn deposit(
         ctx: Context<Deposit>,
         amount: u64,
@@ -305,6 +480,9 @@ pub mod rwa_raffle {
         Ok(())
     }
 
+    /// Set the prize NFT by escrowing a pre-minted NFT into the raffle. This path is used
+    /// for `PreEscrow` prize mode. Future update: enforce Metaplex Verified Collection so
+    /// organizers can only escrow NFTs from their approved collection.
     pub fn set_prize_nft(ctx: Context<SetPrizeNft>) -> Result<()> {
         let raffle = &mut ctx.accounts.raffle;
         require!(ctx.accounts.organizer.key() == raffle.organizer, RaffleError::Unauthorized);
@@ -631,10 +809,11 @@ pub struct Raffle {
     pub prize_escrow: Pubkey,
     pub prize_set: bool,
     pub prize_claimed: bool,
+    pub proceeds_collected: bool,
 }
 
 impl Raffle {
-    pub const LEN: usize = 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1 + 8 + 1 + 32 + 32 + 1 + 1;
+    pub const LEN: usize = 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1 + 8 + 1 + 32 + 32 + 1 + 1 + 1;
 }
 
 #[account]
@@ -775,6 +954,7 @@ pub enum RaffleError {
     #[msg("Prize not set")] PrizeNotSet,
     #[msg("Prize already claimed")] PrizeAlreadyClaimed,
     #[msg("Must claim win first")] MustClaimWinFirst,
+    #[msg("Proceeds already collected")] AlreadyCollected,
 }
 
 #[repr(u8)]

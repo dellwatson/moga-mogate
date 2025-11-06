@@ -49,6 +49,55 @@ export function isWholeTokenAmount(amount: bigint, decimals: number): boolean {
   return amount % unit === 0n;
 }
 
+// --- Config and Permit Types ---
+
+export type RefundMode = "Auto" | "SelfService" | "Hybrid";
+export type PrizeMode = "PreEscrow" | "MintOnClaim";
+
+export type RaffleConfig = {
+  requiredTickets: bigint;
+  deadlineUnixTs: bigint;
+  autoDrawOnFull?: boolean;
+  revealTimeUnixTs?: bigint | null;
+  refundMode?: RefundMode;
+  prizeMode?: PrizeMode;
+};
+
+export type PrizeSpec = {
+  collection?: string; // collection mint or verified collection id
+  uri?: string; // metadata uri (for MintOnClaim)
+};
+
+export type OrganizerPermit = {
+  organizer: string; // base58 organizer pubkey
+  enterpriseId: string; // arbitrary string/id
+  nonce: string; // unique per permit
+  expiryUnixTs: string; // seconds as string
+  raffleConfig: RaffleConfig;
+  prize?: PrizeSpec;
+  programId: string; // raffle program id base58
+};
+
+// Create a canonical message to sign off-chain (ed25519). On-chain we verify
+// the ed25519 signature via the ed25519 program + instructions sysvar.
+export function createRafflePermitMessage(permit: OrganizerPermit): Uint8Array {
+  // Canonical JSON stringify (stable key order)
+  const stable = (obj: any): any => {
+    if (obj === null || typeof obj !== "object") return obj;
+    if (Array.isArray(obj)) return obj.map(stable);
+    return Object.keys(obj)
+      .sort()
+      .reduce((acc: any, k) => {
+        acc[k] = stable(obj[k]);
+        return acc;
+      }, {} as any);
+  };
+  const canonical = stable(permit);
+  const prefix = "MOGA_RAFFLE_PERMIT_v1:";
+  const encoded = new TextEncoder().encode(prefix + JSON.stringify(canonical));
+  return encoded;
+}
+
 export class RwaRaffleClient {
   constructor() {}
   async initializeRaffle(_args: InitRaffleArgs): Promise<void> {}
@@ -58,3 +107,10 @@ export class RwaRaffleClient {
   async claimRefund(): Promise<void> {}
   async claimWin(): Promise<void> {}
 }
+
+// Re-exports for modular SDK usage
+export * from "./raffle";
+export * from "./tokens";
+export * from "./tickets";
+export * from "./solanaKit";
+export * from "./rwa";
