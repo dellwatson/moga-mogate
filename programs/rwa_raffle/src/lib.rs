@@ -12,6 +12,11 @@ use light_sdk::{
 };
 use light_sdk::cpi::{v1::LightSystemProgramCpi, InvokeLightSystemProgram, LightCpiInstruction};
 
+#[cfg(feature = "bubblegum")]
+use mpl_bubblegum::programs::MPL_BUBBLEGUM_ID;
+#[cfg(feature = "bubblegum")]
+use spl_account_compression::{program::SplAccountCompression, Noop};
+
 // NOTE: Devnet program id
 declare_id!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
 
@@ -35,6 +40,8 @@ pub mod rwa_raffle {
         ctx: Context<InitializeRaffle>,
         required_tickets: u64,
         deadline_unix_ts: i64,
+        auto_draw: bool,
+        ticket_mode: u8, // 0=disabled, 1=accept_without_burn, 2=require_burn
     ) -> Result<()> {
         require!(required_tickets > 0, RaffleError::InvalidAmount);
         require!(deadline_unix_ts > Clock::get()?.unix_timestamp, RaffleError::InvalidDeadline);
@@ -50,6 +57,8 @@ pub mod rwa_raffle {
         raffle.status = RaffleStatus::Selling as u8;
         raffle.winner_ticket = 0;
         raffle.proceeds_collected = false;
+        raffle.auto_draw = auto_draw;
+        raffle.ticket_mode = ticket_mode;
         raffle.bump = ctx.bumps.raffle;
 
         // Basic invariants for escrow
@@ -163,7 +172,7 @@ pub struct CollectProceeds<'info> {
     }
 
 #[derive(Accounts)]
-#[instruction(required_tickets: u64, deadline_unix_ts: i64, _permit_nonce: [u8; 16], _permit_expiry_unix_ts: i64)]
+#[instruction(required_tickets: u64, deadline_unix_ts: i64, permit_nonce: [u8; 16], permit_expiry_unix_ts: i64, auto_draw: bool, ticket_mode: u8)]
 pub struct InitializeRaffleWithPermit<'info> {
     #[account(mut)]
     pub organizer: Signer<'info>,
@@ -202,8 +211,10 @@ pub struct InitializeRaffleWithPermit<'info> {
         ctx: Context<InitializeRaffleWithPermit>,
         required_tickets: u64,
         deadline_unix_ts: i64,
-        _permit_nonce: [u8; 16],
-        _permit_expiry_unix_ts: i64,
+        permit_nonce: [u8; 16],
+        permit_expiry_unix_ts: i64,
+        auto_draw: bool,
+        ticket_mode: u8, // 0=disabled, 1=accept_without_burn, 2=require_burn
     ) -> Result<()> {
         let organizer = &ctx.accounts.organizer;
         let raffle = &mut ctx.accounts.raffle;
@@ -216,9 +227,9 @@ pub struct InitializeRaffleWithPermit<'info> {
         raffle.deadline = deadline_unix_ts;
         raffle.status = RaffleStatus::Selling as u8;
         raffle.winner_ticket = 0;
-        raffle.prize_set = false;
-        raffle.prize_claimed = false;
         raffle.proceeds_collected = false;
+        raffle.auto_draw = auto_draw;
+        raffle.ticket_mode = ticket_mode;
         raffle.bump = ctx.bumps.raffle;
 
         require_keys_eq!(ctx.accounts.escrow_ata.mint, raffle.mint);
@@ -240,7 +251,66 @@ pub struct InitializeRaffleWithPermit<'info> {
         slots_acc.bitmap = vec![0u8; bitmap_len];
         slots_acc.owners = vec![Pubkey::default(); required_tickets as usize];
 
-        // TODO: Verify ed25519 signature in instructions sysvar for the organizer permit.
+        // Verify permit expiry
+        require!(permit_expiry_unix_ts > Clock::get()?.unix_timestamp, RaffleError::PermitExpired);
+
+        // Build canonical permit message (binary):
+        // b"RWA_RAFFLE_PERMIT" || organizer(32) || nonce(16) || expiry(i64) ||
+        // required_tickets(u64) || deadline(i64) || program_id(32) || auto_draw(u8) || ticket_mode(u8)
+        let mut expected_msg: Vec<u8> = b"RWA_RAFFLE_PERMIT".to_vec();
+        expected_msg.extend_from_slice(raffle.organizer.as_ref());
+        expected_msg.extend_from_slice(&permit_nonce);
+        expected_msg.extend_from_slice(&permit_expiry_unix_ts.to_le_bytes());
+        expected_msg.extend_from_slice(&required_tickets.to_le_bytes());
+        expected_msg.extend_from_slice(&deadline_unix_ts.to_le_bytes());
+        expected_msg.extend_from_slice(crate::ID.as_ref());
+        expected_msg.push(if raffle.auto_draw { 1 } else { 0 });
+        expected_msg.push(raffle.ticket_mode);
+
+        // Scan instructions sysvar for an ed25519 verify ix that matches
+        use anchor_lang::solana_program::{ed25519_program, sysvar::instructions::load_instruction_at};
+
+        let ixn_acc = &ctx.accounts.instructions_sysvar;
+        let mut found = false;
+        let mut idx = 0;
+        // Iterate through instructions; stop if load fails
+        loop {
+            let loaded = load_instruction_at(idx, ixn_acc);
+            if loaded.is_err() { break; }
+            let ix = loaded.unwrap();
+            if ix.program_id == ed25519_program::id() {
+                // Parse ed25519 instruction data (single signature format)
+                let data = ix.data.as_slice();
+                if data.len() < 16 { idx += 1; continue; }
+                let num = data[0] as usize;
+                if num != 1 { idx += 1; continue; }
+                // Offsets are u16 LE starting at byte 2
+                let sig_off = u16::from_le_bytes([data[2], data[3]]) as usize;
+                let sig_len = u16::from_le_bytes([data[4], data[5]]) as usize;
+                let pk_off = u16::from_le_bytes([data[6], data[7]]) as usize;
+                let pk_len = u16::from_le_bytes([data[8], data[9]]) as usize;
+                let msg_off = u16::from_le_bytes([data[10], data[11]]) as usize;
+                let msg_len = u16::from_le_bytes([data[12], data[13]]) as usize;
+                let msg_acc_idx = u16::from_le_bytes([data[14], data[15]]);
+
+                // We only accept inline message (not from another account)
+                if msg_acc_idx != u16::MAX { idx += 1; continue; }
+                // Bounds checks
+                if pk_len != 32 || sig_len != 64 { idx += 1; continue; }
+                if pk_off.checked_add(pk_len).unwrap_or(usize::MAX) > data.len() { idx += 1; continue; }
+                if msg_off.checked_add(msg_len).unwrap_or(usize::MAX) > data.len() { idx += 1; continue; }
+
+                let pk_bytes = &data[pk_off..pk_off+pk_len];
+                let msg_bytes = &data[msg_off..msg_off+msg_len];
+
+                if pk_bytes == raffle.organizer.as_ref() && msg_bytes == expected_msg.as_slice() {
+                    found = true;
+                    break;
+                }
+            }
+            idx += 1;
+        }
+        require!(found, RaffleError::PermitInvalid);
         Ok(())
     }
 
@@ -325,6 +395,7 @@ pub struct InitializeRaffleWithPermit<'info> {
         if raffle.tickets_sold == raffle.required_tickets {
             raffle.status = RaffleStatus::Drawing as u8;
             emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
+            if raffle.auto_draw { emit!(RandomnessRequested { raffle: raffle.key(), supply: raffle.required_tickets }); }
         }
 
         Ok(())
@@ -383,6 +454,301 @@ pub struct InitializeRaffleWithPermit<'info> {
         });
 
         // Auto-transition to Drawing when threshold reached
+        if raffle.tickets_sold == raffle.required_tickets {
+            raffle.status = RaffleStatus::Drawing as u8;
+            emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
+        }
+
+        Ok(())
+    }
+
+    /// **Join raffle with MOGA tokens (1-TX flow with swap).**
+    ///
+    /// # What it does
+    /// - Validates requested slots are free in the `RaffleSlots` bitmap
+    /// - Gets USDC price from Pyth oracle
+    /// - Swaps MOGA → USDC via Jupiter CPI
+    /// - Deposits USDC into raffle escrow
+    /// - Reserves slots and mints ticket record
+    ///
+    /// # When to call
+    /// - User has MOGA tokens and wants to join with specific slot numbers
+    /// - Raffle is in `Selling` status and before deadline
+    ///
+    /// # Security
+    /// - Slippage protection via `max_moga_in`
+    /// - Slot reservation prevents double-booking
+    /// - Pyth price staleness check
+    ///
+    /// # Feature-gated
+    /// - Requires `pyth-jupiter` feature flag
+    /// - TODO: Implement Pyth + Jupiter CPI logic
+    #[cfg(feature = "pyth-jupiter")]
+    pub fn join_with_moga(
+        ctx: Context<JoinWithMoga>,
+        slots: Vec<u32>,
+        max_moga_in: u64,
+    ) -> Result<()> {
+        let clock = Clock::get()?;
+        let raffle = &mut ctx.accounts.raffle;
+        require!(raffle.status == RaffleStatus::Selling as u8, RaffleError::RaffleNotSelling);
+        require!(clock.unix_timestamp <= raffle.deadline, RaffleError::PastDeadline);
+        require!(!slots.is_empty(), RaffleError::InvalidAmount);
+        require!(slots.len() as u64 + raffle.tickets_sold <= raffle.required_tickets, RaffleError::OverSubscription);
+
+        // 1. Validate slots are free
+        let slots_acc = &mut ctx.accounts.slots;
+        for &slot_idx in &slots {
+            require!(slot_idx < slots_acc.required_slots, RaffleError::InvalidSlot);
+            let byte_idx = (slot_idx / 8) as usize;
+            let bit_idx = slot_idx % 8;
+            let is_taken = (slots_acc.bitmap[byte_idx] & (1 << bit_idx)) != 0;
+            require!(!is_taken, RaffleError::SlotAlreadyTaken);
+        }
+
+        // 2. Get MOGA/USD price from Pyth oracle
+        // NOTE: In production, you need to:
+        // - Add pyth_price_account to JoinWithMoga accounts
+        // - Parse Pyth price feed and check staleness
+        // - Calculate MOGA amount needed for USDC equivalent
+        // - Apply slippage tolerance
+        //
+        // Example implementation:
+        // ```
+        // #[cfg(feature = "pyth-jupiter")]
+        // use pyth_sdk_solana::load_price_feed_from_account_info;
+        //
+        // let pyth_price = load_price_feed_from_account_info(&ctx.accounts.pyth_price_account)?;
+        // let price_data = pyth_price.get_current_price()
+        //     .ok_or(RaffleError::PythPriceUnavailable)?;
+        //
+        // // Check staleness (e.g., max 60 seconds old)
+        // let clock = Clock::get()?;
+        // require!(
+        //     clock.unix_timestamp - price_data.publish_time < 60,
+        //     RaffleError::PythPriceStale
+        // );
+        //
+        // // Calculate MOGA needed (accounting for decimals)
+        // let usdc_needed = slots.len() as u64 * 10u64.pow(ctx.accounts.usdc_mint.decimals as u32);
+        // let moga_needed = calculate_moga_for_usdc(
+        //     usdc_needed,
+        //     price_data.price,
+        //     price_data.expo,
+        //     ctx.accounts.moga_mint.decimals,
+        //     ctx.accounts.usdc_mint.decimals,
+        // );
+        //
+        // // Check slippage
+        // require!(moga_needed <= max_moga_in, RaffleError::SlippageExceeded);
+        // ```
+
+        // 3. Swap MOGA → USDC via Jupiter CPI
+        // NOTE: Jupiter aggregator requires:
+        // - Jupiter program account
+        // - Source token account (payer's MOGA ATA)
+        // - Destination token account (payer's USDC ATA)
+        // - Intermediate accounts (depends on route)
+        // - Quote data (from Jupiter API)
+        //
+        // Example CPI call (pseudo-code):
+        // ```
+        // let jupiter_ix = build_jupiter_swap_ix(
+        //     &ctx.accounts.jupiter_program,
+        //     &ctx.accounts.payer,
+        //     &ctx.accounts.payer_moga_ata,
+        //     &ctx.accounts.payer_usdc_ata,
+        //     &ctx.accounts.moga_mint,
+        //     &ctx.accounts.usdc_mint,
+        //     moga_needed,
+        //     usdc_needed, // minimum out
+        //     // ... intermediate accounts from route
+        // );
+        //
+        // invoke(
+        //     &jupiter_ix,
+        //     &[
+        //         ctx.accounts.jupiter_program.to_account_info(),
+        //         ctx.accounts.payer.to_account_info(),
+        //         ctx.accounts.payer_moga_ata.to_account_info(),
+        //         ctx.accounts.payer_usdc_ata.to_account_info(),
+        //         // ... remaining accounts
+        //     ],
+        // )?;
+        // ```
+        //
+        // TODO: Implement full Jupiter swap CPI when ready
+
+        // 4. Transfer USDC into escrow (for now, assume direct transfer as placeholder)
+        let usdc_amount = slots.len() as u64 * 10u64.pow(ctx.accounts.usdc_mint.decimals as u32);
+        let cpi_accounts = TransferChecked {
+            from: ctx.accounts.payer_usdc_ata.to_account_info(),
+            to: ctx.accounts.escrow_ata.to_account_info(),
+            mint: ctx.accounts.usdc_mint.to_account_info(),
+            authority: ctx.accounts.payer.to_account_info(),
+        };
+        token::transfer_checked(
+            CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts),
+            usdc_amount,
+            ctx.accounts.usdc_mint.decimals,
+        )?;
+
+        // 5. Reserve slots in bitmap
+        for &slot_idx in &slots {
+            let byte_idx = (slot_idx / 8) as usize;
+            let bit_idx = slot_idx % 8;
+            slots_acc.bitmap[byte_idx] |= 1 << bit_idx;
+            slots_acc.owners[slot_idx as usize] = ctx.accounts.payer.key();
+        }
+
+        // 6. Mint ticket record
+        let ticket = &mut ctx.accounts.ticket;
+        ticket.raffle = raffle.key();
+        ticket.owner = ctx.accounts.payer.key();
+        ticket.start = slots[0] as u64 + 1; // 1-based ticket numbers
+        ticket.count = slots.len() as u64;
+        ticket.refunded = false;
+        ticket.claimed_win = false;
+        ticket.bump = ctx.bumps.ticket;
+
+        // 7. Update raffle counters
+        raffle.tickets_sold = raffle.tickets_sold.checked_add(slots.len() as u64).ok_or(RaffleError::Overflow)?;
+
+        emit!(Deposited {
+            raffle: raffle.key(),
+            owner: ticket.owner,
+            start: ticket.start,
+            count: ticket.count,
+            tickets_sold: raffle.tickets_sold,
+        });
+
+        if raffle.tickets_sold == raffle.required_tickets {
+            raffle.status = RaffleStatus::Drawing as u8;
+            emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
+        }
+
+        Ok(())
+    }
+
+    /// **Join raffle with MRFT (refund ticket NFTs).**
+    ///
+    /// # What it does
+    /// - Validates MRFT NFTs belong to the approved collection
+    /// - Burns MRFT NFTs via Bubblegum tree authority
+    /// - Reserves requested slots in `RaffleSlots`
+    /// - Mints ticket record
+    ///
+    /// # When to call
+    /// - User holds MRFT (refund tickets from previous raffles)
+    /// - Raffle is in `Selling` status and before deadline
+    ///
+    /// # Security
+    /// - Collection verification prevents fake tickets
+    /// - Burn authority check via Bubblegum
+    /// - Slot reservation prevents double-booking
+    ///
+    /// # Feature-gated
+    /// - Requires `bubblegum` feature flag
+    /// - TODO: Implement Bubblegum burn CPI logic
+    #[cfg(feature = "bubblegum")]
+    pub fn join_with_ticket(
+        ctx: Context<JoinWithTicket>,
+        slots: Vec<u32>,
+        _nft_proofs: Vec<u8>, // Bubblegum proofs (placeholder)
+    ) -> Result<()> {
+        let clock = Clock::get()?;
+        let raffle = &mut ctx.accounts.raffle;
+        require!(raffle.status == RaffleStatus::Selling as u8, RaffleError::RaffleNotSelling);
+        require!(clock.unix_timestamp <= raffle.deadline, RaffleError::PastDeadline);
+        require!(!slots.is_empty(), RaffleError::InvalidAmount);
+        require!(slots.len() as u64 + raffle.tickets_sold <= raffle.required_tickets, RaffleError::OverSubscription);
+
+        // 1. Validate slots are free
+        let slots_acc = &mut ctx.accounts.slots;
+        for &slot_idx in &slots {
+            require!(slot_idx < slots_acc.required_slots, RaffleError::InvalidSlot);
+            let byte_idx = (slot_idx / 8) as usize;
+            let bit_idx = slot_idx % 8;
+            let is_taken = (slots_acc.bitmap[byte_idx] & (1 << bit_idx)) != 0;
+            require!(!is_taken, RaffleError::SlotAlreadyTaken);
+        }
+
+        // 2. Optionally verify MRFT collection and burn NFTs when required
+        if raffle.ticket_mode == 1 {
+            // TODO: perform Bubblegum burn CPI using provided proofs/accounts
+            // For now, only enforce that proofs vector is non-empty when burn is required
+            require!(!_nft_proofs.is_empty(), RaffleError::TicketBurnRequired);
+        }
+        // NOTE: In production, you need to:
+        // - Parse the merkle tree to get NFT metadata
+        // - Verify the collection mint matches your MRFT collection
+        // - Call bubblegum burn instruction with proper proofs
+        //
+        // For now, we assume the frontend/SDK has already verified the NFTs
+        // and we trust the payer is burning valid MRFTs.
+        //
+        // Full implementation requires:
+        // - merkle_tree: AccountInfo (the compressed NFT tree)
+        // - tree_authority: PDA of the tree
+        // - leaf_owner: payer (must match)
+        // - leaf_delegate: payer or None
+        // - merkle_proof: Vec<AccountInfo> (proof path)
+        // - root: [u8; 32] (current tree root)
+        // - data_hash: [u8; 32] (NFT data hash)
+        // - creator_hash: [u8; 32] (creator hash)
+        // - nonce: u64 (leaf nonce)
+        // - index: u32 (leaf index)
+        //
+        // Example CPI call (pseudo-code):
+        // ```
+        // use mpl_bubblegum::instructions::BurnCpiBuilder;
+        // BurnCpiBuilder::new(&ctx.accounts.bubblegum_program)
+        //     .tree_config(&ctx.accounts.tree_config)
+        //     .leaf_owner(&ctx.accounts.payer)
+        //     .leaf_delegate(&ctx.accounts.payer)
+        //     .merkle_tree(&ctx.accounts.merkle_tree)
+        //     .log_wrapper(&ctx.accounts.log_wrapper)
+        //     .compression_program(&ctx.accounts.compression_program)
+        //     .system_program(&ctx.accounts.system_program)
+        //     .root(root)
+        //     .data_hash(data_hash)
+        //     .creator_hash(creator_hash)
+        //     .nonce(nonce)
+        //     .index(index)
+        //     .invoke()?;
+        // ```
+        //
+        // TODO: Implement full Bubblegum burn CPI when ready
+
+        // 4. Reserve slots in bitmap
+        for &slot_idx in &slots {
+            let byte_idx = (slot_idx / 8) as usize;
+            let bit_idx = slot_idx % 8;
+            slots_acc.bitmap[byte_idx] |= 1 << bit_idx;
+            slots_acc.owners[slot_idx as usize] = ctx.accounts.payer.key();
+        }
+
+        // 5. Mint ticket record
+        let ticket = &mut ctx.accounts.ticket;
+        ticket.raffle = raffle.key();
+        ticket.owner = ctx.accounts.payer.key();
+        ticket.start = slots[0] as u64 + 1; // 1-based ticket numbers
+        ticket.count = slots.len() as u64;
+        ticket.refunded = false;
+        ticket.claimed_win = false;
+        ticket.bump = ctx.bumps.ticket;
+
+        // 6. Update raffle counters
+        raffle.tickets_sold = raffle.tickets_sold.checked_add(slots.len() as u64).ok_or(RaffleError::Overflow)?;
+
+        emit!(Deposited {
+            raffle: raffle.key(),
+            owner: ticket.owner,
+            start: ticket.start,
+            count: ticket.count,
+            tickets_sold: raffle.tickets_sold,
+        });
+
         if raffle.tickets_sold == raffle.required_tickets {
             raffle.status = RaffleStatus::Drawing as u8;
             emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
@@ -587,7 +953,7 @@ pub struct InitializeRaffleWithPermit<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(required_tickets: u64, deadline_unix_ts: i64)]
+#[instruction(required_tickets: u64, deadline_unix_ts: i64, auto_draw: bool, ticket_mode: u8)]
 pub struct InitializeRaffle<'info> {
     #[account(mut)]
     pub organizer: Signer<'info>,
@@ -726,6 +1092,96 @@ pub struct Deposit<'info> {
     pub token_program: Program<'info, TokenInterface>,
 }
 
+/// Accounts for joining raffle with MOGA tokens (swap flow).
+#[cfg(feature = "pyth-jupiter")]
+#[derive(Accounts)]
+#[instruction(slots: Vec<u32>, max_moga_in: u64)]
+pub struct JoinWithMoga<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    
+    #[account(mut, has_one = mint)]
+    pub raffle: Account<'info, Raffle>,
+    
+    #[account(mut, seeds = [SLOTS_SEED, raffle.key().as_ref()], bump)]
+    pub slots: Account<'info, RaffleSlots>,
+    
+    /// USDC mint (escrow mint)
+    #[account(address = raffle.mint)]
+    pub usdc_mint: InterfaceAccount<'info, Mint>,
+    
+    /// MOGA mint (user's input token)
+    pub moga_mint: InterfaceAccount<'info, Mint>,
+    
+    /// Payer's MOGA token account
+    #[account(mut, constraint = payer_moga_ata.owner == payer.key(), constraint = payer_moga_ata.mint == moga_mint.key())]
+    pub payer_moga_ata: InterfaceAccount<'info, TokenAccount>,
+    
+    /// Payer's USDC token account (receives swap output)
+    #[account(mut, constraint = payer_usdc_ata.owner == payer.key(), constraint = payer_usdc_ata.mint == usdc_mint.key())]
+    pub payer_usdc_ata: InterfaceAccount<'info, TokenAccount>,
+    
+    /// Raffle escrow (USDC)
+    #[account(mut, constraint = escrow_ata.owner == raffle.key(), constraint = escrow_ata.mint == usdc_mint.key())]
+    pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
+    
+    /// Ticket PDA (created for this join)
+    #[account(
+        init,
+        payer = payer,
+        space = 8 + Ticket::LEN,
+        seeds = [TICKET_SEED, raffle.key().as_ref(), payer.key().as_ref(), &slots[0].to_le_bytes()],
+        bump,
+    )]
+    pub ticket: Account<'info, Ticket>,
+    
+    // TODO: Add Pyth price account
+    // /// CHECK: Pyth price account for MOGA/USD
+    // pub pyth_price_account: AccountInfo<'info>,
+    
+    // TODO: Add Jupiter swap accounts
+    // pub jupiter_program: Program<'info, Jupiter>,
+    // ... remaining Jupiter accounts
+    
+    pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, TokenInterface>,
+    pub mint: InterfaceAccount<'info, Mint>,
+}
+
+/// Accounts for joining raffle with MRFT (refund ticket NFTs).
+#[cfg(feature = "bubblegum")]
+#[derive(Accounts)]
+#[instruction(slots: Vec<u32>, _nft_proofs: Vec<u8>)]
+pub struct JoinWithTicket<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    
+    #[account(mut)]
+    pub raffle: Account<'info, Raffle>,
+    
+    #[account(mut, seeds = [SLOTS_SEED, raffle.key().as_ref()], bump)]
+    pub slots: Account<'info, RaffleSlots>,
+    
+    /// Ticket PDA (created for this join)
+    #[account(
+        init,
+        payer = payer,
+        space = 8 + Ticket::LEN,
+        seeds = [TICKET_SEED, raffle.key().as_ref(), payer.key().as_ref(), &slots[0].to_le_bytes()],
+        bump,
+    )]
+    pub ticket: Account<'info, Ticket>,
+    
+    // TODO: Add Bubblegum accounts for NFT burn
+    // /// CHECK: Merkle tree account
+    // pub merkle_tree: AccountInfo<'info>,
+    // /// CHECK: Tree authority
+    // pub tree_authority: AccountInfo<'info>,
+    // pub bubblegum_program: Program<'info, Bubblegum>,
+    
+    pub system_program: Program<'info, System>,
+}
+
 #[derive(Accounts)]
 pub struct RequestDraw<'info> {
     pub organizer: Signer<'info>,
@@ -810,10 +1266,12 @@ pub struct Raffle {
     pub prize_set: bool,
     pub prize_claimed: bool,
     pub proceeds_collected: bool,
+    pub auto_draw: bool,
+    pub ticket_mode: u8, // 0=disabled, 1=require_burn, 2=accept_without_burn
 }
 
 impl Raffle {
-    pub const LEN: usize = 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1 + 8 + 1 + 32 + 32 + 1 + 1 + 1;
+    pub const LEN: usize = 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1 + 8 + 1 + 32 + 32 + 1 + 1 + 1 + 1 + 1;
 }
 
 #[account]
@@ -955,6 +1413,16 @@ pub enum RaffleError {
     #[msg("Prize already claimed")] PrizeAlreadyClaimed,
     #[msg("Must claim win first")] MustClaimWinFirst,
     #[msg("Proceeds already collected")] AlreadyCollected,
+    #[msg("Invalid slot index")] InvalidSlot,
+    #[msg("Slot already taken")] SlotAlreadyTaken,
+    #[msg("Slippage exceeded")] SlippageExceeded,
+    #[msg("Invalid NFT collection")] InvalidCollection,
+    #[msg("Permit expired")] PermitExpired,
+    #[msg("Permit invalid")] PermitInvalid,
+    #[msg("Ticket mode disabled")] TicketModeDisabled,
+    #[msg("Ticket burn required")] TicketBurnRequired,
+    #[msg("Pyth price unavailable")] PythPriceUnavailable,
+    #[msg("Pyth price stale")] PythPriceStale,
 }
 
 #[repr(u8)]

@@ -13,6 +13,9 @@ name = "rwa_raffle"
 no-entrypoint = []
 no-idl = []
 cpi = ["no-entrypoint"]
+default = []
+pyth-jupiter = ["pyth-sdk-solana"]  # Feature flag for Pyth + Jupiter integration
+bubblegum = ["mpl-bubblegum", "spl-account-compression"]  # Feature flag for Metaplex Bubblegum (compressed NFTs)
 
 [dependencies]
 anchor-lang = "0.31.1"
@@ -22,3 +25,8 @@ arcium-macros = { version = "0.3.0" }
 arcium-anchor = { version = "0.3.0" }
 light-sdk = { version = "0.16.0", features = ["anchor"] }
 light-hasher = { version = "5.0.0", features = ["solana"] }
+
+# Optional dependencies (feature-gated)
+mpl-bubblegum = { version = "1.4.0", optional = true }
+spl-account-compression = { version = "0.3.0", optional = true }
+pyth-sdk-solana = { version = "0.10.0", optional = true }
