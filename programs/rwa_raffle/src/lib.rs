@@ -1,16 +1,18 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{self as token, Mint, TokenAccount, TokenInterface, TransferChecked};
+use anchor_spl::token_interface::{self as token, Mint, TokenAccount, TransferChecked};
+use anchor_spl::token::Token;
 use arcium_anchor::prelude::*;
 use anchor_lang::solana_program::instruction::AccountMeta;
-use light_sdk::{
-    account::LightAccount,
-    address::v1::derive_address,
-    cpi::{v1::CpiAccounts, CpiSigner},
-    derive_light_cpi_signer,
-    instruction::{PackedAddressTreeInfo, ValidityProof},
-    LightDiscriminator, LightHasher,
-};
-use light_sdk::cpi::{v1::LightSystemProgramCpi, InvokeLightSystemProgram, LightCpiInstruction};
+// Temporarily commented out - Light SDK incompatible with rustc 1.79.0 // 
+// use light_sdk::{
+//     account::LightAccount,
+//     address::v1::derive_address,
+//     cpi::{v1::CpiAccounts, CpiSigner},
+//     derive_light_cpi_signer,
+//     instruction::{PackedAddressTreeInfo, ValidityProof},
+//     LightDiscriminator, LightHasher,
+// };
+// use light_sdk::cpi::{v1::LightSystemProgramCpi, InvokeLightSystemProgram, LightCpiInstruction};
 
 #[cfg(feature = "bubblegum")]
 use mpl_bubblegum::programs::MPL_BUBBLEGUM_ID;
@@ -24,12 +26,13 @@ const RAFFLE_SEED: &[u8] = b"raffle";
 const TICKET_SEED: &[u8] = b"ticket";
 const SLOTS_SEED: &[u8] = b"slots";
 
-pub const LIGHT_CPI_SIGNER: CpiSigner =
-    derive_light_cpi_signer!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
+// pub const LIGHT_CPI_SIGNER: CpiSigner =
+//     derive_light_cpi_signer!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
 
 const COMP_DEF_OFFSET_DRAW: u32 = comp_def_offset("draw");
 
-#[arcium_program]
+#[cfg_attr(not(feature = "arcium"), program)]
+#[cfg_attr(feature = "arcium", arcium_program)]
 pub mod rwa_raffle {
     use super::*;
 
@@ -46,10 +49,16 @@ pub mod rwa_raffle {
         require!(required_tickets > 0, RaffleError::InvalidAmount);
         require!(deadline_unix_ts > Clock::get()?.unix_timestamp, RaffleError::InvalidDeadline);
 
+        // Get keys before mutable borrow
+        let raffle_key = ctx.accounts.raffle.key();
+        let organizer_key = ctx.accounts.organizer.key();
+        let mint_key = ctx.accounts.mint.key();
+        let escrow_key = ctx.accounts.escrow_ata.key();
+
         let raffle = &mut ctx.accounts.raffle;
-        raffle.organizer = ctx.accounts.organizer.key();
-        raffle.mint = ctx.accounts.mint.key();
-        raffle.escrow = ctx.accounts.escrow_ata.key();
+        raffle.organizer = organizer_key;
+        raffle.mint = mint_key;
+        raffle.escrow = escrow_key;
         raffle.required_tickets = required_tickets;
         raffle.tickets_sold = 0;
         raffle.next_ticket_index = 1; // 1-based ticket numbers
@@ -62,20 +71,20 @@ pub mod rwa_raffle {
         raffle.bump = ctx.bumps.raffle;
 
         // Basic invariants for escrow
-        require_keys_eq!(ctx.accounts.escrow_ata.mint, raffle.mint);
-        require_keys_eq!(ctx.accounts.escrow_ata.owner, ctx.accounts.raffle.key());
+        require_keys_eq!(ctx.accounts.escrow_ata.mint, mint_key);
+        require_keys_eq!(ctx.accounts.escrow_ata.owner, raffle_key);
 
         emit!(RaffleInitialized {
-            raffle: raffle.key(),
-            organizer: raffle.organizer,
-            mint: raffle.mint,
+            raffle: raffle_key,
+            organizer: organizer_key,
+            mint: mint_key,
             required_tickets,
             deadline_unix_ts,
         });
 
         // Initialize RaffleSlots PDA for per-slot state
         let slots_acc = &mut ctx.accounts.slots;
-        slots_acc.raffle = raffle.key();
+        slots_acc.raffle = raffle_key;
         slots_acc.required_slots = required_tickets as u32;
         let bitmap_len = ((required_tickets + 7) / 8) as usize;
         slots_acc.bitmap = vec![0u8; bitmap_len];
@@ -95,7 +104,7 @@ pub struct CollectProceeds<'info> {
     pub raffle: Account<'info, Raffle>,
     
     /// The escrow mint (USDC). Used for transfer_checked validation.
-    pub mint: InterfaceAccount<'info, Mint>,
+    pub mint: InterfaceAccount<'info, Mint>, // is this used for swap too?
     
     /// The organizer's token account (USDC) where proceeds will be sent.
     #[account(mut, constraint = organizer_ata.owner == organizer.key(), constraint = organizer_ata.mint == mint.key())]
@@ -107,10 +116,10 @@ pub struct CollectProceeds<'info> {
     pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
     
     /// SPL Token program for the transfer.
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
-    /// **Organizer collects USDC proceeds from the raffle escrow after completion.**
+    /// **Organizer collects USDC proceeds from the raffle escrow after completion.** // might add time allowed to be taken too?
     ///
     /// # What it does
     /// - Transfers the entire USDC balance from the raffle's escrow account to the organizer's token account.
@@ -129,6 +138,12 @@ pub struct CollectProceeds<'info> {
     /// 1. Raffle completes → winner claims prize.
     /// 2. Organizer calls `collect_proceeds()` → all USDC moved to organizer's wallet.
     pub fn collect_proceeds(ctx: Context<CollectProceeds>) -> Result<()> {
+        // Get account infos before mutable borrow
+        let raffle_account_info = ctx.accounts.raffle.to_account_info();
+        let amount = ctx.accounts.escrow_ata.amount;
+        let mint_key = ctx.accounts.mint.key();
+        let organizer_key = ctx.accounts.organizer.key();
+        
         let raffle = &mut ctx.accounts.raffle;
         
         // 1. Verify raffle is completed (winner selected)
@@ -138,25 +153,26 @@ pub struct CollectProceeds<'info> {
         require!(!raffle.proceeds_collected, RaffleError::AlreadyCollected);
 
         // 3. Get the full escrow balance (all participant USDC deposits)
-        let amount = ctx.accounts.escrow_ata.amount;
         require!(amount > 0, RaffleError::InvalidAmount);
 
         // 4. Prepare the transfer: escrow → organizer
+        let raffle_bump = raffle.bump;
+        
         let cpi_accounts = TransferChecked {
             from: ctx.accounts.escrow_ata.to_account_info(),
             to: ctx.accounts.organizer_ata.to_account_info(),
             mint: ctx.accounts.mint.to_account_info(),
-            authority: ctx.accounts.raffle.to_account_info(), // Raffle PDA signs
+            authority: raffle_account_info, // Raffle PDA signs
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();
         
         // 5. Derive PDA signer seeds (raffle PDA owns the escrow)
         let seeds: &[&[u8]] = &[
             RAFFLE_SEED,
-            ctx.accounts.mint.key().as_ref(),
-            ctx.accounts.organizer.key().as_ref(),
+            mint_key.as_ref(),
+            organizer_key.as_ref(),
         ];
-        let bump = [raffle.bump];
+        let bump = [raffle_bump];
         let signer_seeds: &[&[u8]] = &[seeds[0], seeds[1], seeds[2], &bump];
         
         // 6. Execute the transfer with PDA signature
@@ -168,7 +184,7 @@ pub struct CollectProceeds<'info> {
 
         // 7. Mark as collected to prevent re-entrancy
         raffle.proceeds_collected = true;
-        Ok()
+        Ok(())
     }
 
 #[derive(Accounts)]
@@ -199,7 +215,7 @@ pub struct InitializeRaffleWithPermit<'info> {
     #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
     pub instructions_sysvar: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
     /// Initialize a new raffle with an off-chain organizer permit (ed25519-like).
@@ -216,11 +232,16 @@ pub struct InitializeRaffleWithPermit<'info> {
         auto_draw: bool,
         ticket_mode: u8, // 0=disabled, 1=accept_without_burn, 2=require_burn
     ) -> Result<()> {
-        let organizer = &ctx.accounts.organizer;
+        // Get keys before mutable borrow
+        let raffle_key = ctx.accounts.raffle.key();
+        let organizer_key = ctx.accounts.organizer.key();
+        let mint_key = ctx.accounts.mint.key();
+        let escrow_key = ctx.accounts.escrow_ata.key();
+        
         let raffle = &mut ctx.accounts.raffle;
-        raffle.organizer = organizer.key();
-        raffle.mint = ctx.accounts.mint.key();
-        raffle.escrow = ctx.accounts.escrow_ata.key();
+        raffle.organizer = organizer_key;
+        raffle.mint = mint_key;
+        raffle.escrow = escrow_key;
         raffle.required_tickets = required_tickets;
         raffle.tickets_sold = 0;
         raffle.next_ticket_index = 1;
@@ -232,20 +253,20 @@ pub struct InitializeRaffleWithPermit<'info> {
         raffle.ticket_mode = ticket_mode;
         raffle.bump = ctx.bumps.raffle;
 
-        require_keys_eq!(ctx.accounts.escrow_ata.mint, raffle.mint);
-        require_keys_eq!(ctx.accounts.escrow_ata.owner, ctx.accounts.raffle.key());
+        require_keys_eq!(ctx.accounts.escrow_ata.mint, mint_key);
+        require_keys_eq!(ctx.accounts.escrow_ata.owner, raffle_key);
 
         emit!(RaffleInitialized {
-            raffle: raffle.key(),
-            organizer: raffle.organizer,
-            mint: raffle.mint,
+            raffle: raffle_key,
+            organizer: organizer_key,
+            mint: mint_key,
             required_tickets,
             deadline_unix_ts,
         });
 
         // Initialize RaffleSlots PDA for per-slot state
         let slots_acc = &mut ctx.accounts.slots;
-        slots_acc.raffle = raffle.key();
+        slots_acc.raffle = raffle_key;
         slots_acc.required_slots = required_tickets as u32;
         let bitmap_len = ((required_tickets + 7) / 8) as usize;
         slots_acc.bitmap = vec![0u8; bitmap_len];
@@ -268,14 +289,14 @@ pub struct InitializeRaffleWithPermit<'info> {
         expected_msg.push(raffle.ticket_mode);
 
         // Scan instructions sysvar for an ed25519 verify ix that matches
-        use anchor_lang::solana_program::{ed25519_program, sysvar::instructions::load_instruction_at};
+        use anchor_lang::solana_program::{ed25519_program, sysvar::instructions};
 
         let ixn_acc = &ctx.accounts.instructions_sysvar;
         let mut found = false;
         let mut idx = 0;
         // Iterate through instructions; stop if load fails
         loop {
-            let loaded = load_instruction_at(idx, ixn_acc);
+            let loaded = instructions::load_instruction_at_checked(idx, ixn_acc);
             if loaded.is_err() { break; }
             let ix = loaded.unwrap();
             if ix.program_id == ed25519_program::id() {
@@ -314,92 +335,93 @@ pub struct InitializeRaffleWithPermit<'info> {
         Ok(())
     }
 
-    /// Deposit using Light Protocol compressed accounts for the Ticket record.
-    pub fn deposit_compressed<'info>(
-        ctx: Context<'_, '_, '_, 'info, DepositCompressed<'info>>,
-        proof: ValidityProof,
-        address_tree_info: PackedAddressTreeInfo,
-        output_state_tree_index: u8,
-        amount: u64,
-        start_index: u64,
-    ) -> Result<()> {
-        let clock = Clock::get()?;
-        let raffle = &mut ctx.accounts.raffle;
-        require!(raffle.status == RaffleStatus::Selling as u8, RaffleError::RaffleNotSelling);
-        require!(clock.unix_timestamp <= raffle.deadline, RaffleError::PastDeadline);
-        require!(amount > 0, RaffleError::InvalidAmount);
-        require!(start_index == raffle.next_ticket_index, RaffleError::ConcurrentDeposit);
-
-        let unit = 10u64.pow(ctx.accounts.mint.decimals as u32);
-        require!(amount % unit == 0, RaffleError::MustDepositWholeTokens);
-        let tickets = amount / unit;
-        require!(tickets > 0, RaffleError::InvalidAmount);
-        require!(raffle.tickets_sold.saturating_add(tickets) <= raffle.required_tickets, RaffleError::OverSubscription);
-
-        // Transfer tokens into escrow
-        let cpi_accounts = TransferChecked {
-            from: ctx.accounts.payer_ata.to_account_info(),
-            to: ctx.accounts.escrow_ata.to_account_info(),
-            mint: ctx.accounts.mint.to_account_info(),
-            authority: ctx.accounts.signer.to_account_info(),
-        };
-        let cpi_program = ctx.accounts.token_program.to_account_info();
-        token::transfer_checked(CpiContext::new(cpi_program, cpi_accounts), amount, ctx.accounts.mint.decimals)?;
-
-        // Create compressed ticket account via Light
-        let light_cpi_accounts = CpiAccounts::new(
-            ctx.accounts.signer.as_ref(),
-            ctx.remaining_accounts,
-            crate::LIGHT_CPI_SIGNER,
-        );
-
-        let (address, address_seed) = derive_address(
-            &[b"ticket", raffle.key().as_ref(), ctx.accounts.signer.key().as_ref(), &start_index.to_le_bytes()],
-            &address_tree_info
-                .get_tree_pubkey(&light_cpi_accounts)
-                .map_err(|_| error!(RaffleError::Overflow))?,
-            &crate::ID,
-        );
-
-        let new_address_params = address_tree_info.into_new_address_params_packed(address_seed);
-
-        let mut ticket_acc = LightAccount::<TicketCompressed>::new_init(
-            &crate::ID,
-            Some(address),
-            output_state_tree_index,
-        );
-        ticket_acc.raffle = raffle.key();
-        ticket_acc.owner = ctx.accounts.signer.key();
-        ticket_acc.start = raffle.next_ticket_index;
-        ticket_acc.count = tickets;
-        ticket_acc.refunded = false;
-        ticket_acc.claimed_win = false;
-
-        LightSystemProgramCpi::new_cpi(LIGHT_CPI_SIGNER, proof)
-            .with_light_account(ticket_acc)?
-            .with_new_addresses(&[new_address_params])
-            .invoke(light_cpi_accounts)?;
-
-        // Update counters and emit
-        raffle.tickets_sold = raffle.tickets_sold.checked_add(tickets).ok_or(RaffleError::Overflow)?;
-        raffle.next_ticket_index = raffle.next_ticket_index.checked_add(tickets).ok_or(RaffleError::Overflow)?;
-
-        emit!(Deposited {
-            raffle: raffle.key(),
-            owner: ctx.accounts.signer.key(),
-            start: start_index,
-            count: tickets,
-            tickets_sold: raffle.tickets_sold,
-        });
-
-        if raffle.tickets_sold == raffle.required_tickets {
-            raffle.status = RaffleStatus::Drawing as u8;
-            emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
-            if raffle.auto_draw { emit!(RandomnessRequested { raffle: raffle.key(), supply: raffle.required_tickets }); }
-        }
-
-        Ok(())
-    }
+    // Temporarily commented out - Light SDK incompatible with rustc 1.79.0
+    // /// Deposit using Light Protocol compressed accounts for the Ticket record.
+    // pub fn deposit_compressed<'info>(
+    //     ctx: Context<'_, '_, '_, 'info, DepositCompressed<'info>>,
+    //     proof: ValidityProof,
+    //     address_tree_info: PackedAddressTreeInfo,
+    //     output_state_tree_index: u8,
+    //     amount: u64,
+    //     start_index: u64,
+    // ) -> Result<()> {
+    //     let clock = Clock::get()?;
+    //     let raffle = &mut ctx.accounts.raffle;
+    //     require!(raffle.status == RaffleStatus::Selling as u8, RaffleError::RaffleNotSelling);
+    //     require!(clock.unix_timestamp <= raffle.deadline, RaffleError::PastDeadline);
+    //     require!(amount > 0, RaffleError::InvalidAmount);
+    //     require!(start_index == raffle.next_ticket_index, RaffleError::ConcurrentDeposit);
+    //
+    //     let unit = 10u64.pow(ctx.accounts.mint.decimals as u32);
+    //     require!(amount % unit == 0, RaffleError::MustDepositWholeTokens);
+    //     let tickets = amount / unit;
+    //     require!(tickets > 0, RaffleError::InvalidAmount);
+    //     require!(raffle.tickets_sold.saturating_add(tickets) <= raffle.required_tickets, RaffleError::OverSubscription);
+    //
+    //     // Transfer tokens into escrow
+    //     let cpi_accounts = TransferChecked {
+    //         from: ctx.accounts.payer_ata.to_account_info(),
+    //         to: ctx.accounts.escrow_ata.to_account_info(),
+    //         mint: ctx.accounts.mint.to_account_info(),
+    //         authority: ctx.accounts.signer.to_account_info(),
+    //     };
+    //     let cpi_program = ctx.accounts.token_program.to_account_info();
+    //     token::transfer_checked(CpiContext::new(cpi_program, cpi_accounts), amount, ctx.accounts.mint.decimals)?;
+    //
+    //     // Create compressed ticket account via Light
+    //     let light_cpi_accounts = CpiAccounts::new(
+    //         ctx.accounts.signer.as_ref(),
+    //         ctx.remaining_accounts,
+    //         crate::LIGHT_CPI_SIGNER,
+    //     );
+    //
+    //     let (address, address_seed) = derive_address(
+    //         &[b"ticket", raffle.key().as_ref(), ctx.accounts.signer.key().as_ref(), &start_index.to_le_bytes()],
+    //         &address_tree_info
+    //             .get_tree_pubkey(&light_cpi_accounts)
+    //             .map_err(|_| error!(RaffleError::Overflow))?,
+    //         &crate::ID,
+    //     );
+    //
+    //     let new_address_params = address_tree_info.into_new_address_params_packed(address_seed);
+    //
+    //     let mut ticket_acc = LightAccount::<TicketCompressed>::new_init(
+    //         &crate::ID,
+    //         Some(address),
+    //         output_state_tree_index,
+    //     );
+    //     ticket_acc.raffle = raffle.key();
+    //     ticket_acc.owner = ctx.accounts.signer.key();
+    //     ticket_acc.start = raffle.next_ticket_index;
+    //     ticket_acc.count = tickets;
+    //     ticket_acc.refunded = false;
+    //     ticket_acc.claimed_win = false;
+    //
+    //     LightSystemProgramCpi::new_cpi(LIGHT_CPI_SIGNER, proof)
+    //         .with_light_account(ticket_acc)?
+    //         .with_new_addresses(&[new_address_params])
+    //         .invoke(light_cpi_accounts)?;
+    //
+    //     // Update counters and emit
+    //     raffle.tickets_sold = raffle.tickets_sold.checked_add(tickets).ok_or(RaffleError::Overflow)?;
+    //     raffle.next_ticket_index = raffle.next_ticket_index.checked_add(tickets).ok_or(RaffleError::Overflow)?;
+    //
+    //     emit!(Deposited {
+    //         raffle: raffle.key(),
+    //         owner: ctx.accounts.signer.key(),
+    //         start: start_index,
+    //         count: tickets,
+    //         tickets_sold: raffle.tickets_sold,
+    //     });
+    //
+    //     if raffle.tickets_sold == raffle.required_tickets {
+    //         raffle.status = RaffleStatus::Drawing as u8;
+    //         emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
+    //         if raffle.auto_draw { emit!(RandomnessRequested { raffle: raffle.key(), supply: raffle.required_tickets }); }
+    //     }
+    //
+    //     Ok(())
+    // }
 
     /// Deposit raw token amount (no swap; assumes payer holds the escrow mint, e.g. USDC) and
     /// receive a ticket range [start, start+count-1]. For devnet/legacy tests. Clients must pass
@@ -805,7 +827,7 @@ pub struct InitializeRaffleWithPermit<'info> {
 
     /// Batch-mark tickets as refunded and emit refund ticket requests for offchain minting.
     /// Caller passes Ticket accounts as remaining_accounts; safe to call by anyone.
-    pub fn refund_batch(ctx: Context<RefundBatch>) -> Result<()> {
+    pub fn refund_batch<'info>(ctx: Context<'_, '_, 'info, 'info, RefundBatch<'info>>) -> Result<()> {
         let clock = Clock::get()?;
         let raffle = &mut ctx.accounts.raffle;
         require!(raffle.status == RaffleStatus::Selling as u8 || raffle.status == RaffleStatus::Refunding as u8, RaffleError::WrongStatus);
@@ -876,6 +898,9 @@ pub struct InitializeRaffleWithPermit<'info> {
     }
 
     pub fn claim_prize(ctx: Context<ClaimPrize>) -> Result<()> {
+        // Get account info before mutable borrow
+        let raffle_account_info = ctx.accounts.raffle.to_account_info();
+        
         let raffle = &mut ctx.accounts.raffle;
         require!(raffle.status == RaffleStatus::Completed as u8, RaffleError::WrongStatus);
         require!(raffle.prize_set, RaffleError::PrizeNotSet);
@@ -885,71 +910,78 @@ pub struct InitializeRaffleWithPermit<'info> {
         require!(ctx.accounts.prize_mint.decimals == 0, RaffleError::PrizeMustBeNft);
 
         let ticket = &ctx.accounts.ticket;
-        require!(ticket.raffle == raffle.key(), RaffleError::WrongRaffle);
+        let raffle_key = raffle.key();
+        require!(ticket.raffle == raffle_key, RaffleError::WrongRaffle);
         require!(ticket.owner == ctx.accounts.winner.key(), RaffleError::Unauthorized);
         require!(ticket.claimed_win, RaffleError::MustClaimWinFirst);
 
+        let raffle_mint = raffle.mint;
+        let raffle_organizer = raffle.organizer;
+        let raffle_bump = raffle.bump;
+        let prize_mint_key = raffle.prize_mint;
+        
         let seeds: &[&[u8]] = &[
             RAFFLE_SEED,
-            raffle.mint.as_ref(),
-            raffle.organizer.as_ref(),
-            &[raffle.bump],
+            raffle_mint.as_ref(),
+            raffle_organizer.as_ref(),
+            &[raffle_bump],
         ];
         let signer = &[seeds];
         let cpi_accounts = TransferChecked {
             from: ctx.accounts.prize_escrow.to_account_info(),
             to: ctx.accounts.winner_prize_ata.to_account_info(),
             mint: ctx.accounts.prize_mint.to_account_info(),
-            authority: ctx.accounts.raffle.to_account_info(),
+            authority: raffle_account_info,
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();
         token::transfer_checked(CpiContext::new_with_signer(cpi_program, cpi_accounts, signer), 1, 0)?;
 
         raffle.prize_claimed = true;
-        emit!(PrizeClaimed { raffle: raffle.key(), winner: ctx.accounts.winner.key(), prize_mint: raffle.prize_mint });
+        emit!(PrizeClaimed { raffle: raffle_key, winner: ctx.accounts.winner.key(), prize_mint: prize_mint_key });
         Ok(())
     }
 
-    pub fn init_draw_comp_def(ctx: Context<InitDrawCompDef>) -> Result<()> {
-        init_comp_def(ctx.accounts, true, 0, None, None)?;
-        Ok(())
-    }
-
-    pub fn request_draw_arcium(
-        ctx: Context<RequestDrawArcium>,
-        computation_offset: u64,
-    ) -> Result<()> {
-        let raffle = &ctx.accounts.raffle;
-        require!(raffle.status == RaffleStatus::Drawing as u8, RaffleError::WrongStatus);
-
-        let args = vec![Argument::PlaintextU64(raffle.required_tickets)];
-
-        ctx.accounts.sign_pda_account.bump = ctx.bumps.sign_pda_account;
-
-        let cb_ix = DrawCallback::callback_ix(&[AccountMeta::new(ctx.accounts.raffle.key(), false)]);
-        queue_computation(ctx.accounts, computation_offset, args, None, vec![cb_ix])?;
-
-        Ok(())
-    }
-
-    #[arcium_callback(encrypted_ix = "draw")]
-    pub fn draw_callback(
-        ctx: Context<DrawCallback>,
-        output: ComputationOutputs<DrawOutput>,
-    ) -> Result<()> {
-        let winner_ticket = match output {
-            ComputationOutputs::Success(DrawOutput { field_0 }) => field_0,
-            _ => return Err(ArcError::AbortedComputation.into()),
-        };
-
-        let raffle = &mut ctx.accounts.raffle;
-        require!(raffle.status == RaffleStatus::Drawing as u8, RaffleError::WrongStatus);
-        require!(winner_ticket >= 1 && winner_ticket <= raffle.required_tickets, RaffleError::InvalidWinner);
-        raffle.winner_ticket = winner_ticket;
-        raffle.status = RaffleStatus::Completed as u8;
-        emit!(WinnerSelected { raffle: raffle.key(), winner_ticket });
-        Ok(())
-    }
+    // Arcium functions temporarily disabled - requires compiled .arcis files
+    // pub fn init_draw_comp_def(ctx: Context<InitDrawCompDef>) -> Result<()> {
+    //     init_comp_def(ctx.accounts, true, 0, None, None)?;
+    //     Ok(())
+    // }
+    //
+    // pub fn request_draw_arcium(
+    //     ctx: Context<RequestDrawArcium>,
+    //     computation_offset: u64,
+    // ) -> Result<()> {
+    //     let raffle = &ctx.accounts.raffle;
+    //     require!(raffle.status == RaffleStatus::Drawing as u8, RaffleError::WrongStatus);
+    //
+    //     let args = vec![Argument::PlaintextU64(raffle.required_tickets)];
+    //
+    //     ctx.accounts.sign_pda_account.bump = ctx.bumps.sign_pda_account;
+    //
+    //     let cb_ix = DrawCallback::callback_ix(&[AccountMeta::new(ctx.accounts.raffle.key(), false)]);
+    //     queue_computation(ctx.accounts, computation_offset, args, None, vec![cb_ix])?;
+    //
+    //     Ok(())
+    // }
+    //
+    // #[arcium_callback(encrypted_ix = "draw")]
+    // pub fn draw_callback(
+    //     ctx: Context<DrawCallback>,
+    //     output: ComputationOutputs<DrawOutput>,
+    // ) -> Result<()> {
+    //     let winner_ticket = match output {
+    //         ComputationOutputs::Success(DrawOutput { field_0 }) => field_0,
+    //         _ => return Err(ArcError::AbortedComputation.into()),
+    //     };
+    //
+    //     let raffle = &mut ctx.accounts.raffle;
+    //     require!(raffle.status == RaffleStatus::Drawing as u8, RaffleError::WrongStatus);
+    //     require!(winner_ticket >= 1 && winner_ticket <= raffle.required_tickets, RaffleError::InvalidWinner);
+    //     raffle.winner_ticket = winner_ticket;
+    //     raffle.status = RaffleStatus::Completed as u8;
+    //     emit!(WinnerSelected { raffle: raffle.key(), winner_ticket });
+    //     Ok(())
+    // }
 }
 
 #[derive(Accounts)]
@@ -977,7 +1009,7 @@ pub struct InitializeRaffle<'info> {
     )]
     pub slots: Account<'info, RaffleSlots>,
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
 #[derive(Accounts)]
@@ -987,86 +1019,88 @@ pub struct RefundBatch<'info> {
     pub raffle: Account<'info, Raffle>,
 }
 
-#[queue_computation_accounts("draw", payer)]
-#[derive(Accounts)]
-#[instruction(computation_offset: u64)]
-pub struct RequestDrawArcium<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    #[account(mut)]
-    pub raffle: Account<'info, Raffle>,
-    #[account(
-        init_if_needed,
-        space = 9,
-        payer = payer,
-        seeds = [&SIGN_PDA_SEED],
-        bump,
-        address = derive_sign_pda!(),
-    )]
-    pub sign_pda_account: Account<'info, SignerAccount>,
-    #[account(address = derive_mxe_pda!())]
-    pub mxe_account: Account<'info, MXEAccount>,
-    #[account(mut, address = derive_mempool_pda!())]
-    /// CHECK: mempool_account, checked by the arcium program
-    pub mempool_account: UncheckedAccount<'info>,
-    #[account(mut, address = derive_execpool_pda!())]
-    /// CHECK: executing_pool, checked by the arcium program
-    pub executing_pool: UncheckedAccount<'info>,
-    #[account(mut, address = derive_comp_pda!(computation_offset))]
-    /// CHECK: computation_account, checked by the arcium program.
-    pub computation_account: UncheckedAccount<'info>,
-    #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_DRAW))]
-    pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
-    #[account(mut, address = derive_cluster_pda!(mxe_account))]
-    pub cluster_account: Account<'info, Cluster>,
-    #[account(mut, address = ARCIUM_FEE_POOL_ACCOUNT_ADDRESS)]
-    pub pool_account: Account<'info, FeePool>,
-    #[account(address = ARCIUM_CLOCK_ACCOUNT_ADDRESS)]
-    pub clock_account: Account<'info, ClockAccount>,
-    pub system_program: Program<'info, System>,
-    pub arcium_program: Program<'info, Arcium>,
-}
+// Arcium account structs temporarily disabled - requires compiled .arcis files
+// #[queue_computation_accounts("draw", payer)]
+// #[derive(Accounts)]
+// #[instruction(computation_offset: u64)]
+// pub struct RequestDrawArcium<'info> {
+//     #[account(mut)]
+//     pub payer: Signer<'info>,
+//     #[account(mut)]
+//     pub raffle: Account<'info, Raffle>,
+//     #[account(
+//         init_if_needed,
+//         space = 9,
+//         payer = payer,
+//         seeds = [&SIGN_PDA_SEED],
+//         bump,
+//         address = derive_sign_pda!(),
+//     )]
+//     pub sign_pda_account: Account<'info, SignerAccount>,
+//     #[account(address = derive_mxe_pda!())]
+//     pub mxe_account: Account<'info, MXEAccount>,
+//     #[account(mut, address = derive_mempool_pda!())]
+//     /// CHECK: mempool_account, checked by the arcium program
+//     pub mempool_account: UncheckedAccount<'info>,
+//     #[account(mut, address = derive_execpool_pda!())]
+//     /// CHECK: executing_pool, checked by the arcium program
+//     pub executing_pool: UncheckedAccount<'info>,
+//     #[account(mut, address = derive_comp_pda!(computation_offset))]
+//     /// CHECK: computation_account, checked by the arcium program.
+//     pub computation_account: UncheckedAccount<'info>,
+//     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_DRAW))]
+//     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
+//     #[account(mut, address = derive_cluster_pda!(mxe_account))]
+//     pub cluster_account: Account<'info, Cluster>,
+//     #[account(mut, address = ARCIUM_FEE_POOL_ACCOUNT_ADDRESS)]
+//     pub pool_account: Account<'info, FeePool>,
+//     #[account(address = ARCIUM_CLOCK_ACCOUNT_ADDRESS)]
+//     pub clock_account: Account<'info, ClockAccount>,
+//     pub system_program: Program<'info, System>,
+//     pub arcium_program: Program<'info, Arcium>,
+// }
+//
+// #[callback_accounts("draw")]
+// #[derive(Accounts)]
+// pub struct DrawCallback<'info> {
+//     pub arcium_program: Program<'info, Arcium>,
+//     #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_DRAW))]
+//     pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
+//     #[account(address = ::anchor_lang::solana_program::sysvar::instructions::ID)]
+//     /// CHECK: instructions_sysvar, checked by the account constraint
+//     pub instructions_sysvar: AccountInfo<'info>,
+//     #[account(mut)]
+//     pub raffle: Account<'info, Raffle>,
+// }
+//
+// #[init_computation_definition_accounts("draw", payer)]
+// #[derive(Accounts)]
+// pub struct InitDrawCompDef<'info> {
+//     #[account(mut)]
+//     pub payer: Signer<'info>,
+//     #[account(mut, address = derive_mxe_pda!())]
+//     pub mxe_account: Box<Account<'info, MXEAccount>>,
+//     #[account(mut)]
+//     /// CHECK: comp_def_account, checked by arcium program (not initialized yet)
+//     pub comp_def_account: UncheckedAccount<'info>,
+//     pub arcium_program: Program<'info, Arcium>,
+//     pub system_program: Program<'info, System>,
+// }
 
-#[callback_accounts("draw")]
-#[derive(Accounts)]
-pub struct DrawCallback<'info> {
-    pub arcium_program: Program<'info, Arcium>,
-    #[account(address = derive_comp_def_pda!(COMP_DEF_OFFSET_DRAW))]
-    pub comp_def_account: Account<'info, ComputationDefinitionAccount>,
-    #[account(address = ::anchor_lang::solana_program::sysvar::instructions::ID)]
-    /// CHECK: instructions_sysvar, checked by the account constraint
-    pub instructions_sysvar: AccountInfo<'info>,
-    #[account(mut)]
-    pub raffle: Account<'info, Raffle>,
-}
-
-#[init_computation_definition_accounts("draw", payer)]
-#[derive(Accounts)]
-pub struct InitDrawCompDef<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    #[account(mut, address = derive_mxe_pda!())]
-    pub mxe_account: Box<Account<'info, MXEAccount>>,
-    #[account(mut)]
-    /// CHECK: comp_def_account, checked by arcium program (not initialized yet)
-    pub comp_def_account: UncheckedAccount<'info>,
-    pub arcium_program: Program<'info, Arcium>,
-    pub system_program: Program<'info, System>,
-}
-
-#[derive(Accounts)]
-pub struct DepositCompressed<'info> {
-    #[account(mut)]
-    pub signer: Signer<'info>,
-    #[account(mut, has_one = mint, constraint = raffle.escrow == escrow_ata.key())]
-    pub raffle: Account<'info, Raffle>,
-    pub mint: InterfaceAccount<'info, Mint>,
-    #[account(mut, constraint = payer_ata.owner == signer.key(), constraint = payer_ata.mint == mint.key())]
-    pub payer_ata: InterfaceAccount<'info, TokenAccount>,
-    #[account(mut, constraint = escrow_ata.owner == raffle.key(), constraint = escrow_ata.mint == mint.key())]
-    pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
-    pub token_program: Program<'info, TokenInterface>,
-}
+// Temporarily commented out - Light SDK incompatible with rustc 1.79.0
+// #[derive(Accounts)]
+// pub struct DepositCompressed<'info> {
+//     #[account(mut)]
+//     pub signer: Signer<'info>,
+//     #[account(mut, has_one = mint, constraint = raffle.escrow == escrow_ata.key())]
+//     pub raffle: Account<'info, Raffle>,
+//     pub mint: InterfaceAccount<'info, Mint>,
+//     #[account(mut, constraint = payer_ata.owner == signer.key(), constraint = payer_ata.mint == mint.key())]
+//     pub payer_ata: InterfaceAccount<'info, TokenAccount>,
+//     #[account(mut, constraint = escrow_ata.owner == raffle.key(), constraint = escrow_ata.mint == mint.key())]
+//     pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
+//     pub token_program: Program<'info, Token>,
+// }
 
 #[derive(Accounts)]
 #[instruction(amount: u64, start_index: u64)]
@@ -1089,7 +1123,7 @@ pub struct Deposit<'info> {
     )]
     pub ticket: Account<'info, Ticket>,
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
 /// Accounts for joining raffle with MOGA tokens (swap flow).
@@ -1144,7 +1178,7 @@ pub struct JoinWithMoga<'info> {
     // ... remaining Jupiter accounts
     
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
     pub mint: InterfaceAccount<'info, Mint>,
 }
 
@@ -1208,7 +1242,7 @@ pub struct ClaimRefund<'info> {
     pub escrow_ata: InterfaceAccount<'info, TokenAccount>,
     #[account(mut, seeds = [TICKET_SEED, raffle.key().as_ref(), payer.key().as_ref(), &ticket.start.to_le_bytes()], bump = ticket.bump)]
     pub ticket: Account<'info, Ticket>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
 #[derive(Accounts)]
@@ -1231,7 +1265,7 @@ pub struct SetPrizeNft<'info> {
     pub organizer_prize_ata: InterfaceAccount<'info, TokenAccount>,
     #[account(mut, constraint = prize_escrow.owner == raffle.key(), constraint = prize_escrow.mint == prize_mint.key())]
     pub prize_escrow: InterfaceAccount<'info, TokenAccount>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
 #[derive(Accounts)]
@@ -1246,7 +1280,7 @@ pub struct ClaimPrize<'info> {
     pub winner_prize_ata: InterfaceAccount<'info, TokenAccount>,
     #[account(seeds = [TICKET_SEED, raffle.key().as_ref(), winner.key().as_ref(), &ticket.start.to_le_bytes()], bump = ticket.bump)]
     pub ticket: Account<'info, Ticket>,
-    pub token_program: Program<'info, TokenInterface>,
+    pub token_program: Program<'info, Token>,
 }
 
 #[account]
@@ -1306,17 +1340,18 @@ impl Ticket {
     pub const LEN: usize = 32 + 32 + 8 + 8 + 1 + 1 + 1;
 }
 
-#[derive(Clone, Debug, Default, LightDiscriminator, LightHasher)]
-pub struct TicketCompressed {
-    #[hash]
-    pub raffle: Pubkey,
-    #[hash]
-    pub owner: Pubkey,
-    pub start: u64,
-    pub count: u64,
-    pub refunded: bool,
-    pub claimed_win: bool,
-}
+// Temporarily commented out - Light SDK incompatible with rustc 1.79.0
+// #[derive(Clone, Debug, Default, LightDiscriminator, LightHasher)]
+// pub struct TicketCompressed {
+//     #[hash]
+//     pub raffle: Pubkey,
+//     #[hash]
+//     pub owner: Pubkey,
+//     pub start: u64,
+//     pub count: u64,
+//     pub refunded: bool,
+//     pub claimed_win: bool,
+// }
 
 #[event]
 pub struct RaffleInitialized {

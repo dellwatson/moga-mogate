@@ -14,19 +14,20 @@ no-entrypoint = []
 no-idl = []
 cpi = ["no-entrypoint"]
 default = []
-pyth-jupiter = ["pyth-sdk-solana"]  # Feature flag for Pyth + Jupiter integration
-bubblegum = ["mpl-bubblegum", "spl-account-compression"]  # Feature flag for Metaplex Bubblegum (compressed NFTs)
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+pyth-jupiter = ["dep:pyth-sdk-solana"]  # Feature flag for Pyth + Jupiter integration
+bubblegum = []  # Temporarily stubbed; deps removed to avoid Solana 1.16 zeroize conflict
+arcium = []  # Feature flag for Arcium encrypted computation (requires compiled .arcis files)
 
 [dependencies]
 anchor-lang = "0.31.1"
-anchor-spl = { version = "0.31.1", features = ["token", "token-2022", "associated-token"] }
+anchor-spl = "0.31.1"
 arcium-client = { version = "0.3.0", default-features = false }
 arcium-macros = { version = "0.3.0" }
 arcium-anchor = { version = "0.3.0" }
-light-sdk = { version = "0.16.0", features = ["anchor"] }
-light-hasher = { version = "5.0.0", features = ["solana"] }
+# Temporarily commented out - incompatible with rustc 1.79.0
+# light-sdk = { version = "0.16.0", features = ["anchor"] }
+# light-hasher = { version = "5.0.0", features = ["solana"] }
 
 # Optional dependencies (feature-gated)
-mpl-bubblegum = { version = "1.4.0", optional = true }
-spl-account-compression = { version = "0.3.0", optional = true }
 pyth-sdk-solana = { version = "0.10.0", optional = true }
