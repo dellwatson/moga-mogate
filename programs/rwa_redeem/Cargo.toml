@@ -1,0 +1,23 @@
+[package]
+name = "rwa_redeem"
+version = "0.1.0"
+edition = "2021"
+description = "RWA NFT redemption with backend permit"
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "rwa_redeem"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+test-bypass = []  # Bypass permit checks for testing
+bubblegum = []  # Compressed NFT support
+
+[dependencies]
+anchor-lang = "0.31.1"
+anchor-spl = "0.31.1"

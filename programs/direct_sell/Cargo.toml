@@ -1,0 +1,22 @@
+[package]
+name = "direct_sell"
+version = "0.1.0"
+edition = "2021"
+description = "Direct NFT sales with MOGA/USDC payment"
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "direct_sell"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+test-bypass = []  # Bypass permit checks for testing
+
+[dependencies]
+anchor-lang = "0.31.1"
+anchor-spl = "0.31.1"

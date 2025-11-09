@@ -18,6 +18,8 @@ idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 pyth-jupiter = ["dep:pyth-sdk-solana"]  # Feature flag for Pyth + Jupiter integration
 bubblegum = []  # Temporarily stubbed; deps removed to avoid Solana 1.16 zeroize conflict
 arcium = []  # Feature flag for Arcium encrypted computation (requires compiled .arcis files)
+metaplex = ["dep:mpl-token-metadata"]  # Feature flag for Metaplex Token Metadata (post-mint prize path)
+test-bypass = []  # Feature flag to bypass permit checks for testing
 
 [dependencies]
 anchor-lang = "0.31.1"
@@ -31,3 +33,4 @@ arcium-anchor = { version = "0.3.0" }
 
 # Optional dependencies (feature-gated)
 pyth-sdk-solana = { version = "0.10.0", optional = true }
+mpl-token-metadata = { version = "5.0.0", optional = true, features = ["serde"] }
