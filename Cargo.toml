@@ -1,9 +1,12 @@
 [workspace]
 members = [
   "programs/rwa_raffle",
-  "encrypted-ixs",
+  # "encrypted-ixs",  # Disabled - requires nightly Rust for arcis-interpreter
 ]
 resolver = "2"
+
+[profile.release]
+overflow-checks = true
 
 [workspace.package]
 edition = "2021"

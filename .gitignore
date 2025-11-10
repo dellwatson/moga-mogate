@@ -14,3 +14,10 @@
 
 # Env
 .env
+**/**/target/deploy
+**/**/target/deploy/*.json
+**/**/target/deploy/*.keypair
+**/**/target/deploy/*.so
+**/**/target/deploy/*.wasm
+/target/
+programs/*/target/
