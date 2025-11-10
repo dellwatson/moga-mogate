@@ -83,12 +83,27 @@ Optional registry (planned):
 
 ## 6) Joining the Raffle
 
-- Devnet/legacy (no swap): use `deposit()` to transfer USDC directly and mint a ticket record.
-- 1-TX MOGA path (coming): `join_with_moga(slots, max_moga_in)`
-  - Validate free slots via `RaffleSlots` bitmap
-  - Pyth price + Jupiter swap MOGA→USDC
-  - Reserve slots and deposit USDC
-- Ticket path (coming): `join_with_ticket(slots, nft_refs[])` burns MRFT and reserves slots.
+Three paths available:
+
+### A) Devnet/legacy (no swap)
+- Use `deposit()` to transfer USDC directly and mint a ticket record
+- Simple path for testing
+
+### B) 1-TX MOGA path ✅ (feature-gated: `pyth-jupiter`)
+- `join_with_moga(slots, max_moga_in)`
+  - Validates free slots via `RaffleSlots` bitmap
+  - Gets USDC price from Pyth oracle (TODO: implement)
+  - Swaps MOGA→USDC via Jupiter CPI (TODO: implement)
+  - Reserves slots and deposits USDC
+  - Mints ticket record
+- **Status**: Instruction scaffolded; Pyth+Jupiter CPI pending
+
+### C) Ticket path ✅ (feature-gated: `bubblegum`)
+- `join_with_ticket(slots, nft_refs[])`
+  - Validates MRFT collection (TODO: implement)
+  - Burns MRFT NFTs via Bubblegum (TODO: implement)
+  - Reserves slots and mints ticket record
+- **Status**: Instruction scaffolded; Bubblegum burn CPI pending
 
 ## 7) Draw and Claim
 
