@@ -38,6 +38,13 @@ pub const BACKEND_SIGNER: Pubkey = pubkey!("2mdvoXMrxTPyqq9ETxAf7YLgLU7GHdefR88S
 // Uncomment to enable admin-only organizer whitelist
 // pub const ADMIN_PUBKEY: Pubkey = pubkey!("YOUR_ADMIN_PUBKEY_HERE");
 
+// Collection mint for prize NFTs (set after creating collection)
+// TODO: Replace with your actual collection mint after running delegate-collection.ts
+pub const PRIZE_COLLECTION_MINT: Pubkey = pubkey!("CoLLect1oN1111111111111111111111111111111");
+
+// Collection authority PDA seed
+const COLLECTION_AUTHORITY_SEED: &[u8] = b"collection_authority";
+
 #[cfg_attr(not(feature = "arcium"), program)]
 #[cfg_attr(feature = "arcium", arcium_program)]
 pub mod rwa_raffle {
@@ -237,7 +244,9 @@ pub struct InitializeRaffleWithPermit<'info> {
         permit_nonce: [u8; 16],
         permit_expiry_unix_ts: i64,
         auto_draw: bool,
-        ticket_mode: u8, // 0=disabled, 1=accept_without_burn, 2=require_burn
+        ticket_mode: u8,              // 0=disabled, 1=accept_without_burn, 2=require_burn
+        prize_collection_mint: Pubkey, // Collection mint for post-mint prizes (organizer provides)
+        refund_mode: u8,              // 0=USDC refund, 1=MRFT mint, 2=both (user choice)
     ) -> Result<()> {
         // Get keys before mutable borrow
         let raffle_key = ctx.accounts.raffle.key();
@@ -258,6 +267,8 @@ pub struct InitializeRaffleWithPermit<'info> {
         raffle.proceeds_collected = false;
         raffle.auto_draw = auto_draw;
         raffle.ticket_mode = ticket_mode;
+        raffle.prize_collection_mint = prize_collection_mint;
+        raffle.refund_mode = refund_mode;
         raffle.bump = ctx.bumps.raffle;
 
         require_keys_eq!(ctx.accounts.escrow_ata.mint, mint_key);
@@ -978,180 +989,180 @@ pub struct InitializeRaffleWithPermit<'info> {
         Ok(())
     }
 
-    /// **Join raffle with MOGA tokens using backend-signed permit.**
-    ///
-    /// # What it does
-    /// - Verifies backend-signed permit (ed25519) for join authorization
-    /// - Validates slots hash to prevent front-running
-    /// - Checks permit expiry
-    /// - Validates requested slots are free
-    /// - Reserves slots and mints ticket record
-    ///
-    /// # Security
-    /// - Backend must sign: raffle || organizer || payer || slots_hash || moga_mint || usdc_mint || nonce || expiry || program_id
-    /// - Slots hash prevents race conditions and front-running
-    /// - Permit expiry enforced on-chain
-    #[cfg(feature = "pyth-jupiter")]
-    pub fn join_with_moga_with_permit(
-        ctx: Context<JoinWithMogaWithPermit>,
-        slots: Vec<u32>,
-        max_moga_in: u64,
-        permit_nonce: [u8; 16],
-        permit_expiry_unix_ts: i64,
-    ) -> Result<()> {
-        let clock = Clock::get()?;
-        let raffle = &mut ctx.accounts.raffle;
-        require!(raffle.status == RaffleStatus::Selling as u8, RaffleError::RaffleNotSelling);
-        require!(clock.unix_timestamp <= raffle.deadline, RaffleError::PastDeadline);
-        require!(!slots.is_empty(), RaffleError::InvalidAmount);
-        require!(slots.len() as u64 + raffle.tickets_sold <= raffle.required_tickets, RaffleError::OverSubscription);
+    // /// **Join raffle with MOGA tokens using backend-signed permit.**
+    // ///
+    // /// # What it does
+    // /// - Verifies backend-signed permit (ed25519) for join authorization
+    // /// - Validates slots hash to prevent front-running
+    // /// - Checks permit expiry
+    // /// - Validates requested slots are free
+    // /// - Reserves slots and mints ticket record
+    // ///
+    // /// # Security
+    // /// - Backend must sign: raffle || organizer || payer || slots_hash || moga_mint || usdc_mint || nonce || expiry || program_id
+    // /// - Slots hash prevents race conditions and front-running
+    // /// - Permit expiry enforced on-chain
+    // #[cfg(feature = "pyth-jupiter")]
+    // pub fn join_with_moga_with_permit(
+    //     ctx: Context<JoinWithMogaWithPermit>,
+    //     slots: Vec<u32>,
+    //     max_moga_in: u64,
+    //     permit_nonce: [u8; 16],
+    //     permit_expiry_unix_ts: i64,
+    // ) -> Result<()> {
+    //     let clock = Clock::get()?;
+    //     let raffle = &mut ctx.accounts.raffle;
+    //     require!(raffle.status == RaffleStatus::Selling as u8, RaffleError::RaffleNotSelling);
+    //     require!(clock.unix_timestamp <= raffle.deadline, RaffleError::PastDeadline);
+    //     require!(!slots.is_empty(), RaffleError::InvalidAmount);
+    //     require!(slots.len() as u64 + raffle.tickets_sold <= raffle.required_tickets, RaffleError::OverSubscription);
 
-        // Verify permit expiry
-        require!(permit_expiry_unix_ts > clock.unix_timestamp, RaffleError::PermitExpired);
+    //     // Verify permit expiry
+    //     require!(permit_expiry_unix_ts > clock.unix_timestamp, RaffleError::PermitExpired);
 
-        // Compute slots hash for permit verification
-        let mut slots_bytes = Vec::with_capacity(slots.len() * 4);
-        for &slot in &slots {
-            slots_bytes.extend_from_slice(&slot.to_le_bytes());
-        }
-        let slots_hash = anchor_lang::solana_program::hash::hash(&slots_bytes);
+    //     // Compute slots hash for permit verification
+    //     let mut slots_bytes = Vec::with_capacity(slots.len() * 4);
+    //     for &slot in &slots {
+    //         slots_bytes.extend_from_slice(&slot.to_le_bytes());
+    //     }
+    //     let slots_hash = anchor_lang::solana_program::hash::hash(&slots_bytes);
 
-        // Build canonical permit message
-        let mut expected_msg: Vec<u8> = b"RWA_RAFFLE_JOIN_PERMIT".to_vec();
-        expected_msg.extend_from_slice(raffle.key().as_ref());
-        expected_msg.extend_from_slice(raffle.organizer.as_ref());
-        expected_msg.extend_from_slice(ctx.accounts.payer.key().as_ref());
-        expected_msg.extend_from_slice(slots_hash.as_ref());
-        expected_msg.extend_from_slice(ctx.accounts.moga_mint.key().as_ref());
-        expected_msg.extend_from_slice(ctx.accounts.usdc_mint.key().as_ref());
-        expected_msg.extend_from_slice(&permit_nonce);
-        expected_msg.extend_from_slice(&permit_expiry_unix_ts.to_le_bytes());
-        expected_msg.extend_from_slice(crate::ID.as_ref());
+    //     // Build canonical permit message
+    //     let mut expected_msg: Vec<u8> = b"RWA_RAFFLE_JOIN_PERMIT".to_vec();
+    //     expected_msg.extend_from_slice(raffle.key().as_ref());
+    //     expected_msg.extend_from_slice(raffle.organizer.as_ref());
+    //     expected_msg.extend_from_slice(ctx.accounts.payer.key().as_ref());
+    //     expected_msg.extend_from_slice(slots_hash.as_ref());
+    //     expected_msg.extend_from_slice(ctx.accounts.moga_mint.key().as_ref());
+    //     expected_msg.extend_from_slice(ctx.accounts.usdc_mint.key().as_ref());
+    //     expected_msg.extend_from_slice(&permit_nonce);
+    //     expected_msg.extend_from_slice(&permit_expiry_unix_ts.to_le_bytes());
+    //     expected_msg.extend_from_slice(crate::ID.as_ref());
 
-        // Verify ed25519 signature from backend
-        use anchor_lang::solana_program::{ed25519_program, sysvar::instructions};
-        let ixn_acc = &ctx.accounts.instructions_sysvar;
-        let mut found = false;
-        let mut idx = 0;
-        loop {
-            let loaded = instructions::load_instruction_at_checked(idx, ixn_acc);
-            if loaded.is_err() { break; }
-            let ix = loaded.unwrap();
-            if ix.program_id == ed25519_program::id() {
-                let data = ix.data.as_slice();
-                if data.len() < 16 { idx += 1; continue; }
-                let num = data[0] as usize;
-                if num != 1 { idx += 1; continue; }
-                let sig_off = u16::from_le_bytes([data[2], data[3]]) as usize;
-                let sig_len = u16::from_le_bytes([data[4], data[5]]) as usize;
-                let pk_off = u16::from_le_bytes([data[6], data[7]]) as usize;
-                let pk_len = u16::from_le_bytes([data[8], data[9]]) as usize;
-                let msg_off = u16::from_le_bytes([data[10], data[11]]) as usize;
-                let msg_len = u16::from_le_bytes([data[12], data[13]]) as usize;
-                let msg_acc_idx = u16::from_le_bytes([data[14], data[15]]);
+    //     // Verify ed25519 signature from backend
+    //     use anchor_lang::solana_program::{ed25519_program, sysvar::instructions};
+    //     let ixn_acc = &ctx.accounts.instructions_sysvar;
+    //     let mut found = false;
+    //     let mut idx = 0;
+    //     loop {
+    //         let loaded = instructions::load_instruction_at_checked(idx, ixn_acc);
+    //         if loaded.is_err() { break; }
+    //         let ix = loaded.unwrap();
+    //         if ix.program_id == ed25519_program::id() {
+    //             let data = ix.data.as_slice();
+    //             if data.len() < 16 { idx += 1; continue; }
+    //             let num = data[0] as usize;
+    //             if num != 1 { idx += 1; continue; }
+    //             let sig_off = u16::from_le_bytes([data[2], data[3]]) as usize;
+    //             let sig_len = u16::from_le_bytes([data[4], data[5]]) as usize;
+    //             let pk_off = u16::from_le_bytes([data[6], data[7]]) as usize;
+    //             let pk_len = u16::from_le_bytes([data[8], data[9]]) as usize;
+    //             let msg_off = u16::from_le_bytes([data[10], data[11]]) as usize;
+    //             let msg_len = u16::from_le_bytes([data[12], data[13]]) as usize;
+    //             let msg_acc_idx = u16::from_le_bytes([data[14], data[15]]);
 
-                if msg_acc_idx != u16::MAX { idx += 1; continue; }
-                if pk_len != 32 || sig_len != 64 { idx += 1; continue; }
-                if pk_off.checked_add(pk_len).unwrap_or(usize::MAX) > data.len() { idx += 1; continue; }
-                if msg_off.checked_add(msg_len).unwrap_or(usize::MAX) > data.len() { idx += 1; continue; }
+    //             if msg_acc_idx != u16::MAX { idx += 1; continue; }
+    //             if pk_len != 32 || sig_len != 64 { idx += 1; continue; }
+    //             if pk_off.checked_add(pk_len).unwrap_or(usize::MAX) > data.len() { idx += 1; continue; }
+    //             if msg_off.checked_add(msg_len).unwrap_or(usize::MAX) > data.len() { idx += 1; continue; }
 
-                let pk_bytes = &data[pk_off..pk_off+pk_len];
-                let msg_bytes = &data[msg_off..msg_off+msg_len];
+    //             let pk_bytes = &data[pk_off..pk_off+pk_len];
+    //             let msg_bytes = &data[msg_off..msg_off+msg_len];
 
-                if pk_bytes == BACKEND_SIGNER.as_ref() && msg_bytes == expected_msg.as_slice() {
-                    found = true;
-                    break;
-                }
-            }
-            idx += 1;
-        }
-        require!(found, RaffleError::PermitInvalid);
+    //             if pk_bytes == BACKEND_SIGNER.as_ref() && msg_bytes == expected_msg.as_slice() {
+    //                 found = true;
+    //                 break;
+    //             }
+    //         }
+    //         idx += 1;
+    //     }
+    //     require!(found, RaffleError::PermitInvalid);
 
-        // Validate slots are free
-        let slots_acc = &mut ctx.accounts.slots;
-        for &slot_idx in &slots {
-            require!(slot_idx < slots_acc.required_slots, RaffleError::InvalidSlot);
-            let byte_idx = (slot_idx / 8) as usize;
-            let bit_idx = slot_idx % 8;
-            let is_taken = (slots_acc.bitmap[byte_idx] & (1 << bit_idx)) != 0;
-            require!(!is_taken, RaffleError::SlotAlreadyTaken);
-        }
+    //     // Validate slots are free
+    //     let slots_acc = &mut ctx.accounts.slots;
+    //     for &slot_idx in &slots {
+    //         require!(slot_idx < slots_acc.required_slots, RaffleError::InvalidSlot);
+    //         let byte_idx = (slot_idx / 8) as usize;
+    //         let bit_idx = slot_idx % 8;
+    //         let is_taken = (slots_acc.bitmap[byte_idx] & (1 << bit_idx)) != 0;
+    //         require!(!is_taken, RaffleError::SlotAlreadyTaken);
+    //     }
 
-        // Pyth price check and slippage (same as join_with_moga)
-        use pyth_sdk_solana::load_price_feed_from_account_info;
-        let pyth_price = load_price_feed_from_account_info(&ctx.accounts.pyth_price_account)
-            .map_err(|_| RaffleError::PythPriceUnavailable)?;
-        let price_data = pyth_price.get_current_price()
-            .ok_or(RaffleError::PythPriceUnavailable)?;
-        require!(
-            clock.unix_timestamp - price_data.publish_time < 60,
-            RaffleError::PythPriceStale
-        );
+    //     // Pyth price check and slippage (same as join_with_moga)
+    //     use pyth_sdk_solana::load_price_feed_from_account_info;
+    //     let pyth_price = load_price_feed_from_account_info(&ctx.accounts.pyth_price_account)
+    //         .map_err(|_| RaffleError::PythPriceUnavailable)?;
+    //     let price_data = pyth_price.get_current_price()
+    //         .ok_or(RaffleError::PythPriceUnavailable)?;
+    //     require!(
+    //         clock.unix_timestamp - price_data.publish_time < 60,
+    //         RaffleError::PythPriceStale
+    //     );
 
-        let usdc_needed = slots.len() as u64 * 10u64.pow(ctx.accounts.usdc_mint.decimals as u32);
-        let price_scaled = if price_data.expo >= 0 {
-            (price_data.price as u128).checked_mul(10u128.pow(price_data.expo as u32)).ok_or(RaffleError::Overflow)?
-        } else {
-            (price_data.price as u128).checked_div(10u128.pow((-price_data.expo) as u32)).ok_or(RaffleError::Overflow)?
-        };
-        let moga_decimals = ctx.accounts.moga_mint.decimals;
-        let usdc_decimals = ctx.accounts.usdc_mint.decimals;
-        let moga_needed = ((usdc_needed as u128)
-            .checked_mul(10u128.pow(moga_decimals as u32)).ok_or(RaffleError::Overflow)?)
-            .checked_div(price_scaled.checked_mul(10u128.pow(usdc_decimals as u32)).ok_or(RaffleError::Overflow)?)
-            .ok_or(RaffleError::Overflow)? as u64;
-        require!(moga_needed <= max_moga_in, RaffleError::SlippageExceeded);
+    //     let usdc_needed = slots.len() as u64 * 10u64.pow(ctx.accounts.usdc_mint.decimals as u32);
+    //     let price_scaled = if price_data.expo >= 0 {
+    //         (price_data.price as u128).checked_mul(10u128.pow(price_data.expo as u32)).ok_or(RaffleError::Overflow)?
+    //     } else {
+    //         (price_data.price as u128).checked_div(10u128.pow((-price_data.expo) as u32)).ok_or(RaffleError::Overflow)?
+    //     };
+    //     let moga_decimals = ctx.accounts.moga_mint.decimals;
+    //     let usdc_decimals = ctx.accounts.usdc_mint.decimals;
+    //     let moga_needed = ((usdc_needed as u128)
+    //         .checked_mul(10u128.pow(moga_decimals as u32)).ok_or(RaffleError::Overflow)?)
+    //         .checked_div(price_scaled.checked_mul(10u128.pow(usdc_decimals as u32)).ok_or(RaffleError::Overflow)?)
+    //         .ok_or(RaffleError::Overflow)? as u64;
+    //     require!(moga_needed <= max_moga_in, RaffleError::SlippageExceeded);
 
-        // Transfer USDC into escrow (placeholder; swap CPI would go here)
-        let usdc_amount = usdc_needed;
-        let cpi_accounts = TransferChecked {
-            from: ctx.accounts.payer_usdc_ata.to_account_info(),
-            to: ctx.accounts.escrow_ata.to_account_info(),
-            mint: ctx.accounts.usdc_mint.to_account_info(),
-            authority: ctx.accounts.payer.to_account_info(),
-        };
-        token::transfer_checked(
-            CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts),
-            usdc_amount,
-            ctx.accounts.usdc_mint.decimals,
-        )?;
+    //     // Transfer USDC into escrow (placeholder; swap CPI would go here)
+    //     let usdc_amount = usdc_needed;
+    //     let cpi_accounts = TransferChecked {
+    //         from: ctx.accounts.payer_usdc_ata.to_account_info(),
+    //         to: ctx.accounts.escrow_ata.to_account_info(),
+    //         mint: ctx.accounts.usdc_mint.to_account_info(),
+    //         authority: ctx.accounts.payer.to_account_info(),
+    //     };
+    //     token::transfer_checked(
+    //         CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts),
+    //         usdc_amount,
+    //         ctx.accounts.usdc_mint.decimals,
+    //     )?;
 
-        // Reserve slots
-        for &slot_idx in &slots {
-            let byte_idx = (slot_idx / 8) as usize;
-            let bit_idx = slot_idx % 8;
-            slots_acc.bitmap[byte_idx] |= 1 << bit_idx;
-            slots_acc.owners[slot_idx as usize] = ctx.accounts.payer.key();
-        }
+    //     // Reserve slots
+    //     for &slot_idx in &slots {
+    //         let byte_idx = (slot_idx / 8) as usize;
+    //         let bit_idx = slot_idx % 8;
+    //         slots_acc.bitmap[byte_idx] |= 1 << bit_idx;
+    //         slots_acc.owners[slot_idx as usize] = ctx.accounts.payer.key();
+    //     }
 
-        // Mint ticket record
-        let ticket = &mut ctx.accounts.ticket;
-        ticket.raffle = raffle.key();
-        ticket.owner = ctx.accounts.payer.key();
-        ticket.start = slots[0] as u64 + 1;
-        ticket.count = slots.len() as u64;
-        ticket.refunded = false;
-        ticket.claimed_win = false;
-        ticket.bump = ctx.bumps.ticket;
+    //     // Mint ticket record
+    //     let ticket = &mut ctx.accounts.ticket;
+    //     ticket.raffle = raffle.key();
+    //     ticket.owner = ctx.accounts.payer.key();
+    //     ticket.start = slots[0] as u64 + 1;
+    //     ticket.count = slots.len() as u64;
+    //     ticket.refunded = false;
+    //     ticket.claimed_win = false;
+    //     ticket.bump = ctx.bumps.ticket;
 
-        raffle.tickets_sold = raffle.tickets_sold.checked_add(slots.len() as u64).ok_or(RaffleError::Overflow)?;
+    //     raffle.tickets_sold = raffle.tickets_sold.checked_add(slots.len() as u64).ok_or(RaffleError::Overflow)?;
 
-        emit!(Deposited {
-            raffle: raffle.key(),
-            owner: ticket.owner,
-            start: ticket.start,
-            count: ticket.count,
-            tickets_sold: raffle.tickets_sold,
-        });
+    //     emit!(Deposited {
+    //         raffle: raffle.key(),
+    //         owner: ticket.owner,
+    //         start: ticket.start,
+    //         count: ticket.count,
+    //         tickets_sold: raffle.tickets_sold,
+    //     });
 
-        if raffle.tickets_sold == raffle.required_tickets {
-            raffle.status = RaffleStatus::Drawing as u8;
-            emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
-            if raffle.auto_draw { emit!(RandomnessRequested { raffle: raffle.key(), supply: raffle.required_tickets }); }
-        }
+    //     if raffle.tickets_sold == raffle.required_tickets {
+    //         raffle.status = RaffleStatus::Drawing as u8;
+    //         emit!(ThresholdReached { raffle: raffle.key(), supply: raffle.required_tickets });
+    //         if raffle.auto_draw { emit!(RandomnessRequested { raffle: raffle.key(), supply: raffle.required_tickets }); }
+    //     }
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 
     /// **Claim prize by minting a new NFT on-chain (post-mint path).**
     ///
@@ -1178,6 +1189,13 @@ pub struct InitializeRaffleWithPermit<'info> {
         require!(ticket.raffle == raffle.key(), RaffleError::WrongRaffle);
         require!(ticket.owner == ctx.accounts.winner.key(), RaffleError::Unauthorized);
         require!(ticket.claimed_win, RaffleError::MustClaimWinFirst);
+        
+        // Verify collection mint matches raffle config
+        require_keys_eq!(
+            ctx.accounts.collection_mint.key(),
+            raffle.prize_collection_mint,
+            RaffleError::InvalidCollectionMint
+        );
 
         // Metaplex Token Metadata CPI to mint NFT
         use mpl_token_metadata::instructions::{CreateV1CpiBuilder, VerifyCollectionV1CpiBuilder};
@@ -1797,7 +1815,7 @@ pub struct BatchCreateRaffles<'info> {
 #[account]
 pub struct Raffle {
     pub organizer: Pubkey,
-    pub mint: Pubkey,
+    pub mint: Pubkey,                    // USDC/stable coin mint
     pub escrow: Pubkey,
     pub required_tickets: u64,
     pub tickets_sold: u64,
@@ -1806,17 +1824,19 @@ pub struct Raffle {
     pub status: u8,
     pub winner_ticket: u64,
     pub bump: u8,
-    pub prize_mint: Pubkey,
+    pub prize_mint: Pubkey,              // Pre-minted prize NFT (if pre-mint mode)
     pub prize_escrow: Pubkey,
     pub prize_set: bool,
     pub prize_claimed: bool,
     pub proceeds_collected: bool,
     pub auto_draw: bool,
-    pub ticket_mode: u8, // 0=disabled, 1=require_burn, 2=accept_without_burn
+    pub ticket_mode: u8,                 // 0=disabled, 1=require_burn, 2=accept_without_burn
+    pub prize_collection_mint: Pubkey,   // Collection mint for post-mint prizes (organizer sets this)
+    pub refund_mode: u8,                 // 0=USDC refund, 1=MRFT mint, 2=both (user choice)
 }
 
 impl Raffle {
-    pub const LEN: usize = 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1 + 8 + 1 + 32 + 32 + 1 + 1 + 1 + 1 + 1;
+    pub const LEN: usize = 32 + 32 + 32 + 8 + 8 + 8 + 8 + 1 + 8 + 1 + 32 + 32 + 1 + 1 + 1 + 1 + 1 + 32 + 1;
 }
 
 #[account]
@@ -1973,6 +1993,7 @@ pub enum RaffleError {
     #[msg("Slots hash mismatch")] SlotsHashMismatch,
     #[msg("Jupiter accounts missing")] JupiterAccountsMissing,
     #[msg("Batch size exceeded")] BatchSizeExceeded,
+    #[msg("Invalid collection mint")] InvalidCollectionMint,
 }
 
 #[repr(u8)]
