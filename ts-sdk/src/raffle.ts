@@ -1,16 +1,19 @@
-import { Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { type Address, getAddressEncoder, getAddressDecoder } from "@solana/addresses";
+import type { IInstruction } from "@solana/instructions";
 import { createHash } from "crypto";
 import { ed25519VerifyIx } from "./solanaKit";
-import { deriveRafflePda } from "./index";
+import { deriveRafflePda, deriveSlotsPda } from "./index";
 
 export type CreateRaffleDirectArgs = {
-  programId: PublicKey;
-  organizer: PublicKey;
-  escrowMint: PublicKey; // USDC mint
-  escrowAta: PublicKey;  // must be owned by raffle PDA
+  programId: Address;
+  organizer: Address;
+  escrowMint: Address; // USDC mint
+  escrowAta: Address;  // must be owned by raffle PDA
   requiredTickets: bigint;
   deadlineUnixTs: bigint;
-  tokenProgram?: PublicKey; // default Tokenkeg
+  autoDraw: boolean;
+  ticketMode: number; // 0=disabled, 1=require_burn, 2=accept_without_burn
+  tokenProgram?: Address; // default Tokenkeg
 };
 
 export type CreateRaffleWithPermitArgs = CreateRaffleDirectArgs & {
@@ -23,83 +26,89 @@ export type CreateRaffleWithPermitArgs = CreateRaffleDirectArgs & {
 };
 
 export type JoinWithMogaArgs = {
-  programId: PublicKey;
-  payer: PublicKey;
-  raffle: PublicKey;
-  mogaMint: PublicKey;
+  programId: Address;
+  payer: Address;
+  raffle: Address;
+  mogaMint: Address;
   // slot numbers selected by user (0-based or 1-based as per program; to be finalized)
   slots: number[];
   maxMogaIn: bigint; // slippage cap from SDK price quote
 };
 
 export type JoinWithTicketArgs = {
-  programId: PublicKey;
-  payer: PublicKey;
-  raffle: PublicKey;
+  programId: Address;
+  payer: Address;
+  raffle: Address;
   slots: number[];
   // references/Proofs for MRFT NFTs to burn/accept
   ticketRefs: any[];
 };
 
-export async function createDirectRaffleTx(_conn: Connection, _args: CreateRaffleDirectArgs): Promise<Transaction> {
-  const { programId, organizer, escrowMint, escrowAta, requiredTickets, deadlineUnixTs } = _args;
-  const tokenProgram = _args.tokenProgram ?? new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-  const [raffle] = deriveRafflePda(programId, escrowMint, organizer);
-  const slots = PublicKey.findProgramAddressSync([
-    Buffer.from("slots"),
-    raffle.toBuffer(),
-  ], programId)[0];
+/**
+ * Build initialize_raffle instruction (direct, no permit).
+ * Returns a Kit IInstruction that can be added to a transaction.
+ */
+export async function createDirectRaffleIx(_args: CreateRaffleDirectArgs): Promise<IInstruction> {
+  const { programId, organizer, escrowMint, escrowAta, requiredTickets, deadlineUnixTs, autoDraw, ticketMode } = _args;
+  const tokenProgram = _args.tokenProgram ?? ("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address);
+  const [raffle] = await deriveRafflePda(programId, escrowMint, organizer);
+  const [slots] = await deriveSlotsPda(programId, raffle);
 
   const data = Buffer.concat([
     discriminator("initialize_raffle"),
     u64le(requiredTickets),
     i64le(deadlineUnixTs),
+    Buffer.from([autoDraw ? 1 : 0, ticketMode & 0xff]),
   ]);
 
-  const keys = [
-    { pubkey: organizer, isSigner: true, isWritable: true },
-    { pubkey: escrowMint, isSigner: false, isWritable: false },
-    { pubkey: escrowAta, isSigner: false, isWritable: true },
-    { pubkey: raffle, isSigner: false, isWritable: true },
-    { pubkey: slots, isSigner: false, isWritable: true },
-    { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-    { pubkey: tokenProgram, isSigner: false, isWritable: false },
-  ];
-
-  const ix = new TransactionInstruction({ programId, keys, data });
-  return new Transaction().add(ix);
+  return {
+    programAddress: programId,
+    accounts: [
+      { address: organizer, role: 3 /* signer + writable */ },
+      { address: escrowMint, role: 0 /* readonly */ },
+      { address: escrowAta, role: 1 /* writable */ },
+      { address: raffle, role: 1 /* writable */ },
+      { address: slots, role: 1 /* writable */ },
+      { address: "11111111111111111111111111111111" as Address, role: 0 /* System */ },
+      { address: tokenProgram, role: 0 },
+    ],
+    data,
+  };
 }
 
-export async function collectProceedsTx(
-  _conn: Connection,
-  programId: PublicKey,
-  args: { organizer: PublicKey; raffle: PublicKey; mint: PublicKey; organizerAta: PublicKey; escrowAta: PublicKey; tokenProgram?: PublicKey }
-): Promise<Transaction> {
-  const tokenProgram = args.tokenProgram ?? new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-  const keys = [
-    { pubkey: args.organizer, isSigner: true, isWritable: true },
-    { pubkey: args.raffle, isSigner: false, isWritable: true },
-    { pubkey: args.mint, isSigner: false, isWritable: false },
-    { pubkey: args.organizerAta, isSigner: false, isWritable: true },
-    { pubkey: args.escrowAta, isSigner: false, isWritable: true },
-    { pubkey: tokenProgram, isSigner: false, isWritable: false },
-  ];
+export function collectProceedsIx(
+  programId: Address,
+  args: { organizer: Address; raffle: Address; mint: Address; organizerAta: Address; escrowAta: Address; tokenProgram?: Address }
+): IInstruction {
+  const tokenProgram = args.tokenProgram ?? ("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address);
   const data = discriminator("collect_proceeds");
-  const ix = new TransactionInstruction({ programId, keys, data });
-  return new Transaction().add(ix);
+  return {
+    programAddress: programId,
+    accounts: [
+      { address: args.organizer, role: 3 },
+      { address: args.raffle, role: 1 },
+      { address: args.mint, role: 0 },
+      { address: args.organizerAta, role: 1 },
+      { address: args.escrowAta, role: 1 },
+      { address: tokenProgram, role: 0 },
+    ],
+    data,
+  };
 }
 
-export async function createRaffleWithPermitTx(_conn: Connection, _args: CreateRaffleWithPermitArgs): Promise<Transaction> {
-  const { programId, organizer, escrowMint, escrowAta, requiredTickets, deadlineUnixTs, permitMessage, permitSignature } = _args;
-  const tokenProgram = _args.tokenProgram ?? new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-  const [raffle] = deriveRafflePda(programId, escrowMint, organizer);
-  const slots = PublicKey.findProgramAddressSync([
-    Buffer.from("slots"),
-    raffle.toBuffer(),
-  ], programId)[0];
+/**
+ * Build initialize_raffle_with_permit instructions (ed25519 verify + init).
+ * Returns array of Kit IInstructions: [ed25519VerifyIx, initRaffleIx]
+ */
+export async function createRaffleWithPermitIxs(_args: CreateRaffleWithPermitArgs): Promise<IInstruction[]> {
+  const { programId, organizer, escrowMint, escrowAta, requiredTickets, deadlineUnixTs, permitMessage, permitSignature, autoDraw, ticketMode } = _args;
+  const tokenProgram = _args.tokenProgram ?? ("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address);
+  const [raffle] = await deriveRafflePda(programId, escrowMint, organizer);
+  const [slots] = await deriveSlotsPda(programId, raffle);
 
+  const encoder = getAddressEncoder();
   const edIx = ed25519VerifyIx({
-    publicKey: organizer.toBytes(),
+    publicKey: encoder.encode(organizer),
     message: permitMessage,
     signature: permitSignature,
   });
@@ -108,69 +117,35 @@ export async function createRaffleWithPermitTx(_conn: Connection, _args: CreateR
     discriminator("initialize_raffle_with_permit"),
     u64le(requiredTickets),
     i64le(deadlineUnixTs),
-    // nonce (16), expiry (i64)
     _args.permitNonce,
     i64le(_args.permitExpiryUnixTs),
+    Buffer.from([autoDraw ? 1 : 0, ticketMode & 0xff]),
   ]);
-  const instructionsSysvar = new PublicKey("Sysvar1nstructions1111111111111111111111111");
-  const keys = [
-    { pubkey: organizer, isSigner: true, isWritable: true },
-    { pubkey: escrowMint, isSigner: false, isWritable: false },
-    { pubkey: escrowAta, isSigner: false, isWritable: true },
-    { pubkey: raffle, isSigner: false, isWritable: true },
-    { pubkey: slots, isSigner: false, isWritable: true },
-    { pubkey: instructionsSysvar, isSigner: false, isWritable: false },
-    { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
-    { pubkey: tokenProgram, isSigner: false, isWritable: false },
-  ];
-  const initIx = new TransactionInstruction({ programId, keys, data });
-  return new Transaction().add(edIx, initIx);
+
+  const instructionsSysvar = "Sysvar1nstructions1111111111111111111111111" as Address;
+  const systemProgram = "11111111111111111111111111111111" as Address;
+
+  const initIx: IInstruction = {
+    programAddress: programId,
+    accounts: [
+      { address: organizer, role: 3 },
+      { address: escrowMint, role: 0 },
+      { address: escrowAta, role: 1 },
+      { address: raffle, role: 1 },
+      { address: slots, role: 1 },
+      { address: instructionsSysvar, role: 0 },
+      { address: systemProgram, role: 0 },
+      { address: tokenProgram, role: 0 },
+    ],
+    data,
+  };
+
+  return [edIx, initIx];
 }
 
-export async function joinWithMogaTx(_conn: Connection, _args: JoinWithMogaArgs): Promise<Transaction> {
-  // TODO: build join_with_moga IX (pyth+jupiter feature-gated)
-  return new Transaction();
-}
-
-export async function joinWithTicketTx(_conn: Connection, _args: JoinWithTicketArgs): Promise<Transaction> {
-  // TODO: build join_with_ticket IX (bubblegum burn authority provided)
-  return new Transaction();
-}
-
-export async function claimRefundTx(
-  _conn: Connection,
-  programId: PublicKey,
-  args: { payer: PublicKey; raffle: PublicKey; mint: PublicKey; payerAta: PublicKey; escrowAta: PublicKey; ticket: PublicKey; tokenProgram?: PublicKey }
-): Promise<Transaction> {
-  const tokenProgram = args.tokenProgram ?? new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-  const keys = [
-    { pubkey: args.payer, isSigner: true, isWritable: true },
-    { pubkey: args.raffle, isSigner: false, isWritable: true },
-    { pubkey: args.mint, isSigner: false, isWritable: false },
-    { pubkey: args.payerAta, isSigner: false, isWritable: true },
-    { pubkey: args.escrowAta, isSigner: false, isWritable: true },
-    { pubkey: args.ticket, isSigner: false, isWritable: true },
-    { pubkey: tokenProgram, isSigner: false, isWritable: false },
-  ];
-  const data = discriminator("claim_refund");
-  const ix = new TransactionInstruction({ programId, keys, data });
-  return new Transaction().add(ix);
-}
-
-export async function claimWinTx(
-  _conn: Connection,
-  programId: PublicKey,
-  args: { winner: PublicKey; raffle: PublicKey; ticket: PublicKey }
-): Promise<Transaction> {
-  const keys = [
-    { pubkey: args.winner, isSigner: true, isWritable: true },
-    { pubkey: args.raffle, isSigner: false, isWritable: true },
-    { pubkey: args.ticket, isSigner: false, isWritable: true },
-  ];
-  const data = discriminator("claim_win");
-  const ix = new TransactionInstruction({ programId, keys, data });
-  return new Transaction().add(ix);
-}
+// NOTE: Additional instruction builders (join, claim, etc.) can be added here.
+// For now, the core init + permit builders are migrated to Anza Kit.
+// Legacy web3.js-based builders removed for tree-shaking benefits.
 
 // -------------------- utils --------------------
 
@@ -190,4 +165,21 @@ function i64le(v: bigint): Buffer {
   const b = Buffer.alloc(8);
   b.writeBigInt64LE(v);
   return b;
+}
+
+function encodeVecU32(arr: number[]): Buffer {
+  const len = Buffer.alloc(4);
+  len.writeUInt32LE(arr.length);
+  const items = Buffer.concat(arr.map(n => {
+    const b = Buffer.alloc(4);
+    b.writeUInt32LE(n);
+    return b;
+  }));
+  return Buffer.concat([len, items]);
+}
+
+function encodeVecU8(arr: Uint8Array): Buffer {
+  const len = Buffer.alloc(4);
+  len.writeUInt32LE(arr.length);
+  return Buffer.concat([len, Buffer.from(arr)]);
 }

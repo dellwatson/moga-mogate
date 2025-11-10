@@ -1,4 +1,5 @@
-import { PublicKey } from "@solana/web3.js";
+import { type Address, getAddressEncoder, getAddressDecoder } from "@solana/addresses";
+import { getProgramDerivedAddress } from "@solana/addresses";
 
 // Minimal client surface (bun-compatible). Fill in with Anchor IDL wiring in later tasks.
 export type InitRaffleArgs = {
@@ -14,29 +15,48 @@ export type DepositArgs = {
 export const RAFFLE_SEED = "raffle";
 export const TICKET_SEED = "ticket";
 
-export function deriveRafflePda(
-  programId: PublicKey,
-  mint: PublicKey,
-  organizer: PublicKey,
-): [PublicKey, number] {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from(RAFFLE_SEED), mint.toBuffer(), organizer.toBuffer()],
-    programId,
-  );
+export async function deriveRafflePda(
+  programId: Address,
+  mint: Address,
+  organizer: Address,
+): Promise<[Address, number]> {
+  const encoder = getAddressEncoder();
+  const seeds = [
+    new TextEncoder().encode(RAFFLE_SEED),
+    encoder.encode(mint),
+    encoder.encode(organizer),
+  ];
+  return await getProgramDerivedAddress({ programAddress: programId, seeds });
 }
 
-export function deriveTicketPda(
-  programId: PublicKey,
-  raffle: PublicKey,
-  owner: PublicKey,
+export async function deriveSlotsPda(
+  programId: Address,
+  raffle: Address,
+): Promise<[Address, number]> {
+  const encoder = getAddressEncoder();
+  const seeds = [
+    new TextEncoder().encode("slots"),
+    encoder.encode(raffle),
+  ];
+  return await getProgramDerivedAddress({ programAddress: programId, seeds });
+}
+
+export async function deriveTicketPda(
+  programId: Address,
+  raffle: Address,
+  owner: Address,
   startIndex: bigint,
-): [PublicKey, number] {
-  const le8 = Buffer.alloc(8);
-  le8.writeBigUInt64LE(startIndex);
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from(TICKET_SEED), raffle.toBuffer(), owner.toBuffer(), le8],
-    programId,
-  );
+): Promise<[Address, number]> {
+  const encoder = getAddressEncoder();
+  const le8 = new Uint8Array(8);
+  new DataView(le8.buffer).setBigUint64(0, startIndex, true);
+  const seeds = [
+    new TextEncoder().encode(TICKET_SEED),
+    encoder.encode(raffle),
+    encoder.encode(owner),
+    le8,
+  ];
+  return await getProgramDerivedAddress({ programAddress: programId, seeds });
 }
 
 export function amountForTickets(tickets: bigint, decimals: number): bigint {
