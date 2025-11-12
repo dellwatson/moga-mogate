@@ -3,14 +3,16 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-rwa_raffle = "5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M"
-direct_sell = "Di1ectSe11111111111111111111111111111111111"
-rwa_redeem = "RwaRede3m1111111111111111111111111111111111"
+rwa_raffle = "RWAwMRRTxAsRhaWPSj4MS2yrVAPbySsCDQAf9s5dyjr"
+direct_sell = "SeLx2bBokdXRzDqvqVB8m8FHT3Ts4VvPjvPaNetHZnn"
+direct_sell_anchor = "DE9rqqvye7rExak5cjYdkBup5wR9PRYMrbZw17xPooCt"
+rwa_redeem = "reDwZbFJt4fRJg5Ro5pGhszt9bcGCfjgnsxCiTp9eNf"
 
 [programs.devnet]
-rwa_raffle = "5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M"
-direct_sell = "Di1ectSe11111111111111111111111111111111111"
-rwa_redeem = "RwaRede3m1111111111111111111111111111111111"
+rwa_raffle = "RWAwMRRTxAsRhaWPSj4MS2yrVAPbySsCDQAf9s5dyjr"
+direct_sell = "SeLx2bBokdXRzDqvqVB8m8FHT3Ts4VvPjvPaNetHZnn"
+direct_sell_anchor = "DE9rqqvye7rExak5cjYdkBup5wR9PRYMrbZw17xPooCt"
+rwa_redeem = "reDwZbFJt4fRJg5Ro5pGhszt9bcGCfjgnsxCiTp9eNf"
 
 [programs.mainnet]
 # rwa_raffle = "REPLACE_WITH_MAINNET_ID"

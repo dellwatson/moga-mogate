@@ -1,0 +1,37 @@
+{
+  "name": "mogate-rwa-raffle-monorepo",
+  "version": "1.0.0",
+  "description": "Mogate RWA Raffle Platform - Monorepo",
+  "private": true,
+  "scripts": {
+    "deploy:moga": "bun run scripts/1-deploy-moga-token.ts",
+    "deploy:prize-collection": "bun run scripts/2-create-prize-collection.ts",
+    "deploy:delegate-prize": "bun run scripts/3-delegate-collection-authority.ts",
+    "deploy:mrft-collection": "bun run scripts/4-create-mrft-collection.ts",
+    "deploy:delegate-mrft": "bun run scripts/5-delegate-mrft-authority.ts",
+    "deploy:stablecoins": "bun run scripts/6-setup-stablecoins.ts",
+    "deploy:programs": "bun run scripts/7-deploy-programs.ts",
+    "deploy:moga-plus": "bun run scripts/9-deploy-moga-plus.ts",
+    "deploy:all": "bun run deploy:moga && bun run deploy:prize-collection && bun run deploy:delegate-prize && bun run deploy:mrft-collection && bun run deploy:delegate-mrft && bun run deploy:stablecoins",
+    "test:programs": "bun run scripts/8-test-programs.ts",
+    "build:programs": "anchor build",
+    "build:raffle": "cargo build-sbf --manifest-path programs/rwa_raffle/Cargo.toml --features metaplex,pyth-jupiter,bubblegum",
+    "build:raffle-moga-plus": "cargo build-sbf --manifest-path programs/rwa_raffle/Cargo.toml --features metaplex,pyth-jupiter,bubblegum,moga-plus",
+    "build:direct-sell": "cargo build-sbf --manifest-path programs/direct_sell/Cargo.toml --features pyth-jupiter",
+    "build:redeem": "cargo build-sbf --manifest-path programs/rwa_redeem/Cargo.toml"
+  },
+  "dependencies": {
+    "@metaplex-foundation/js": "^0.19.4",
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@solana/spl-token": "^0.3.9",
+    "@solana/web3.js": "^1.87.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  }
+}
