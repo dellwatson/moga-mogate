@@ -1,0 +1,12 @@
+# Placeholder for moga-logo.png
+# 
+# Replace this file with your actual MOGA token logo:
+# - Format: PNG (recommended) or JPG
+# - Size: 500x500 to 1000x1000 pixels
+# - Aspect ratio: 1:1 (square)
+# - File size: < 1 MB
+#
+# You can download the logo from:
+# https://pbs.twimg.com/profile_images/1981074902288351233/_cmsEwgO_400x400.jpg
+#
+# Then save it as: metadata/moga-logo.png
