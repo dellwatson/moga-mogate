@@ -10,17 +10,8 @@
  *   bun run scripts/1b-add-token-metadata-github.ts
  */
 
-import {
-  Connection,
-  Keypair,
-  PublicKey,
-  Transaction,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js";
-import {
-  createCreateMetadataAccountV3Instruction,
-  PROGRAM_ID as METADATA_PROGRAM_ID,
-} from "@metaplex-foundation/mpl-token-metadata";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { Metaplex, keypairIdentity } from "@metaplex-foundation/js";
 import fs from "fs";
 import path from "path";
 
@@ -50,22 +41,6 @@ const METADATA = {
 };
 
 // ============================================================================
-// Helper Functions
-// ============================================================================
-
-function getMetadataPDA(mint: PublicKey): PublicKey {
-  const [metadata] = PublicKey.findProgramAddressSync(
-    [
-      Buffer.from("metadata"),
-      METADATA_PROGRAM_ID.toBuffer(),
-      mint.toBuffer(),
-    ],
-    METADATA_PROGRAM_ID
-  );
-  return metadata;
-}
-
-// ============================================================================
 // Main
 // ============================================================================
 
@@ -77,12 +52,12 @@ async function main() {
 
   // Load wallet
   const walletData = JSON.parse(fs.readFileSync(WALLET_PATH, "utf-8"));
-  const payer = Keypair.fromSecretKey(Uint8Array.from(walletData));
-  console.log("Payer:", payer.publicKey.toBase58());
+  const wallet = Keypair.fromSecretKey(Uint8Array.from(walletData));
+  console.log("Wallet:", wallet.publicKey.toBase58());
 
   // Connect to Solana
   const connection = new Connection(RPC_URL, "confirmed");
-  const balance = await connection.getBalance(payer.publicKey);
+  const balance = await connection.getBalance(wallet.publicKey);
   console.log("Balance:", balance / 1e9, "SOL");
   console.log();
 
@@ -103,31 +78,33 @@ async function main() {
   }
 
   const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-  const mint = new PublicKey(config.mint);
+  const mintAddress = new PublicKey(config.mint);
   
-  console.log("MOGA Mint:", mint.toBase58());
+  console.log("MOGA Mint:", mintAddress.toBase58());
   console.log();
 
-  // Derive metadata PDA
-  const metadataPDA = getMetadataPDA(mint);
-  console.log("Metadata PDA:", metadataPDA.toBase58());
+  // Initialize Metaplex
+  console.log("📝 Initializing Metaplex SDK...");
+  const metaplex = Metaplex.make(connection).use(keypairIdentity(wallet));
+  console.log("✅ Metaplex initialized");
   console.log();
 
   // Check if metadata already exists
   try {
-    const accountInfo = await connection.getAccountInfo(metadataPDA);
-    if (accountInfo) {
-      console.log("⚠️  Metadata already exists!");
-      console.log("Metadata account:", metadataPDA.toBase58());
-      console.log();
-      console.log("To update metadata, use a different script or Metaplex CLI");
-      console.log();
-      console.log("Current metadata URI:", METADATA.uri);
-      console.log("You can still update the JSON file on GitHub to change metadata");
-      process.exit(0);
-    }
+    const nft = await metaplex.nfts().findByMint({ mintAddress });
+    console.log("⚠️  Metadata already exists!");
+    console.log("Name:", nft.name);
+    console.log("Symbol:", nft.symbol);
+    console.log("URI:", nft.uri);
+    console.log();
+    console.log("💡 To update metadata:");
+    console.log("   1. Edit metadata/moga-token.json on GitHub");
+    console.log("   2. Metadata will update automatically (no transaction needed)");
+    process.exit(0);
   } catch (err) {
     // Metadata doesn't exist, proceed
+    console.log("No existing metadata found, creating new...");
+    console.log();
   }
 
   console.log("📝 Creating Token Metadata");
@@ -164,53 +141,30 @@ async function main() {
     process.exit(1);
   }
 
-  // Create metadata instruction
-  const createMetadataIx = createCreateMetadataAccountV3Instruction(
-    {
-      metadata: metadataPDA,
-      mint: mint,
-      mintAuthority: payer.publicKey,
-      payer: payer.publicKey,
-      updateAuthority: payer.publicKey,
-    },
-    {
-      createMetadataAccountArgsV3: {
-        data: {
-          name: METADATA.name,
-          symbol: METADATA.symbol,
-          uri: METADATA.uri,
-          sellerFeeBasisPoints: 0,
-          creators: null,
-          collection: null,
-          uses: null,
-        },
-        isMutable: true,
-        collectionDetails: null,
-      },
-    }
-  );
-
-  // Create and send transaction
-  const transaction = new Transaction().add(createMetadataIx);
+  console.log("🚀 Creating on-chain metadata account...");
   
-  console.log("🚀 Sending transaction...");
   try {
-    const signature = await sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [payer],
-      { commitment: "confirmed" }
-    );
+    // Create metadata account
+    const { nft } = await metaplex.nfts().create({
+      uri: METADATA.uri,
+      name: METADATA.name,
+      symbol: METADATA.symbol,
+      sellerFeeBasisPoints: 0,
+      useExistingMint: mintAddress,
+      updateAuthority: wallet,
+      mintAuthority: wallet,
+      tokenOwner: wallet.publicKey,
+    });
 
-    console.log("✅ Metadata created!");
-    console.log("Transaction:", signature);
-    console.log("Metadata PDA:", metadataPDA.toBase58());
+    console.log("✅ Token metadata created!");
+    console.log("Metadata Address:", nft.metadataAddress.toBase58());
+    console.log("URI:", METADATA.uri);
     console.log();
 
     // Update config file
-    config.metadataPDA = metadataPDA.toBase58();
-    config.metadataCreatedAt = new Date().toISOString();
+    config.metadataAddress = nft.metadataAddress.toBase58();
     config.metadataUri = METADATA.uri;
+    config.metadataCreatedAt = new Date().toISOString();
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     console.log("✅ Configuration updated");
     console.log();
@@ -223,8 +177,8 @@ async function main() {
     console.log();
     console.log("View on Solana Explorer:");
     const explorerUrl = NETWORK === "mainnet"
-      ? `https://explorer.solana.com/address/${mint.toBase58()}`
-      : `https://explorer.solana.com/address/${mint.toBase58()}?cluster=devnet`;
+      ? `https://explorer.solana.com/address/${mintAddress.toBase58()}`
+      : `https://explorer.solana.com/address/${mintAddress.toBase58()}?cluster=devnet`;
     console.log(explorerUrl);
     console.log();
     console.log("💡 To update metadata in the future:");
@@ -235,10 +189,11 @@ async function main() {
   } catch (error: any) {
     console.error("\n❌ Error creating metadata:");
     console.error(error);
-    if (error.logs) {
-      console.error("\nProgram logs:");
-      error.logs.forEach((log: string) => console.error(log));
+    
+    if (error.message?.includes("already in use")) {
+      console.log("\n💡 Metadata account already exists. This is normal if you ran the script before.");
     }
+    
     throw error;
   }
 }

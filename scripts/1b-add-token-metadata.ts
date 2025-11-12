@@ -19,7 +19,7 @@ import {
 } from "@solana/web3.js";
 import {
   createCreateMetadataAccountV3Instruction,
-  PROGRAM_ID as METADATA_PROGRAM_ID,
+  MPL_TOKEN_METADATA_PROGRAM_ID,
 } from "@metaplex-foundation/mpl-token-metadata";
 import fs from "fs";
 import path from "path";
@@ -60,10 +60,10 @@ function getMetadataPDA(mint: PublicKey): PublicKey {
   const [metadata] = PublicKey.findProgramAddressSync(
     [
       Buffer.from("metadata"),
-      METADATA_PROGRAM_ID.toBuffer(),
+      MPL_TOKEN_METADATA_PROGRAM_ID.toBuffer(),
       mint.toBuffer(),
     ],
-    METADATA_PROGRAM_ID
+    MPL_TOKEN_METADATA_PROGRAM_ID
   );
   return metadata;
 }
