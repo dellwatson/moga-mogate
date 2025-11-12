@@ -2,8 +2,8 @@ use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{self as token, Mint, TokenAccount, Burn};
 use anchor_spl::token::Token;
 
-// TODO: Replace with actual deployed program ID
-declare_id!("RwaRede3m1111111111111111111111111111111111");
+// NOTE: Devnet program ID
+declare_id!("reDwZbFJt4fRJg5Ro5pGhszt9bcGCfjgnsxCiTp9eNf");
 
 const REDEMPTION_SEED: &[u8] = b"redemption";
 const BACKEND_SIGNER: Pubkey = pubkey!("2mdvoXMrxTPyqq9ETxAf7YLgLU7GHdefR88SLvQ5xC7r");
@@ -316,7 +316,7 @@ pub struct RedeemNftWithPermit<'info> {
         payer = holder,
         space = 8 + Redemption::LEN,
         seeds = [REDEMPTION_SEED, nft_mint.key().as_ref(), holder.key().as_ref()],
-        bump,
+        bump
     )]
     pub redemption: Account<'info, Redemption>,
 
@@ -346,7 +346,7 @@ pub struct RedeemNftTest<'info> {
         payer = holder,
         space = 8 + Redemption::LEN,
         seeds = [REDEMPTION_SEED, nft_mint.key().as_ref(), holder.key().as_ref()],
-        bump,
+        bump
     )]
     pub redemption: Account<'info, Redemption>,
 
@@ -384,7 +384,7 @@ pub struct RedeemCompressedNft<'info> {
         payer = holder,
         space = 8 + Redemption::LEN,
         seeds = [REDEMPTION_SEED, nft_mint.key().as_ref(), holder.key().as_ref()],
-        bump,
+        bump
     )]
     pub redemption: Account<'info, Redemption>,
 

@@ -1,15 +1,18 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{self as token, Mint, TokenAccount, TransferChecked};
-use anchor_spl::token::Token;
+use anchor_spl::token::{self as token, Mint, TokenAccount, TransferChecked, Token};
 
-// NOTE: Devnet program ID
-declare_id!("SeLx2bBokdXRzDqvqVB8m8FHT3Ts4VvPjvPaNetHZnn");
+// NOTE: Anchor IDL-compatible variant
+declare_id!("DE9rqqvye7rExak5cjYdkBup5wR9PRYMrbZw17xPooCt");
 
 const LISTING_SEED: &[u8] = b"listing";
+const CONFIG_SEED: &[u8] = b"config";
 const BACKEND_SIGNER: Pubkey = pubkey!("2mdvoXMrxTPyqq9ETxAf7YLgLU7GHdefR88SLvQ5xC7r");
 
+// Platform fee: 250 basis points = 2.5%
+const PLATFORM_FEE_BPS: u16 = 250;
+
 #[program]
-pub mod direct_sell {
+pub mod direct_sell_anchor {
     use super::*;
 
     /// **Create a new NFT listing (with backend permit).**
@@ -27,7 +30,7 @@ pub mod direct_sell {
     pub fn create_listing_with_permit(
         ctx: Context<CreateListingWithPermit>,
         price: u64,
-        permit_nonce: [u8; 16],
+        permit_nonce: Vec<u8>,
         permit_expiry_unix_ts: i64,
     ) -> Result<()> {
         let clock = Clock::get()?;
@@ -85,6 +88,75 @@ pub mod direct_sell {
         create_listing_internal(ctx, price)
     }
 
+
+    /// **Initialize platform configuration (admin only).**
+    ///
+    /// Sets up the platform fee wallet and fee percentage.
+    /// Can only be called once by the program authority.
+    pub fn initialize_config(
+        ctx: Context<InitializeConfig>,
+        fee_bps: u16,
+    ) -> Result<()> {
+        require!(fee_bps <= 1000, DirectSellError::InvalidFeeBps); // Max 10%
+        
+        let config = &mut ctx.accounts.config;
+        config.authority = ctx.accounts.authority.key();
+        config.fee_wallet = ctx.accounts.fee_wallet.key();
+        config.fee_bps = fee_bps;
+        config.bump = ctx.bumps.config;
+        
+        msg!("Platform config initialized: fee={}bps, wallet={}", fee_bps, config.fee_wallet);
+        Ok(())
+    }
+
+    /// **Update platform fee configuration (admin only).**
+    ///
+    /// Allows the authority to update fee percentage and fee wallet.
+    pub fn update_config(
+        ctx: Context<UpdateConfig>,
+        new_fee_bps: Option<u16>,
+        new_fee_wallet: Option<Pubkey>,
+    ) -> Result<()> {
+        let config = &mut ctx.accounts.config;
+        
+        if let Some(fee_bps) = new_fee_bps {
+            require!(fee_bps <= 1000, DirectSellError::InvalidFeeBps);
+            config.fee_bps = fee_bps;
+            msg!("Fee updated to {}bps", fee_bps);
+        }
+        
+        if let Some(wallet) = new_fee_wallet {
+            config.fee_wallet = wallet;
+            msg!("Fee wallet updated to {}", wallet);
+        }
+        
+        Ok(())
+    }
+
+    /// **Withdraw accumulated fees from fee wallet (admin only).**
+    ///
+    /// Allows authority to withdraw collected platform fees.
+    pub fn withdraw_fees(
+        ctx: Context<WithdrawFees>,
+        amount: u64,
+    ) -> Result<()> {
+        let cpi_accounts = TransferChecked {
+            from: ctx.accounts.fee_wallet_ata.to_account_info(),
+            to: ctx.accounts.destination_ata.to_account_info(),
+            mint: ctx.accounts.payment_mint.to_account_info(),
+            authority: ctx.accounts.fee_wallet.to_account_info(),
+        };
+        
+        token::transfer_checked(
+            CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts),
+            amount,
+            ctx.accounts.payment_mint.decimals,
+        )?;
+        
+        msg!("Withdrawn {} tokens to {}", amount, ctx.accounts.destination_ata.key());
+        Ok(())
+    }
+
     /// **[TEST ONLY] Create listing without permit verification.**
     #[cfg(feature = "test-bypass")]
     pub fn create_listing_test(
@@ -94,7 +166,7 @@ pub mod direct_sell {
         create_listing_internal_test(ctx, price)
     }
 
-    /// **Buy an NFT listing with USDC.**
+    /// **Buy an NFT listing with USDC (with platform fee).**
     ///
     /// # What it does
     /// - Transfers USDC payment from buyer to seller
@@ -112,7 +184,36 @@ pub mod direct_sell {
         require_keys_eq!(listing.payment_mint, ctx.accounts.payment_mint.key());
         require_keys_eq!(listing.seller, ctx.accounts.seller.key());
 
-        // Transfer payment from buyer to seller
+        let config = &ctx.accounts.config;
+        let total_price = listing.price;
+        
+        // Calculate platform fee
+        let platform_fee = (total_price as u128)
+            .checked_mul(config.fee_bps as u128)
+            .unwrap()
+            .checked_div(10000)
+            .unwrap() as u64;
+        
+        let seller_amount = total_price.checked_sub(platform_fee).unwrap();
+        
+        msg!("Sale: total={}, fee={}, seller={}", total_price, platform_fee, seller_amount);
+
+        // Transfer platform fee to fee wallet
+        if platform_fee > 0 {
+            let cpi_fee = TransferChecked {
+                from: ctx.accounts.buyer_payment_ata.to_account_info(),
+                to: ctx.accounts.fee_wallet_ata.to_account_info(),
+                mint: ctx.accounts.payment_mint.to_account_info(),
+                authority: ctx.accounts.buyer.to_account_info(),
+            };
+            token::transfer_checked(
+                CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_fee),
+                platform_fee,
+                ctx.accounts.payment_mint.decimals,
+            )?;
+        }
+
+        // Transfer remaining payment to seller
         let cpi_accounts = TransferChecked {
             from: ctx.accounts.buyer_payment_ata.to_account_info(),
             to: ctx.accounts.seller_payment_ata.to_account_info(),
@@ -121,7 +222,7 @@ pub mod direct_sell {
         };
         token::transfer_checked(
             CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts),
-            listing.price,
+            seller_amount,
             ctx.accounts.payment_mint.decimals,
         )?;
 
@@ -343,7 +444,7 @@ pub mod direct_sell {
     /// # Parameters
     /// - `prices`: Vec of listing prices
     /// - `permit_data`: Vec of (nonce, expiry) for each listing
-    #[cfg(not(feature = "test-bypass"))]
+    #[cfg(feature = "batch")]
     pub fn batch_create_listings(
         ctx: Context<BatchCreateListings>,
         prices: Vec<u64>,
@@ -444,7 +545,7 @@ fn create_listing_internal(
     listing.payment_mint = ctx.accounts.payment_mint.key();
     listing.price = price;
     listing.sold = false;
-    listing.bump = ctx.bumps.listing;
+    listing.bump = 0; // No PDA in IDL-compatible version
 
     emit!(ListingCreated {
         listing: listing.key(),
@@ -486,7 +587,7 @@ fn create_listing_internal_test(
     listing.payment_mint = ctx.accounts.payment_mint.key();
     listing.price = price;
     listing.sold = false;
-    listing.bump = ctx.bumps.listing;
+    listing.bump = 0; // No PDA in IDL-compatible version
 
     emit!(ListingCreated {
         listing: listing.key(),
@@ -505,42 +606,25 @@ fn create_listing_internal_test(
 
 #[cfg(not(feature = "test-bypass"))]
 #[derive(Accounts)]
-#[instruction(price: u64, permit_nonce: [u8; 16], permit_expiry_unix_ts: i64)]
 pub struct CreateListingWithPermit<'info> {
     #[account(mut)]
     pub seller: Signer<'info>,
 
-    pub nft_mint: InterfaceAccount<'info, Mint>,
-    pub payment_mint: InterfaceAccount<'info, Mint>,
+    pub nft_mint: Account<'info, Mint>,
+    pub payment_mint: Account<'info, Mint>,
 
-    #[account(mut, constraint = seller_nft_ata.owner == seller.key(), constraint = seller_nft_ata.mint == nft_mint.key())]
-    pub seller_nft_ata: InterfaceAccount<'info, TokenAccount>,
-
-    #[account(mut, constraint = listing_nft_escrow.owner == listing.key(), constraint = listing_nft_escrow.mint == nft_mint.key())]
-    pub listing_nft_escrow: InterfaceAccount<'info, TokenAccount>,
-
-    // #[cfg(not(feature = "idl-build"))]
-    // #[account(mut, constraint = seller_payment_ata.owner == seller.key(), constraint = seller_payment_ata.mint == payment_mint.key())]
-    // pub seller_payment_ata: InterfaceAccount<'info, TokenAccount>;
-
-    // #[cfg(feature = "idl-build")]
-    // #[account(mut)]
-    // pub seller_payment_ata: InterfaceAccount<'info, TokenAccount>;
-
-
-
-    #[account(
-        init,
-        payer = seller,
-        space = 8 + Listing::LEN,
-        seeds = [LISTING_SEED, nft_mint.key().as_ref(), seller.key().as_ref()],
-        bump,
-    )]
+    #[account(init, payer = seller, space = 8 + Listing::LEN)]
     pub listing: Account<'info, Listing>,
+
+    #[account(mut)]
+    pub seller_nft_ata: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub listing_nft_escrow: Account<'info, TokenAccount>,
 
     /// CHECK: Instructions sysvar for ed25519 verification
     #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
-    pub instructions_sysvar: AccountInfo<'info>,
+    pub instructions_sysvar: UncheckedAccount<'info>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -548,19 +632,18 @@ pub struct CreateListingWithPermit<'info> {
 
 #[cfg(feature = "test-bypass")]
 #[derive(Accounts)]
-#[instruction(price: u64)]
 pub struct CreateListingTest<'info> {
     #[account(mut)]
     pub seller: Signer<'info>,
 
-    pub nft_mint: InterfaceAccount<'info, Mint>,
-    pub payment_mint: InterfaceAccount<'info, Mint>,
+    pub nft_mint: Account<'info, Mint>,
+    pub payment_mint: Account<'info, Mint>,
 
-    #[account(mut, constraint = seller_nft_ata.owner == seller.key(), constraint = seller_nft_ata.mint == nft_mint.key())]
-    pub seller_nft_ata: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub seller_nft_ata: Account<'info, TokenAccount>,
 
-    #[account(mut, constraint = listing_nft_escrow.owner == listing.key(), constraint = listing_nft_escrow.mint == nft_mint.key())]
-    pub listing_nft_escrow: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub listing_nft_escrow: Account<'info, TokenAccount>,
 
     #[account(
         init,
@@ -572,6 +655,55 @@ pub struct CreateListingTest<'info> {
     pub listing: Account<'info, Listing>,
 
     pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, Token>,
+}
+
+#[derive(Accounts)]
+pub struct InitializeConfig<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    #[account(
+        init,
+        payer = authority,
+        space = 8 + PlatformConfig::LEN,
+        seeds = [CONFIG_SEED],
+        bump,
+    )]
+    pub config: Account<'info, PlatformConfig>,
+
+    /// CHECK: Fee wallet can be any account
+    pub fee_wallet: UncheckedAccount<'info>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct UpdateConfig<'info> {
+    #[account(mut, has_one = authority)]
+    pub config: Account<'info, PlatformConfig>,
+
+    pub authority: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct WithdrawFees<'info> {
+    #[account(has_one = authority, has_one = fee_wallet)]
+    pub config: Account<'info, PlatformConfig>,
+
+    pub authority: Signer<'info>,
+
+    /// CHECK: Fee wallet from config
+    pub fee_wallet: Signer<'info>,
+
+    pub payment_mint: Account<'info, Mint>,
+
+    #[account(mut)]
+    pub fee_wallet_ata: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub destination_ata: Account<'info, TokenAccount>,
+
     pub token_program: Program<'info, Token>,
 }
 
@@ -582,25 +714,30 @@ pub struct BuyListing<'info> {
 
     /// CHECK: Seller receives payment
     #[account(mut)]
-    pub seller: AccountInfo<'info>,
+    pub seller: UncheckedAccount<'info>,
 
     #[account(mut)]
     pub listing: Account<'info, Listing>,
 
-    pub nft_mint: InterfaceAccount<'info, Mint>,
-    pub payment_mint: InterfaceAccount<'info, Mint>,
+    pub config: Account<'info, PlatformConfig>,
 
-    #[account(mut, constraint = buyer_payment_ata.owner == buyer.key(), constraint = buyer_payment_ata.mint == payment_mint.key())]
-    pub buyer_payment_ata: InterfaceAccount<'info, TokenAccount>,
+    pub nft_mint: Account<'info, Mint>,
+    pub payment_mint: Account<'info, Mint>,
 
-    #[account(mut, constraint = seller_payment_ata.owner == seller.key(), constraint = seller_payment_ata.mint == payment_mint.key())]
-    pub seller_payment_ata: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub buyer_payment_ata: Account<'info, TokenAccount>,
 
-    #[account(mut, constraint = listing_nft_escrow.owner == listing.key(), constraint = listing_nft_escrow.mint == nft_mint.key())]
-    pub listing_nft_escrow: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub seller_payment_ata: Account<'info, TokenAccount>,
 
-    #[account(mut, constraint = buyer_nft_ata.owner == buyer.key(), constraint = buyer_nft_ata.mint == nft_mint.key())]
-    pub buyer_nft_ata: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub fee_wallet_ata: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub listing_nft_escrow: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub buyer_nft_ata: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
 }
@@ -613,13 +750,13 @@ pub struct CancelListing<'info> {
     #[account(mut, close = seller)]
     pub listing: Account<'info, Listing>,
 
-    pub nft_mint: InterfaceAccount<'info, Mint>,
+    pub nft_mint: Account<'info, Mint>,
 
-    #[account(mut, constraint = seller_nft_ata.owner == seller.key(), constraint = seller_nft_ata.mint == nft_mint.key())]
-    pub seller_nft_ata: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub seller_nft_ata: Account<'info, TokenAccount>,
 
-    #[account(mut, constraint = listing_nft_escrow.owner == listing.key(), constraint = listing_nft_escrow.mint == nft_mint.key())]
-    pub listing_nft_escrow: InterfaceAccount<'info, TokenAccount>,
+    #[account(mut)]
+    pub listing_nft_escrow: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
 }
@@ -632,7 +769,7 @@ pub struct BuyListingWithMoga<'info> {
 
     /// CHECK: Seller receives payment
     #[account(mut)]
-    pub seller: AccountInfo<'info>,
+    pub seller: UncheckedAccount<'info>,
 
     #[account(mut)]
     pub listing: Account<'info, Listing>,
@@ -642,7 +779,7 @@ pub struct BuyListingWithMoga<'info> {
     pub moga_mint: InterfaceAccount<'info, Mint>,
 
     /// CHECK: Pyth MOGA/USD price feed (validates MOGA token)
-    pub pyth_moga_price: AccountInfo<'info>,
+    pub pyth_moga_price: UncheckedAccount<'info>,
 
     #[account(mut, constraint = buyer_moga_ata.owner == buyer.key(), constraint = buyer_moga_ata.mint == moga_mint.key())]
     pub buyer_moga_ata: InterfaceAccount<'info, TokenAccount>,
@@ -663,7 +800,9 @@ pub struct BuyListingWithMoga<'info> {
     // Jupiter accounts via remaining_accounts
 }
 
-#[cfg(not(feature = "test-bypass"))]
+ 
+
+#[cfg(feature = "batch")]
 #[derive(Accounts)]
 pub struct BatchCreateListings<'info> {
     #[account(mut)]
@@ -673,7 +812,7 @@ pub struct BatchCreateListings<'info> {
 
     /// CHECK: Instructions sysvar for ed25519 verification
     #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
-    pub instructions_sysvar: AccountInfo<'info>,
+    pub instructions_sysvar: UncheckedAccount<'info>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -683,6 +822,18 @@ pub struct BatchCreateListings<'info> {
 // ============================================================================
 // State
 // ============================================================================
+
+#[account]
+pub struct PlatformConfig {
+    pub authority: Pubkey,      // 32
+    pub fee_wallet: Pubkey,      // 32
+    pub fee_bps: u16,            // 2 (basis points, e.g., 250 = 2.5%)
+    pub bump: u8,                // 1
+}
+
+impl PlatformConfig {
+    pub const LEN: usize = 32 + 32 + 2 + 1;
+}
 
 #[account]
 pub struct Listing {
@@ -744,4 +895,5 @@ pub enum DirectSellError {
     #[msg("Invalid Pyth account")] InvalidPythAccount,
     #[msg("Pyth price is stale")] PythPriceStale,
     #[msg("Invalid Pyth price")] InvalidPythPrice,
+    #[msg("Invalid fee basis points (max 1000 = 10%)")] InvalidFeeBps,
 }

@@ -20,14 +20,14 @@ use mpl_bubblegum::programs::MPL_BUBBLEGUM_ID;
 use spl_account_compression::{program::SplAccountCompression, Noop};
 
 // NOTE: Devnet program id
-declare_id!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
+declare_id!("RWAwMRRTxAsRhaWPSj4MS2yrVAPbySsCDQAf9s5dyjr");
 
 const RAFFLE_SEED: &[u8] = b"raffle";
 const TICKET_SEED: &[u8] = b"ticket";
 const SLOTS_SEED: &[u8] = b"slots";
 
 // pub const LIGHT_CPI_SIGNER: CpiSigner =
-//     derive_light_cpi_signer!("5xAQW7YPsYjHkeWfuqa55ZbeUDcLJtsRUiU4HcCLm12M");
+//     derive_light_cpi_signer!("RWAwMRRTxAsRhaWPSj4MS2yrVAPbySsCDQAf9s5dyjr");
 
 const COMP_DEF_OFFSET_DRAW: u32 = comp_def_offset("draw");
 
@@ -40,7 +40,7 @@ pub const BACKEND_SIGNER: Pubkey = pubkey!("2mdvoXMrxTPyqq9ETxAf7YLgLU7GHdefR88S
 
 // Collection mint for prize NFTs (set after creating collection)
 // TODO: Replace with your actual collection mint after running delegate-collection.ts
-pub const PRIZE_COLLECTION_MINT: Pubkey = pubkey!("CoLLect1oN1111111111111111111111111111111");
+pub const PRIZE_COLLECTION_MINT: Pubkey = pubkey!("Co11ectionMintAddress1111111111111111111111");
 
 // Collection authority PDA seed
 const COLLECTION_AUTHORITY_SEED: &[u8] = b"collection_authority";
