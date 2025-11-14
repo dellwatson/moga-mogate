@@ -1,0 +1,64 @@
+{
+  "name": "Business Class 🌊 🌊 Transatlantic",
+  "symbol": "FLIGHT-TRANS-BIZ",
+  "description": "Business class credit for transatlantic routes (🇺🇸 USA ↔ 🇪🇺 Europe). Any airline. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/business-transatlantic.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "Unlimited"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Business"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇺🇸 Any"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🌊 Transatlantic"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 75
+    },
+    {
+      "trait_type": "Supply",
+      "value": 350
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/business-transatlantic.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

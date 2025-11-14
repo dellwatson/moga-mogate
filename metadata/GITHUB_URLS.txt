@@ -1,0 +1,76 @@
+# Flight NFT Metadata - GitHub Raw URLs
+# Copy-paste ready for scripts
+
+BASE_URL="https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/nfts/flights"
+
+# ============================================================================
+# COLLECTION METADATA
+# ============================================================================
+
+TRAVEL_SFT_COLLECTION="https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/collections/travel-sft.json"
+TRAVEL_1OF1_COLLECTION="https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/collections/travel-1of1.json"
+
+# ============================================================================
+# SFT CREDITS (11 modes)
+# ============================================================================
+
+# COMMON TIER (3,500 supply)
+SFT_500_ANY="${BASE_URL}/sft-credit-500-any.json"                          # Supply: 2000, Score: 10
+SFT_2000_SEA="${BASE_URL}/sft-credit-2000-southeast-asia.json"             # Supply: 1500, Score: 20
+
+# UNCOMMON TIER (3,900 supply)
+SFT_ECO_INDONESIA="${BASE_URL}/sft-economy-domestic-indonesia.json"        # Supply: 1200, Score: 25
+SFT_ECO_ASIA="${BASE_URL}/sft-economy-asia-exclude-china.json"             # Supply: 1000, Score: 30
+SFT_ECO_WORLDWIDE="${BASE_URL}/sft-economy-exclude-usa-china.json"         # Supply: 900,  Score: 35
+SFT_PREM_USA="${BASE_URL}/sft-premium-economy-usa.json"                    # Supply: 800,  Score: 40
+
+# RARE TIER (1,250 supply)
+SFT_8000_BIZ="${BASE_URL}/sft-credit-8000-business.json"                   # Supply: 500,  Score: 65
+SFT_BIZ_EUROPE="${BASE_URL}/sft-business-roundtrip-europe.json"            # Supply: 400,  Score: 70
+SFT_BIZ_TRANS="${BASE_URL}/sft-business-transatlantic.json"                # Supply: 350,  Score: 75
+
+# EPIC TIER (450 supply)
+SFT_FIRST_ME="${BASE_URL}/sft-first-class-middle-east.json"                # Supply: 250,  Score: 88
+SFT_15000_FIRST="${BASE_URL}/sft-first-class-15000.json"                   # Supply: 200,  Score: 90
+
+# ============================================================================
+# 1/1 SPECIFIC BOOKINGS (4 unique)
+# ============================================================================
+
+# LEGENDARY TIER
+ONEOF1_QATAR="${BASE_URL}/1of1-qatar-business-roundtrip.json"              # Score: 85
+ONEOF1_ANA="${BASE_URL}/1of1-ana-first-nrt-lhr.json"                       # Score: 95
+ONEOF1_EMIRATES="${BASE_URL}/1of1-emirates-first-dxb-jfk.json"             # Score: 98
+ONEOF1_SINGAPORE="${BASE_URL}/1of1-singapore-suites-sin-lax.json"          # Score: 100
+
+# ============================================================================
+# USAGE EXAMPLES
+# ============================================================================
+
+# TypeScript/JavaScript
+const metadata = {
+  common: [
+    "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/nfts/flights/sft-credit-500-any.json",
+    "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/nfts/flights/sft-credit-2000-southeast-asia.json"
+  ],
+  legendary: [
+    "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json"
+  ]
+};
+
+# Bash
+curl "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/nfts/flights/sft-credit-500-any.json"
+
+# ============================================================================
+# SUPPLY SUMMARY
+# ============================================================================
+
+# Total SFT Supply: 9,100
+# Total 1/1 Supply: 4
+# Total NFTs: 9,104
+
+# Common:    3,500 (38.4%)
+# Uncommon:  3,900 (42.8%)
+# Rare:      1,250 (13.7%)
+# Epic:        450 (4.9%)
+# Legendary:     4 (0.04%)

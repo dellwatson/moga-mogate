@@ -1,0 +1,80 @@
+{
+  "name": "Four Seasons 🇲🇻 Maldives - 7 Night Overwater Villa",
+  "symbol": "HOTEL-FS-MALDIVES",
+  "description": "7 nights at Four Seasons Resort 🇲🇻 Maldives at Landaa Giraavaru. Overwater villa with private pool. Includes daily breakfast for 2, spa credit $500, and seaplane transfers. Booking ID: FS-MALDIVES-2025-001. Redeemable on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/four-seasons-maldives-7nights.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Specific Hotel Booking"
+    },
+    {
+      "trait_type": "Booking ID",
+      "value": "FS-MALDIVES-2025-001"
+    },
+    {
+      "trait_type": "Hotel",
+      "value": "Four Seasons Maldives"
+    },
+    {
+      "trait_type": "Location",
+      "value": "🇲🇻 Landaa Giraavaru, Maldives"
+    },
+    {
+      "trait_type": "Room Type",
+      "value": "Overwater Villa with Pool"
+    },
+    {
+      "trait_type": "Duration",
+      "value": "7 Nights"
+    },
+    {
+      "trait_type": "Guests",
+      "value": "2 Adults"
+    },
+    {
+      "trait_type": "Includes",
+      "value": "Breakfast + Spa Credit + Transfers"
+    },
+    {
+      "trait_type": "Retail Value",
+      "value": "$15,000"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 95
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/four-seasons-maldives-7nights.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

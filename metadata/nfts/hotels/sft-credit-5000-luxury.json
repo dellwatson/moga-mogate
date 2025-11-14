@@ -1,0 +1,60 @@
+{
+  "name": "$5000 Luxury Hotel Credit - 5-Star Properties",
+  "symbol": "HOTEL-5K-LUX",
+  "description": "$5000 credit for luxury 5-star hotel bookings worldwide. Premium properties only (Four Seasons, Ritz-Carlton, St. Regis, etc.). Redeemable only on emiless.com. No expiration.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/credit-5000-luxury.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Hotel Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "$5000"
+    },
+    {
+      "trait_type": "Hotel Type",
+      "value": "5-Star Luxury"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🌍 🌍 Worldwide"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 70
+    },
+    {
+      "trait_type": "Supply",
+      "value": 300
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/credit-5000-luxury.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK",
+  "symbol": "FLIGHT-EK-FIRST",
+  "description": "Specific Emirates A380 first class booking: 🇦🇪 Dubai (🇦🇪 DXB) to New York 🇺🇸 JFK. Booking ID: EK-FIRST-2025-001. Includes shower spa and onboard lounge. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/emirates-first-dxb-jfk.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Specific Booking"
+    },
+    {
+      "trait_type": "Booking ID",
+      "value": "EK-FIRST-2025-001"
+    },
+    {
+      "trait_type": "Class",
+      "value": "First Class"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇦🇪 Emirates"
+    },
+    {
+      "trait_type": "Aircraft",
+      "value": "A380"
+    },
+    {
+      "trait_type": "Route",
+      "value": "🇦🇪 DXB → 🇺🇸 JFK"
+    },
+    {
+      "trait_type": "Trip Type",
+      "value": "One Way"
+    },
+    {
+      "trait_type": "Departure",
+      "value": "🇦🇪 Dubai (DXB)"
+    },
+    {
+      "trait_type": "Destination",
+      "value": "🇺🇸 New York JFK"
+    },
+    {
+      "trait_type": "Special Features",
+      "value": "Shower Spa + Lounge"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 98
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/emirates-first-dxb-jfk.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "name": "Rolex Cosmograph Daytona - Platinum Ice Blue",
+  "symbol": "LUXURY-ROLEX-001",
+  "description": "Rolex Cosmograph Daytona 116506 in platinum with ice blue dial. 40mm case, automatic movement, Cerachrom bezel. Serial #116506-2024-001. Includes box, papers, and certificate of authenticity. Redeemable for physical watch.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/rolex-daytona-platinum.png",
+  "external_url": "https://mogate.io/luxury",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Luxury Watch"
+    },
+    {
+      "trait_type": "Brand",
+      "value": "Rolex"
+    },
+    {
+      "trait_type": "Model",
+      "value": "Cosmograph Daytona 116506"
+    },
+    {
+      "trait_type": "Serial Number",
+      "value": "116506-2024-001"
+    },
+    {
+      "trait_type": "Material",
+      "value": "Platinum"
+    },
+    {
+      "trait_type": "Dial Color",
+      "value": "Ice Blue"
+    },
+    {
+      "trait_type": "Case Size",
+      "value": "40mm"
+    },
+    {
+      "trait_type": "Movement",
+      "value": "Automatic"
+    },
+    {
+      "trait_type": "Condition",
+      "value": "Brand New"
+    },
+    {
+      "trait_type": "Retail Value",
+      "value": "$75,000"
+    },
+    {
+      "trait_type": "Includes",
+      "value": "Box & Papers"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 100
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    }
+  ],
+  "properties": {
+    "category": "luxury",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/rolex-daytona-platinum.png",
+        "type": "image/png"
+      }
+    ]
+  }
+}

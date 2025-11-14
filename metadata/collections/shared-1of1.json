@@ -1,0 +1,21 @@
+{
+  "name": "Mogate Marketplace - Unique Items",
+  "symbol": "MOGATE-1OF1",
+  "description": "Verified 1/1 NFTs from Mogate marketplace - curated creators. Each item is unique and authenticated.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/shared-1of1.png",
+  "external_url": "https://mogate.io",
+  "attributes": [
+    {
+      "trait_type": "Collection Type",
+      "value": "Marketplace Unique"
+    },
+    {
+      "trait_type": "Token Type",
+      "value": "Unique (1/1)"
+    },
+    {
+      "trait_type": "Platform Fee",
+      "value": "2.5%"
+    }
+  ]
+}

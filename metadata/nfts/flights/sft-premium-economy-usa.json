@@ -1,0 +1,64 @@
+{
+  "name": "Premium Economy 🇺🇸 USA Domestic",
+  "symbol": "FLIGHT-USA-PREM",
+  "description": "Premium Economy class credit for 🇺🇸 USA domestic routes. Any airline, any price. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/premium-economy-usa.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "Unlimited"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Premium Economy"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇺🇸 Any"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🇺🇸 USA Domestic"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 40
+    },
+    {
+      "trait_type": "Supply",
+      "value": 800
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/premium-economy-usa.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

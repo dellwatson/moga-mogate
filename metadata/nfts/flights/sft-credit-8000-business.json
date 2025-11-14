@@ -1,0 +1,64 @@
+{
+  "name": "$8000 Business Class Credit",
+  "symbol": "FLIGHT-8K-BIZ",
+  "description": "$8000 credit for business class flights. Excludes 🇶🇦 Qatar Airways. Redeemable only on emiless.com. Fixed price, fixed class.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-8000-business.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "$8000"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Business"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇶🇦 Any (Exclude Qatar)"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🌍 Worldwide"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 65
+    },
+    {
+      "trait_type": "Supply",
+      "value": 500
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-8000-business.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

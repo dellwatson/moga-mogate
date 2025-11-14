@@ -1,0 +1,64 @@
+{
+  "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit",
+  "symbol": "FLIGHT-2K-SEA",
+  "description": "$2000 credit for 🌏 Southeast 🌏 Asia routes (Thailand, Vietnam, 🇸🇬 Singapore, Malaysia, 🇮🇩 Indonesia, Philippines). Any class, any airline. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-2000-southeast-asia.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "$2000"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Flexible"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇮🇩 Any"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🌏 Southeast Asia"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 20
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1500
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-2000-southeast-asia.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

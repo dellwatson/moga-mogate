@@ -1,0 +1,17 @@
+{
+  "name": "Mogate Travel - Unique Bookings",
+  "symbol": "MOGATE-TRAVEL",
+  "description": "Unique flight tickets and hotel bookings with specific booking IDs",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/travel-1of1.png",
+  "external_url": "https://mogate.io/travel",
+  "attributes": [
+    {
+      "trait_type": "Collection Type",
+      "value": "Travel Bookings"
+    },
+    {
+      "trait_type": "Token Type",
+      "value": "Unique (1/1)"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "name": "Mogate Token",
   "symbol": "MOGA",
   "description": "Mogate platform utility token for RWA raffles and marketplace. Used for entry fees, rewards, and platform governance.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/moga-logo.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/master/metadata/moga-logo.png",
   "external_url": "https://mogate.io",
   "attributes": [
     {
@@ -22,7 +22,7 @@
     "category": "fungible-token",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/moga-logo.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/master/metadata/moga-logo.png",
         "type": "image/png"
       }
     ]

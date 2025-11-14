@@ -1,11 +1,42 @@
-# MOGA Token Metadata
+# Mogate Metadata Repository
 
-This directory contains the metadata for the MOGA token that will be hosted on GitHub.
+This directory contains all metadata for Mogate platform assets hosted on GitHub.
 
-## Files
+## 📁 Directory Structure
+
+```
+metadata/
+├── moga-token.json          # MOGA token metadata
+├── moga-logo.png            # MOGA token logo
+├── collections/             # NFT collection metadata
+│   ├── travel-sft.json
+│   └── travel-1of1.json
+├── nfts/                    # Individual NFT metadata
+│   └── flights/             # Flight NFT metadata (15 modes)
+│       ├── sft-*.json       # SFT credits (11 files)
+│       └── 1of1-*.json      # Unique bookings (4 files)
+└── images/                  # Image assets (to be added)
+    ├── flights/
+    └── travel-*.png
+```
+
+## 🎫 Flight NFT Metadata (NEW)
+
+**15 flight modes created** with comprehensive rarity system:
+- **11 SFT Credits** (~9,100 total supply)
+- **4 1/1 Bookings** (4 legendary NFTs)
+
+See `FLIGHT_METADATA_SUMMARY.md` for complete details.
+
+### Quick Access
+- All URLs: `GITHUB_URLS.txt`
+- Full index: `nfts/flights/METADATA_INDEX.md`
+- Usage guide: `nfts/flights/README.md`
+
+## 🪙 MOGA Token Metadata
 
 - **`moga-token.json`** - Token metadata (name, symbol, description, image)
-- **`moga-logo.png`** - Token logo image (replace with your actual logo)
+- **`moga-logo.png`** - Token logo image
 
 ## Usage
 

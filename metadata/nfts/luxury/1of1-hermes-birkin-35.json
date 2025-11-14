@@ -1,0 +1,78 @@
+{
+  "name": "Hermès Birkin 35 - Togo Leather Black with Gold Hardware",
+  "symbol": "LUXURY-HERMES-001",
+  "description": "Hermès Birkin 35 handbag in black Togo leather with gold hardware. Includes lock, keys, clochette, dust bag, box, and ribbon. Serial #BIRKIN-2024-001. Authenticated and brand new. Redeemable for physical handbag.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/hermes-birkin-35.png",
+  "external_url": "https://mogate.io/luxury",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Luxury Handbag"
+    },
+    {
+      "trait_type": "Brand",
+      "value": "Hermès"
+    },
+    {
+      "trait_type": "Model",
+      "value": "Birkin 35"
+    },
+    {
+      "trait_type": "Serial Number",
+      "value": "BIRKIN-2024-001"
+    },
+    {
+      "trait_type": "Leather Type",
+      "value": "Togo"
+    },
+    {
+      "trait_type": "Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Hardware",
+      "value": "Gold"
+    },
+    {
+      "trait_type": "Size",
+      "value": "35cm"
+    },
+    {
+      "trait_type": "Condition",
+      "value": "Brand New"
+    },
+    {
+      "trait_type": "Retail Value",
+      "value": "$25,000"
+    },
+    {
+      "trait_type": "Includes",
+      "value": "Full Set with Box"
+    },
+    {
+      "trait_type": "Authentication",
+      "value": "Verified Authentic"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 88
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    }
+  ],
+  "properties": {
+    "category": "luxury",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/hermes-birkin-35.png",
+        "type": "image/png"
+      }
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "name": "Business Round Trip - 🇪🇺 Europe Domestic",
+  "symbol": "FLIGHT-EU-BIZ-RT",
+  "description": "Business class round trip credit for domestic European routes. Any airline within 🇪🇺 Europe. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/business-roundtrip-europe.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "Unlimited"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Business"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇪🇺 Any European"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🇪🇺 Europe Domestic"
+    },
+    {
+      "trait_type": "Trip Type",
+      "value": "Round Trip"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 70
+    },
+    {
+      "trait_type": "Supply",
+      "value": 400
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/business-roundtrip-europe.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

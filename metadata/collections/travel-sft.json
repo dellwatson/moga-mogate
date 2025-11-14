@@ -1,0 +1,17 @@
+{
+  "name": "Mogate Travel - Credits",
+  "symbol": "MOGATE-CREDIT",
+  "description": "Flight and hotel credits (Semi-Fungible Tokens) - Redeemable on emiless.com",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/travel-sft.png",
+  "external_url": "https://mogate.io/travel",
+  "attributes": [
+    {
+      "trait_type": "Collection Type",
+      "value": "Travel Credits"
+    },
+    {
+      "trait_type": "Token Type",
+      "value": "Semi-Fungible"
+    }
+  ]
+}

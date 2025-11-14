@@ -1,0 +1,80 @@
+{
+  "name": "Burj Al Arab - Royal Suite 3 Nights",
+  "symbol": "HOTEL-BURJ-ROYAL",
+  "description": "3 nights at Burj Al Arab 🇦🇪 Dubai - Royal Suite (2 bedrooms, 780 sqm). Includes butler service, Rolls-Royce transfers, unlimited dining at all restaurants, and spa access. Booking ID: BURJ-ROYAL-2025-001. Redeemable on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/burj-al-arab-royal-suite.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Specific Hotel Booking"
+    },
+    {
+      "trait_type": "Booking ID",
+      "value": "BURJ-ROYAL-2025-001"
+    },
+    {
+      "trait_type": "Hotel",
+      "value": "Burj Al Arab"
+    },
+    {
+      "trait_type": "Location",
+      "value": "🇦🇪 Dubai, UAE"
+    },
+    {
+      "trait_type": "Room Type",
+      "value": "Royal Suite (780 sqm)"
+    },
+    {
+      "trait_type": "Duration",
+      "value": "3 Nights"
+    },
+    {
+      "trait_type": "Guests",
+      "value": "4 Adults"
+    },
+    {
+      "trait_type": "Includes",
+      "value": "Butler + Rolls-Royce + Unlimited Dining"
+    },
+    {
+      "trait_type": "Retail Value",
+      "value": "$30,000"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 100
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/burj-al-arab-royal-suite.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

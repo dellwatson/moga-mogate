@@ -1,0 +1,74 @@
+{
+  "name": "Patek Philippe Nautilus 5711/1A - Blue Dial",
+  "symbol": "LUXURY-PATEK-001",
+  "description": "Patek Philippe Nautilus 5711/1A-010 in stainless steel with blue dial. 40mm case, automatic caliber 26-330 S C movement. Serial #5711-2024-001. Includes box, papers, and certificate. Redeemable for physical watch.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/patek-philippe-nautilus.png",
+  "external_url": "https://mogate.io/luxury",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Luxury Watch"
+    },
+    {
+      "trait_type": "Brand",
+      "value": "Patek Philippe"
+    },
+    {
+      "trait_type": "Model",
+      "value": "Nautilus 5711/1A-010"
+    },
+    {
+      "trait_type": "Serial Number",
+      "value": "5711-2024-001"
+    },
+    {
+      "trait_type": "Material",
+      "value": "Stainless Steel"
+    },
+    {
+      "trait_type": "Dial Color",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Case Size",
+      "value": "40mm"
+    },
+    {
+      "trait_type": "Movement",
+      "value": "Automatic Caliber 26-330 S C"
+    },
+    {
+      "trait_type": "Condition",
+      "value": "Brand New"
+    },
+    {
+      "trait_type": "Retail Value",
+      "value": "$150,000"
+    },
+    {
+      "trait_type": "Includes",
+      "value": "Box & Papers"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 100
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    }
+  ],
+  "properties": {
+    "category": "luxury",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/patek-philippe-nautilus.png",
+        "type": "image/png"
+      }
+    ]
+  }
+}
