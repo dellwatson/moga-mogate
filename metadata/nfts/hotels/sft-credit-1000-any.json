@@ -2,7 +2,7 @@
   "name": "$1000 Hotel Credit - Any Property",
   "symbol": "HOTEL-1K",
   "description": "$1000 credit for hotel bookings worldwide. Any hotel, any dates. Redeemable only on emiless.com. No expiration.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/credit-1000-any.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000-any.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -46,7 +46,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/credit-1000-any.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000-any.png",
         "type": "image/png"
       }
     ],

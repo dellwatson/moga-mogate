@@ -2,7 +2,7 @@
   "name": "Patek Philippe Nautilus 5711/1A - Blue Dial",
   "symbol": "LUXURY-PATEK-001",
   "description": "Patek Philippe Nautilus 5711/1A-010 in stainless steel with blue dial. 40mm case, automatic caliber 26-330 S C movement. Serial #5711-2024-001. Includes box, papers, and certificate. Redeemable for physical watch.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/patek-philippe-nautilus.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-philippe-nautilus.png",
   "external_url": "https://mogate.io/luxury",
   "attributes": [
     {
@@ -66,7 +66,7 @@
     "category": "luxury",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/patek-philippe-nautilus.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-philippe-nautilus.png",
         "type": "image/png"
       }
     ]

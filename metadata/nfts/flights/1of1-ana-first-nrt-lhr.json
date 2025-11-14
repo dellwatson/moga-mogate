@@ -2,7 +2,7 @@
   "name": "ANA First Class - Tokyo to London",
   "symbol": "FLIGHT-NH-FIRST",
   "description": "Specific ANA first class booking: Tokyo Narita (🇯🇵 NRT) to London Heathrow (🇬🇧 LHR). Booking ID: NH-FIRST-2025-001. Japanese hospitality at its finest. Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/ana-first-nrt-lhr.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -66,7 +66,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/ana-first-nrt-lhr.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
         "type": "image/png"
       }
     ],

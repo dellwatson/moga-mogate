@@ -2,7 +2,7 @@
   "name": "🇶🇦 Qatar Airways Business Round Trip - 🇶🇦 DOH to 🇬🇧 LHR",
   "symbol": "FLIGHT-QR-BIZ",
   "description": "Specific 🇶🇦 Qatar Airways business class round trip booking: Doha (🇶🇦 DOH) to London Heathrow (🇬🇧 LHR). Booking ID: QR-BIZ-2025-001. Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/qatar-business-roundtrip.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-roundtrip.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -62,7 +62,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/qatar-business-roundtrip.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-roundtrip.png",
         "type": "image/png"
       }
     ],

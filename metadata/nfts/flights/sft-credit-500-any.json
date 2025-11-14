@@ -2,7 +2,7 @@
   "name": "$500 Flight Credit - Any Airline",
   "symbol": "FLIGHT-500",
   "description": "$500 credit for any airline flight. No expiration. Redeemable only on emiless.com. Flexible class and airline selection.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-500-any.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-500-any.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -50,7 +50,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-500-any.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-500-any.png",
         "type": "image/png"
       }
     ],

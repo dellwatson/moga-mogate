@@ -2,7 +2,7 @@
   "name": "Mogate Marketplace - Credits & Vouchers",
   "symbol": "MOGATE-SFT",
   "description": "Platform credits and vouchers (Semi-Fungible Tokens). Redeemable for various services and products on Mogate marketplace.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/shared-sft.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/shared-sft.png",
   "external_url": "https://mogate.io",
   "attributes": [
     {

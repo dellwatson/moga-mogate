@@ -2,7 +2,7 @@
   "name": "$15000 First Class Credit - Premium Airlines",
   "symbol": "FLIGHT-15K-FIRST",
   "description": "$15000 credit for first class flights on premium airlines (Emirates, 🇸🇬 Singapore, 🇶🇦 Qatar, Etihad, ANA). Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/first-class-15000.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/first-class-15000.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -50,7 +50,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/first-class-15000.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/first-class-15000.png",
         "type": "image/png"
       }
     ],

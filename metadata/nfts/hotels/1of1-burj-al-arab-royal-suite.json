@@ -2,7 +2,7 @@
   "name": "Burj Al Arab - Royal Suite 3 Nights",
   "symbol": "HOTEL-BURJ-ROYAL",
   "description": "3 nights at Burj Al Arab 🇦🇪 Dubai - Royal Suite (2 bedrooms, 780 sqm). Includes butler service, Rolls-Royce transfers, unlimited dining at all restaurants, and spa access. Booking ID: BURJ-ROYAL-2025-001. Redeemable on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/burj-al-arab-royal-suite.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal-suite.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -66,7 +66,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/burj-al-arab-royal-suite.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal-suite.png",
         "type": "image/png"
       }
     ],

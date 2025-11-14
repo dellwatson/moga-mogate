@@ -2,7 +2,7 @@
   "name": "Mogate Luxury RWA",
   "symbol": "MOGATE-LUX",
   "description": "High-end luxury items - watches, jewelry, handbags, diamonds. Verified authentic RWA (Real World Assets) redeemable for physical items.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury.png",
   "external_url": "https://mogate.io/luxury",
   "attributes": [
     {

@@ -2,7 +2,7 @@
   "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX",
   "symbol": "FLIGHT-SQ-SUITES",
   "description": "Specific 🇸🇬 Singapore Airlines A380 Suites class booking: 🇸🇬 Singapore (🇸🇬 SIN) to Los Angeles (🇺🇸 LAX). Booking ID: SQ-SUITES-2025-001. Private suite with double bed. Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/singapore-suites-sin-lax.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -70,7 +70,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/singapore-suites-sin-lax.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
         "type": "image/png"
       }
     ],

@@ -2,7 +2,7 @@
   "name": "Economy Domestic 🇮🇩 Indonesia - Any Price",
   "symbol": "FLIGHT-ID-ECO",
   "description": "Economy class flight credit for domestic 🇮🇩 Indonesia routes. Any airline, any price. Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/economy-domestic-indonesia.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/economy-domestic-indonesia.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -50,7 +50,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/economy-domestic-indonesia.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/economy-domestic-indonesia.png",
         "type": "image/png"
       }
     ],

@@ -2,7 +2,7 @@
   "name": "$10000 First Class Credit - Voucher #001",
   "symbol": "FLIGHT-10K-FIRST-001",
   "description": "Unique $10000 first class flight credit voucher. Serial #001. Premium airlines only (Emirates, 🇸🇬 Singapore, 🇶🇦 Qatar, Etihad, ANA). Redeemable only on emiless.com. This is a 1/1 unique voucher.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-10000-first.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-10000-first.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -58,7 +58,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/credit-10000-first.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-10000-first.png",
         "type": "image/png"
       }
     ],

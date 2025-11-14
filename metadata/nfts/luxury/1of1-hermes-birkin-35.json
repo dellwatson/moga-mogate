@@ -2,7 +2,7 @@
   "name": "Hermès Birkin 35 - Togo Leather Black with Gold Hardware",
   "symbol": "LUXURY-HERMES-001",
   "description": "Hermès Birkin 35 handbag in black Togo leather with gold hardware. Includes lock, keys, clochette, dust bag, box, and ribbon. Serial #BIRKIN-2024-001. Authenticated and brand new. Redeemable for physical handbag.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/hermes-birkin-35.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
   "external_url": "https://mogate.io/luxury",
   "attributes": [
     {
@@ -70,7 +70,7 @@
     "category": "luxury",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/hermes-birkin-35.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
         "type": "image/png"
       }
     ]

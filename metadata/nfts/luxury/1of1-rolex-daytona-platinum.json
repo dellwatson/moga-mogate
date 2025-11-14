@@ -2,7 +2,7 @@
   "name": "Rolex Cosmograph Daytona - Platinum Ice Blue",
   "symbol": "LUXURY-ROLEX-001",
   "description": "Rolex Cosmograph Daytona 116506 in platinum with ice blue dial. 40mm case, automatic movement, Cerachrom bezel. Serial #116506-2024-001. Includes box, papers, and certificate of authenticity. Redeemable for physical watch.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/rolex-daytona-platinum.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
   "external_url": "https://mogate.io/luxury",
   "attributes": [
     {
@@ -66,7 +66,7 @@
     "category": "luxury",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/luxury/rolex-daytona-platinum.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
         "type": "image/png"
       }
     ]

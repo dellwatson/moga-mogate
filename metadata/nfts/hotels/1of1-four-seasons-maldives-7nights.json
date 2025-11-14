@@ -2,7 +2,7 @@
   "name": "Four Seasons 🇲🇻 Maldives - 7 Night Overwater Villa",
   "symbol": "HOTEL-FS-MALDIVES",
   "description": "7 nights at Four Seasons Resort 🇲🇻 Maldives at Landaa Giraavaru. Overwater villa with private pool. Includes daily breakfast for 2, spa credit $500, and seaplane transfers. Booking ID: FS-MALDIVES-2025-001. Redeemable on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/four-seasons-maldives-7nights.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/four-seasons-maldives-7nights.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -66,7 +66,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/hotels/four-seasons-maldives-7nights.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/four-seasons-maldives-7nights.png",
         "type": "image/png"
       }
     ],

@@ -2,7 +2,7 @@
   "name": "Business Round Trip - 🇪🇺 Europe Domestic",
   "symbol": "FLIGHT-EU-BIZ-RT",
   "description": "Business class round trip credit for domestic European routes. Any airline within 🇪🇺 Europe. Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/business-roundtrip-europe.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/business-roundtrip-europe.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -54,7 +54,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/main/metadata/images/flights/business-roundtrip-europe.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/business-roundtrip-europe.png",
         "type": "image/png"
       }
     ],
