@@ -1,6 +1,6 @@
 {
-  "name": "$8000 Business Class Credit",
-  "symbol": "FLIGHT-8K-BIZ",
+  "name": "$8K Business Class",
+  "symbol": "FLT-8K-BIZ",
   "description": "$8000 credit for business class flights. Excludes 🇶🇦 Qatar Airways. Redeemable only on emiless.com. Fixed price, fixed class.",
   "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
   "external_url": "https://emiless.com",

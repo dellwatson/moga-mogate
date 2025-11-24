@@ -1,6 +1,6 @@
 {
-  "name": "$3000 Premium Economy Credit - Voucher #001",
-  "symbol": "FLIGHT-3K-PREM-001",
+  "name": "$3K Premium Economy #001",
+  "symbol": "3K-PREM",
   "description": "Unique $3000 premium economy flight credit voucher. Serial #001. Any airline worldwide. Redeemable only on emiless.com. This is a 1/1 unique voucher.",
   "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
   "external_url": "https://emiless.com",

@@ -1,6 +1,6 @@
 {
-  "name": "$1000 Hotel Credit - Any Property",
-  "symbol": "HOTEL-1K",
+  "name": "$1K Hotel Credit",
+  "symbol": "HTL-1K",
   "description": "$1000 credit for hotel bookings worldwide. Any hotel, any dates. Redeemable only on emiless.com. No expiration.",
   "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000.png",
   "external_url": "https://emiless.com",

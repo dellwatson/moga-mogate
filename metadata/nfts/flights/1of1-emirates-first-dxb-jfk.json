@@ -1,6 +1,6 @@
 {
-  "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK",
-  "symbol": "FLIGHT-EK-FIRST",
+  "name": "Emirates First DXB-JFK",
+  "symbol": "EK-FIRST",
   "description": "Specific Emirates A380 first class booking: 🇦🇪 Dubai (🇦🇪 DXB) to New York 🇺🇸 JFK. Booking ID: EK-FIRST-2025-001. Includes shower spa and onboard lounge. Redeemable only on emiless.com.",
   "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
   "external_url": "https://emiless.com",
