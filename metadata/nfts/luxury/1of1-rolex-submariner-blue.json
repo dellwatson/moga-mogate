@@ -1,8 +1,8 @@
 {
-  "name": "Patek Philippe Nautilus 5711/1A - Blue Dial",
-  "symbol": "LUXURY-PATEK-001",
-  "description": "Patek Philippe Nautilus 5711/1A-010 in stainless steel with blue dial. 40mm case, automatic caliber 26-330 S C movement. Serial #5711-2024-001. Includes box, papers, and certificate. Redeemable for physical watch.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-philippe-nautilus.png",
+  "name": "Rolex Submariner Date - Blue Dial",
+  "symbol": "LUXURY-ROLEX-SUB-001",
+  "description": "Rolex Submariner Date 126619LB in white gold with blue dial and blue Cerachrom bezel. 41mm case, automatic caliber 3235 movement. Serial #SUB-2024-001. Includes box, papers, and certificate. Redeemable for physical watch.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-submariner-blue.png",
   "external_url": "https://mogate.io/luxury",
   "attributes": [
     {
@@ -11,19 +11,19 @@
     },
     {
       "trait_type": "Brand",
-      "value": "Patek Philippe"
+      "value": "Rolex"
     },
     {
       "trait_type": "Model",
-      "value": "Nautilus 5711/1A-010"
+      "value": "Submariner Date 126619LB"
     },
     {
       "trait_type": "Serial Number",
-      "value": "5711-2024-001"
+      "value": "SUB-2024-001"
     },
     {
       "trait_type": "Material",
-      "value": "Stainless Steel"
+      "value": "White Gold"
     },
     {
       "trait_type": "Dial Color",
@@ -31,11 +31,11 @@
     },
     {
       "trait_type": "Case Size",
-      "value": "40mm"
+      "value": "41mm"
     },
     {
       "trait_type": "Movement",
-      "value": "Automatic Caliber 26-330 S C"
+      "value": "Automatic Caliber 3235"
     },
     {
       "trait_type": "Condition",
@@ -43,7 +43,7 @@
     },
     {
       "trait_type": "Retail Value",
-      "value": "$150,000"
+      "value": "$75,000"
     },
     {
       "trait_type": "Includes",
@@ -66,7 +66,7 @@
     "category": "luxury",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-philippe-nautilus.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-submariner-blue.png",
         "type": "image/png"
       }
     ]

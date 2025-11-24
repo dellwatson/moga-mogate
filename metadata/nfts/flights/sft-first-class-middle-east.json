@@ -2,7 +2,7 @@
   "name": "First Class 🌍 🌍 Middle East Routes",
   "symbol": "FLIGHT-ME-FIRST",
   "description": "First class credit for 🌍 Middle East routes (🇦🇪 UAE, 🇶🇦 Qatar, Saudi Arabia, Oman, Kuwait). Premium airlines only. Redeemable only on emiless.com.",
-  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/first-class-middle-east.png",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/middle-east-first.png",
   "external_url": "https://emiless.com",
   "attributes": [
     {
@@ -50,7 +50,7 @@
     "category": "travel",
     "files": [
       {
-        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/first-class-middle-east.png",
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/middle-east-first.png",
         "type": "image/png"
       }
     ],
