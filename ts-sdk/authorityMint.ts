@@ -30,6 +30,7 @@ export type MintArgs = {
   collectionMint: PublicKey;
   programId: PublicKey; // authority_mint program id
   payer: PublicKey;
+  isSizedCollection?: boolean; // Default to true for backwards compatibility
 };
 
 // No longer using PDA for mint - using Keypair instead
@@ -113,6 +114,7 @@ export function buildMintNftIx(args: MintArgs & { mintKeypair: Keypair }) {
     programId,
     payer,
     mintKeypair,
+    isSizedCollection,
   } = args;
 
   const mint = mintKeypair.publicKey;
@@ -139,12 +141,14 @@ export function buildMintNftIx(args: MintArgs & { mintKeypair: Keypair }) {
     .update("global:mint_nft")
     .digest()
     .subarray(0, 8);
+  const isSized = isSizedCollection ?? true; // Default to true for backwards compatibility
   const data = Buffer.concat([
     Buffer.from(disc),
     encodeString(name),
     encodeString(symbol),
     encodeString(uri),
     encodeOptionU64(maxSupply ?? null),
+    Buffer.from([isSized ? 1 : 0]), // boolean as u8
   ]);
 
   const keys = [

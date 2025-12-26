@@ -2,9 +2,9 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     metadata::{
-        create_master_edition_v3, create_metadata_accounts_v3, verify_sized_collection_item,
+        create_master_edition_v3, create_metadata_accounts_v3, verify_sized_collection_item, verify_collection,
         mpl_token_metadata::types::{Creator, DataV2},
-        CreateMasterEditionV3, CreateMetadataAccountsV3, Metadata, VerifySizedCollectionItem,
+        CreateMasterEditionV3, CreateMetadataAccountsV3, Metadata, VerifySizedCollectionItem, VerifyCollection,
     },
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
@@ -137,6 +137,7 @@ pub mod authority_mint {
         symbol: String,
         uri: String,
         max_supply: Option<u64>,
+        is_sized_collection: bool,
     ) -> Result<()> {
         let is_sft = max_supply.is_some() && max_supply.unwrap() > 0;
         msg!("🎫 Minting {}: {}", if is_sft { "SFT" } else { "NFT" }, name);
@@ -228,22 +229,40 @@ pub mod authority_mint {
         ];
         let signer_seeds_slice = &[signer_seeds];
 
-        // Build CPI context and include the collection authority record PDA as a remaining account
-        let cpi_ctx = CpiContext::new_with_signer(
-            ctx.accounts.token_metadata_program.to_account_info(),
-            VerifySizedCollectionItem {
-                payer: ctx.accounts.payer.to_account_info(),
-                collection_authority: ctx.accounts.collection_authority.to_account_info(),
-                metadata: ctx.accounts.metadata.to_account_info(),
-                collection_mint: ctx.accounts.collection_mint.to_account_info(),
-                collection_metadata: ctx.accounts.collection_metadata.to_account_info(),
-                collection_master_edition: ctx.accounts.collection_master_edition.to_account_info(),
-            },
-            signer_seeds_slice,
-        )
-        .with_remaining_accounts(vec![ctx.accounts.collection_authority_record_pda.to_account_info()]);
-
-        verify_sized_collection_item(cpi_ctx, Some(ctx.accounts.collection_authority_record_pda.key()))?;
+        // Use the appropriate verify function based on collection type
+        if is_sized_collection {
+            msg!("📊 Using verify_sized_collection_item (collection has size)");
+            let cpi_ctx = CpiContext::new_with_signer(
+                ctx.accounts.token_metadata_program.to_account_info(),
+                VerifySizedCollectionItem {
+                    payer: ctx.accounts.payer.to_account_info(),
+                    collection_authority: ctx.accounts.collection_authority.to_account_info(),
+                    metadata: ctx.accounts.metadata.to_account_info(),
+                    collection_mint: ctx.accounts.collection_mint.to_account_info(),
+                    collection_metadata: ctx.accounts.collection_metadata.to_account_info(),
+                    collection_master_edition: ctx.accounts.collection_master_edition.to_account_info(),
+                },
+                signer_seeds_slice,
+            )
+            .with_remaining_accounts(vec![ctx.accounts.collection_authority_record_pda.to_account_info()]);
+            verify_sized_collection_item(cpi_ctx, Some(ctx.accounts.collection_authority_record_pda.key()))?;
+        } else {
+            msg!("📦 Using verify_collection (collection has no size)");
+            let cpi_ctx = CpiContext::new_with_signer(
+                ctx.accounts.token_metadata_program.to_account_info(),
+                VerifyCollection {
+                    payer: ctx.accounts.payer.to_account_info(),
+                    collection_authority: ctx.accounts.collection_authority.to_account_info(),
+                    metadata: ctx.accounts.metadata.to_account_info(),
+                    collection_mint: ctx.accounts.collection_mint.to_account_info(),
+                    collection_metadata: ctx.accounts.collection_metadata.to_account_info(),
+                    collection_master_edition: ctx.accounts.collection_master_edition.to_account_info(),
+                },
+                signer_seeds_slice,
+            )
+            .with_remaining_accounts(vec![ctx.accounts.collection_authority_record_pda.to_account_info()]);
+            verify_collection(cpi_ctx, Some(ctx.accounts.collection_authority_record_pda.key()))?;
+        }
 
         msg!("✅ {} minted and verified successfully!", if is_sft { "SFT" } else { "NFT" });
         Ok(())
