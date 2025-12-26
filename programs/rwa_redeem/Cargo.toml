@@ -20,5 +20,5 @@ test-bypass = []  # Bypass permit checks for testing
 bubblegum = []  # Compressed NFT support
 
 [dependencies]
-anchor-lang = "0.31.1"
-anchor-spl = "0.31.1"
+anchor-lang = "0.32.0"
+anchor-spl = "0.32.0"

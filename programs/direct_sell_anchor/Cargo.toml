@@ -19,6 +19,6 @@ test-bypass = []  # Bypass permit checks for testing
 pyth-jupiter = ["dep:pyth-sdk-solana"]  # Pyth oracle + Jupiter swap (disabled by default for IDL)
 
 [dependencies]
-anchor-lang = "0.31.1"
-anchor-spl = "0.31.1"
+anchor-lang = "0.32.0"
+anchor-spl = "0.32.0"
 pyth-sdk-solana = { version = "0.9", optional = true }

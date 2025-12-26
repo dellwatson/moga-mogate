@@ -22,8 +22,8 @@ metaplex = ["dep:mpl-token-metadata"]  # Feature flag for Metaplex Token Metadat
 test-bypass = []  # Feature flag to bypass permit checks for testing
 
 [dependencies]
-anchor-lang = "0.31.1"
-anchor-spl = "0.31.1"
+anchor-lang = "0.32.0"
+anchor-spl = "0.32.0"
 arcium-client = { version = "0.3.0", default-features = false }
 arcium-macros = { version = "0.3.0" }
 arcium-anchor = { version = "0.3.0" }
