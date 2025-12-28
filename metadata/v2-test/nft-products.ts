@@ -76,7 +76,7 @@ export const nftProducts: FlightProduct[] = [
     metadata_uri:
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/solana/tixia/1o1/800-eco-only/metadata.json",
     metadata: {
-      name: "Tixia $800 Flight Credit (ECO Only)",
+      name: "Tixia $800 Economy Credit",
       symbol: "TIX-800-ECO",
       description:
         "$800 Tixia flight credit (economy class only). Any airline. Worldwide.",
@@ -253,7 +253,7 @@ export const nftProducts: FlightProduct[] = [
     metadata_uri:
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/polygon/tixia/erc721/800-eco-only/metadata.json",
     metadata: {
-      name: "Tixia $800 Flight Credit (ECO Only)",
+      name: "Tixia $800 Economy Credit",
       symbol: "TIX-800-ECO",
       description:
         "$800 Tixia flight credit (economy class only). Any airline. Worldwide.",
