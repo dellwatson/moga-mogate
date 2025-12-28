@@ -1,0 +1,17 @@
+{
+  "name": "Tixia $2000 Hotel Credit",
+  "company": "tixia",
+  "network": "casper",
+  "standard": "1o1",
+  "amount_usd": 2000,
+  "category": "hotel",
+  "restrictions": [],
+  "description": "$2000 Tixia hotel credit.",
+  "image": "../../../../../images/worldwide-economy-exclude.png",
+  "detail_images": [],
+  "attributes": [
+    { "trait_type": "Credit", "value": "$2000" },
+    { "trait_type": "Type", "value": "Hotel" }
+  ],
+  "external_url": ""
+}

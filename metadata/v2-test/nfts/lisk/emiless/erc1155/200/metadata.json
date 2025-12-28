@@ -1,0 +1,17 @@
+{
+  "name": "Emiless $200 Credit",
+  "company": "emiless",
+  "network": "lisk",
+  "standard": "erc1155",
+  "amount_usd": 200,
+  "category": "flight",
+  "restrictions": [],
+  "description": "$200 Emiless flight credit.",
+  "image": "../../../../../images/europe-business-roundtrip.png",
+  "detail_images": [],
+  "attributes": [
+    { "trait_type": "Credit", "value": "$200" },
+    { "trait_type": "Type", "value": "Flight" }
+  ],
+  "external_url": ""
+}

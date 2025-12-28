@@ -1,0 +1,13 @@
+{
+  "name": "Tixia Flights ERC-721",
+  "company": "tixia",
+  "network": "lisk",
+  "standard": "erc721",
+  "description": "Tixia flight credit collection on Lisk (ERC-721).",
+  "image": "",
+  "banner": "",
+  "external_url": "",
+  "royalties_bps": 0,
+  "creator": "",
+  "tags": ["travel", "flight", "credit"]
+}

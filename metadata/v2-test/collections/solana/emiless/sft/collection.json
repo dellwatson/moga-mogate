@@ -1,0 +1,13 @@
+{
+  "name": "Emiless Business SFT",
+  "company": "emiless",
+  "network": "solana",
+  "standard": "sft",
+  "description": "Emiless business-class flight credit SFT collection on Solana.",
+  "image": "",
+  "banner": "",
+  "external_url": "",
+  "royalties_bps": 0,
+  "creator": "",
+  "tags": ["flight", "business", "credit"]
+}

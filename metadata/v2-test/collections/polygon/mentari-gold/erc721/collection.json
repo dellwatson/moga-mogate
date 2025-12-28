@@ -1,0 +1,13 @@
+{
+  "name": "Mentari Gold ERC-721",
+  "company": "mentari-gold",
+  "network": "polygon",
+  "standard": "erc721",
+  "description": "Mentari Gold credit collection on Polygon (ERC-721).",
+  "image": "",
+  "banner": "",
+  "external_url": "",
+  "royalties_bps": 0,
+  "creator": "",
+  "tags": ["jewelry", "gold", "diamond", "credit"]
+}
