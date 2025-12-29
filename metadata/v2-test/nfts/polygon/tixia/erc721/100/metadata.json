@@ -1,6 +1,6 @@
 {
   "name": "Tixia $100 Flight Credit",
-  "symbol": "TIX-100",
+  "symbol": "TIX",
   "description": "$100 Tixia flight credit voucher. Any airline. Worldwide.",
   "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-100.png",
   "external_url": "",

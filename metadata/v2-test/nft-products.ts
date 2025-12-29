@@ -34,7 +34,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/solana/tixia/1o1/100/metadata.json",
     metadata: {
       name: "Tixia $100 Flight Credit",
-      symbol: "TIX-100",
+      symbol: "TIX",
       description:
         "$100 Tixia flight credit. No airline or region restriction.",
       image:
@@ -77,7 +77,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/solana/tixia/1o1/800-eco-only/metadata.json",
     metadata: {
       name: "Tixia $800 Economy Credit",
-      symbol: "TIX-800-ECO",
+      symbol: "TIX",
       description:
         "$800 Tixia flight credit (economy class only). Any airline. Worldwide.",
       image:
@@ -120,8 +120,8 @@ export const nftProducts: FlightProduct[] = [
     metadata_uri:
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/solana/emiless/1o1/300-business/metadata.json",
     metadata: {
-      name: "Emiless $300 Business Credit #001",
-      symbol: "EMI-300-BIZ",
+      name: "Emiless $300 Business #001",
+      symbol: "EMI",
       description:
         "Unique $300 business-class flight credit voucher. Serial #001. Any airline worldwide. Redeemable only on emiless.com.",
       image:
@@ -166,7 +166,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/solana/emiless/1o1/3000-business/metadata.json",
     metadata: {
       name: "Emiless $3000 Business Credit",
-      symbol: "EMI-3K-BIZ",
+      symbol: "EMI",
       description: "$3000 Emiless business-class flight credit.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-3000-business.png",
@@ -210,7 +210,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/polygon/tixia/erc721/100/metadata.json",
     metadata: {
       name: "Tixia $100 Flight Credit",
-      symbol: "TIX-100",
+      symbol: "TIX",
       description:
         "$100 Tixia flight credit. No airline or region restriction.",
       image:
@@ -254,7 +254,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/polygon/tixia/erc721/800-eco-only/metadata.json",
     metadata: {
       name: "Tixia $800 Economy Credit",
-      symbol: "TIX-800-ECO",
+      symbol: "TIX",
       description:
         "$800 Tixia flight credit (economy class only). Any airline. Worldwide.",
       image:
@@ -299,7 +299,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/polygon/mentari-gold/erc721/5000-diamond/metadata.json",
     metadata: {
       name: "Mentari Gold $5000 (Diamond)",
-      symbol: "MG-5K-DIA",
+      symbol: "MG-5K",
       description: "$5000 Mentari Gold credit for diamond jewelry.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/jewelry/mentari-diamond-5000.png",
@@ -336,7 +336,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/polygon/mentari-gold/erc721/12000-any/metadata.json",
     metadata: {
       name: "Mentari Gold $12000 (Any)",
-      symbol: "MG-12K-ANY",
+      symbol: "MG-12K",
       description: "$12000 Mentari Gold credit for diamond or gold.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/jewelry/mentari-gold-12000.png",
@@ -374,7 +374,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/lisk/tixia/erc721/200/metadata.json",
     metadata: {
       name: "Tixia $200 Flight Credit",
-      symbol: "TIX-200",
+      symbol: "TIX",
       description: "$200 Tixia flight credit voucher. Any airline. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-200.png",
@@ -417,7 +417,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/lisk/tixia/erc721/800/metadata.json",
     metadata: {
       name: "Tixia $800 Flight Credit",
-      symbol: "TIX-800",
+      symbol: "TIX",
       description: "$800 Tixia flight credit. Any airline. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
@@ -461,7 +461,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/lisk/emiless/erc721/200/metadata.json",
     metadata: {
       name: "Emiless $200 Flight Credit",
-      symbol: "EMI-200",
+      symbol: "EMI",
       description:
         "$200 Emiless flight credit voucher. Any airline. Worldwide.",
       image:
@@ -505,7 +505,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/lisk/emiless/erc721/800/metadata.json",
     metadata: {
       name: "Emiless $800 Flight Credit",
-      symbol: "EMI-800",
+      symbol: "EMI",
       description: "$800 Emiless flight credit. Any airline. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
@@ -549,7 +549,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/casper/tixia/1o1/200/metadata.json",
     metadata: {
       name: "Tixia $200 Flight Credit",
-      symbol: "TIX-200",
+      symbol: "TIX",
       description: "$200 Tixia flight credit voucher. Any airline. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-200.png",
@@ -592,7 +592,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/casper/tixia/1o1/800/metadata.json",
     metadata: {
       name: "Tixia $800 Flight Credit",
-      symbol: "TIX-800",
+      symbol: "TIX",
       description: "$800 Tixia flight credit. Any airline. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
@@ -635,7 +635,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/casper/tixia/1o1/800-hotels/metadata.json",
     metadata: {
       name: "Tixia $800 Hotel Credit",
-      symbol: "TIX-HTL-800",
+      symbol: "TIX",
       description: "$800 Tixia hotel credit. Any hotel. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/hotels/hotel-credit-800.png",
@@ -676,7 +676,7 @@ export const nftProducts: FlightProduct[] = [
       "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/nfts/casper/tixia/1o1/2000-hotels/metadata.json",
     metadata: {
       name: "Tixia $2000 Hotel Credit",
-      symbol: "TIX-HTL-2K",
+      symbol: "TIX",
       description: "$2000 Tixia hotel credit. Any hotel. Worldwide.",
       image:
         "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/hotels/hotel-credit-2000.png",

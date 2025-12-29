@@ -1,6 +1,6 @@
 {
-  "name": "Emiless $300 Business Credit #001",
-  "symbol": "EMI-300-BIZ",
+  "name": "Emiless $300 Business #001",
+  "symbol": "EMI",
   "description": "Unique $300 business-class flight credit voucher. Serial #001. Any airline worldwide. Redeemable only on emiless.com.",
   "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-300-business.png",
   "external_url": "https://emiless.com",
