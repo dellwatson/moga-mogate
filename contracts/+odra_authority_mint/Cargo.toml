@@ -1,0 +1,17 @@
+[package]
+name = "odra_authority_mint"
+version = "0.1.0"
+edition = "2021"
+description = "Odra-based authority mint contract (Casper)"
+license = "Apache-2.0"
+
+[lib]
+name = "odra_authority_mint"
+crate-type = ["cdylib"]
+
+[dependencies]
+odra = "2.4.0"
+
+[profile.release]
+lto = true
+opt-level = "z"

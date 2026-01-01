@@ -18,13 +18,21 @@
     "build:raffle": "cargo build-sbf --manifest-path programs/rwa_raffle/Cargo.toml --features metaplex,pyth-jupiter,bubblegum",
     "build:raffle-moga-plus": "cargo build-sbf --manifest-path programs/rwa_raffle/Cargo.toml --features metaplex,pyth-jupiter,bubblegum,moga-plus",
     "build:direct-sell": "cargo build-sbf --manifest-path programs/direct_sell/Cargo.toml --features pyth-jupiter",
-    "build:redeem": "cargo build-sbf --manifest-path programs/rwa_redeem/Cargo.toml"
+    "build:redeem": "cargo build-sbf --manifest-path programs/rwa_redeem/Cargo.toml",
+    "build:authority-mint": "cargo build-sbf --manifest-path programs/authority_mint/Cargo.toml",
+    "redeploy:authority-mint": "bun run scripts/redeploy-authority-mint.ts",
+    "delegate:authority-mint": "bun run scripts/delegate-authority-mint-collection.ts",
+    "test:authority-mint": "bun run scripts/mint-authority-nft.ts"
   },
   "dependencies": {
     "@metaplex-foundation/js": "^0.19.4",
-    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@metaplex-foundation/mpl-token-metadata": "3",
+    "@metaplex-foundation/umi": "^1.4.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^1.4.1",
     "@solana/spl-token": "^0.3.9",
-    "@solana/web3.js": "^1.87.6"
+    "@solana/web3.js": "^1.87.6",
+    "borsh": "^2.0.0",
+    "bs58": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

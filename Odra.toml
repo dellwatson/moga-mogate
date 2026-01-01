@@ -1,0 +1,9 @@
+[[contracts]]
+name = "ant_mint_test"
+path = "contracts/+odra_another_mint"
+fqn = "ant_mint_test::AntMintTest"
+
+[[contracts]]
+name = "odra_authority_mint"
+path = "contracts/+odra_authority_mint"
+fqn = "odra_authority_mint::AuthorityMint"

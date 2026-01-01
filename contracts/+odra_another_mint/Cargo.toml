@@ -1,0 +1,17 @@
+[package]
+name = "ant_mint_test"
+version = "0.1.0"
+edition = "2021"
+description = "Simple Casper test contract mirroring ant_mint_test Anchor program"
+license = "Apache-2.0"
+
+[lib]
+name = "ant_mint_test"
+crate-type = ["cdylib"]
+
+[dependencies]
+odra = "2.4.0"
+
+[profile.release]
+lto = true
+opt-level = "z"

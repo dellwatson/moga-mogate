@@ -1,0 +1,18 @@
+[package]
+name = "rwa_raffle_cspr"
+version = "0.1.0"
+edition = "2021"
+description = "RWA raffle contract for Casper Network"
+license = "Apache-2.0"
+
+[lib]
+name = "rwa_raffle_cspr"
+crate-type = ["cdylib"]
+
+[dependencies]
+casper-contract = { version = "1", default-features = false }
+casper-types = "1"
+
+[profile.release]
+lto = true
+opt-level = "z"

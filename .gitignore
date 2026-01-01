@@ -21,3 +21,9 @@
 **/**/target/deploy/*.wasm
 /target/
 programs/*/target/
+
+todo.txt
+next
+
+Account 1_secret_key.pem
+Account 2_secret_key.pem
