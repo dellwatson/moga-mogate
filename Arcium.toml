@@ -1,4 +1,0 @@
-[localnet]
-nodes = 2
-localnet_timeout_secs = 60
-backends = ["Cerberus"]
