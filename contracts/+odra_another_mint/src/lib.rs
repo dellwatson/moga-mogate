@@ -1,3 +1,8 @@
+#![cfg_attr(not(test), no_std)]
+#![cfg_attr(not(test), no_main)]
+
+extern crate alloc;
+
 use odra::prelude::*;
 
 /// Minimal Odra test contract mirroring `ant_mint_test` behavior:

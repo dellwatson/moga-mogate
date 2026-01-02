@@ -1,0 +1,16 @@
+[package]
+name = "authority-mint"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+casper-contract = "5.1.1"
+casper-types = "6.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true

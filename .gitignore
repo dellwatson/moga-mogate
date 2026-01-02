@@ -2,6 +2,8 @@
 /target/
 /dist/
 /coverage/
+*.wasm
+!contracts/$moga-collection/cep78.wasm
 
 # Node
 /node_modules/
@@ -21,6 +23,10 @@
 **/**/target/deploy/*.wasm
 /target/
 programs/*/target/
+contracts/*/target/
+contracts/**/target/
+**/Cargo.lock
+!Cargo.lock
 
 todo.txt
 next

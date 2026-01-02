@@ -1,0 +1,3 @@
+[[contracts]]
+name = "AntMintTest"
+fqn = "ant_mint_test::AntMintTest"
