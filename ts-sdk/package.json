@@ -8,12 +8,8 @@
     "build": "bun build ./src/index.ts --outdir ./dist --target bun",
     "test": "bun test"
   },
-  "peerDependencies": {
-    "@coral-xyz/anchor": "^0.31.1",
-    "@solana/addresses": "^2.0.0",
-    "@solana/instructions": "^2.0.0",
-    "@solana/transactions": "^2.0.0",
-    "@solana/codecs": "^2.0.0",
-    "@solana/signers": "^2.0.0"
+  "peerDependencies": {},
+  "dependencies": {
+    "casper-js-sdk": "^5.0.7"
   }
 }

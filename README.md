@@ -1,215 +1,251 @@
-# RWA Raffle (Cross-Chain)
+# Mogate RWA Platform - Casper Network
 
-This monorepo contains a cross-chain RWA raffle system with network-specific implementations:
-
-**Core Concept:**
-
-- Participants deposit MOGA tokens into an escrow.
-- When the required amount is reached before the deadline, a randomness draw selects a winning ticket.
-- If the deadline passes without reaching the threshold, deposits are refundable.
+This monorepo contains the Casper Network implementation of the Mogate RWA platform with NFT faucet, burn validation, and authority mint contracts.
 
 ## Network Branches
 
-Each blockchain has its own branch with tailored implementation:
+This is a multi-chain project. Each blockchain has its own branch:
 
-- **`main` / `solana`** — Solana implementation (Light zk-compression + Arcium randomness)
-- **`casper-network`** — Casper Network implementation
+- **`main` / `solana`** — Solana implementation
+- **`casper-network`** — Casper Network implementation ⭐ **YOU ARE HERE**
 - **`evm`** — EVM implementation _(coming soon)_
 
 **Switch branches to view network-specific code and documentation.**
 
 ---
 
-## Network-Specific Details
+## Casper Network Implementation
 
-### Solana (`main` / `solana` branch)
+### Tech Stack
 
-**Tech Stack:**
+- **Native Casper Contracts** (Rust with `casper-contract` + `casper-types`)
+- **CEP-78 Enhanced NFT Standard** for collections
+- **CEP-18 Token Standard** for MOGA token
+- **TypeScript SDK** with `casper-js-sdk`
 
-- Anchor program for smart contracts
-- Light Protocol zk-compression for scalable participant/ticket state
-- Arcium MPC for verifiable randomness generation
+### Project Structure
 
-**Packages:**
+```
+contracts/
+├── +casper_authority_mint/     # Authority mint contract (native Casper)
+├── $moga-collection/           # CEP-78 NFT collections
+│   ├── cep78.wasm             # Pre-compiled CEP-78 binary
+│   ├── deploy-tixia-1o1.sh    # Deploy Tixia 1/1 collection
+│   └── deploy-tixia-sft.sh    # Deploy Tixia SFT collection
+└── +odra_authority_mint/       # Odra skeleton (not used)
 
-- `programs/rwa_raffle/` — Anchor program
-- `ts-sdk/` — TypeScript SDK (bun-compatible)
-- `offchain/` — Worker for Arcium + Light integration
-- `docs/` — Architecture docs and SVG diagrams
+ts-sdk/
+├── src/casper-authority-mint.ts         # Authority mint SDK
+└── src/casper-authority-mint.example.ts # Usage examples
 
-**Key Features:**
+offchain/backend/
+├── src/casper-nft-validator.ts          # Burn validation service
+├── src/api-burn-validator.ts            # REST API endpoints
+└── README-BURN-VALIDATOR.md             # Burn validator docs
 
-- SPL Token / Token-2022 support via `anchor-spl` token interface
-- Compressed accounts for efficient state management
-- MPC-based randomness with on-chain callback settlement
+scripts/casper/
+├── mint-nft.ts           # Mint NFT via authority mint
+└── validate-burn.ts      # Validate burn transaction
 
-**Status:**
+docs/casper/
+├── CEP78_COLLECTIONS_DEPLOYED.md        # Collection deployment guide
+├── AUTHORITY_MINT_DEPLOYED.md           # Authority mint guide
+└── FINAL_STATUS.md                      # Deployment summary
+```
 
-- Initial program scaffolding with escrow and ticket accounting
-- Randomness and compressed accounts integration in progress
+### Deployed Contracts (Testnet)
 
----
+| Contract                 | Hash                                                               | Explorer                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Authority Mint**       | `b50dc5da60d9836fc36ae4250ebc11c40baae5d347030d29c8dc8ee937e1c2dc` | [View](https://testnet.cspr.live/contract/b50dc5da60d9836fc36ae4250ebc11c40baae5d347030d29c8dc8ee937e1c2dc) |
+| **Tixia 1/1 Collection** | `376fb8f9264fd7cf232a3ee43c43ff606b30b89cbb92eda0f2537513b1463c97` | [View](https://testnet.cspr.live/contract/376fb8f9264fd7cf232a3ee43c43ff606b30b89cbb92eda0f2537513b1463c97) |
+| **Tixia SFT Collection** | `e3699ea7bbbcc74018b0c24d3557c6cfd34b9c30405cf4cf4bae3dfc589ccea0` | [View](https://testnet.cspr.live/contract/e3699ea7bbbcc74018b0c24d3557c6cfd34b9c30405cf4cf4bae3dfc589ccea0) |
 
-### Casper Network (`casper-network` branch) ⭐ CURRENT
+### Key Features
 
-**Tech Stack:**
-
-- Odra framework (Rust-based smart contracts)
-- Native Casper randomness mechanisms
-- CEP-18 token standard for MOGA
-
-**Packages:**
-
-- `contracts/+odra_another_mint/` — Sample Odra contract (test deployment)
-- `contracts/+odra_authority_mint/` — Authority mint wrapper contract
-- `contracts/$moga-collection/` — NFT collection contracts (planned)
-- `scripts/` — Casper deployment and interaction scripts
-- `docs/casper/` — Casper-specific documentation
-
-**Key Features:**
-
-- Odra framework for clean, testable contract development
-- Casper's deterministic deployment and upgrade model
-- Native account-based architecture
-- Gas-efficient refund mechanisms
-- Authority-based delegated minting for NFT collections
-
-**Status:**
-
-- ✅ Odra contracts compiling (`+odra_another_mint`, `+odra_authority_mint`)
-- 🚀 Ready for testnet deployment
-- 📝 MOGA token + NFT collection contracts in progress
+✅ **CEP-78 NFT Collections** - Standard-compliant NFTs with metadata  
+✅ **Authority Mint Contract** - Delegated minting for simplified frontend  
+✅ **Burn Validation** - Extract metadata + owner from burn tx hash  
+✅ **TypeScript SDK** - Full SDK for minting and validation  
+✅ **REST API** - Backend endpoints for burn validation
 
 ---
 
-### EVM Chains (`polygon`, `lisk` branches)
+## Prerequisites
 
-**Tech Stack:**
-
-- Solidity smart contracts
-- Chainlink VRF for verifiable randomness
-- ERC-20 token standard for MOGA
-
-**Packages:**
-
-- `contracts/` — Solidity contracts (Hardhat/Foundry)
-- `sdk/` — ethers.js/viem-based SDK
-- `docs/evm/` — EVM-specific documentation
-
-**Key Features:**
-
-- Multi-chain deployment (Polygon, Lisk, and other EVM-compatible chains)
-- Chainlink VRF integration for randomness
-- Gas-optimized batch operations
-
-**Status:**
-
-- Branches pending creation
+- **Rust** nightly-2025-02-04 (for contract builds)
+- **Bun** 1.0+ (package manager)
+- **casper-client** 5.0.0+ (`cargo install casper-client`)
+- **Casper testnet account** with CSPR tokens
 
 ---
 
-## General Prerequisites
+## Quick Start
 
-- **Bun** (preferred package manager)
-- **Git** for branch management
+### 1. Install Dependencies
 
-### Network-Specific Prerequisites
+```bash
+bun install
+cd ts-sdk && bun install
+cd ../offchain/backend && bun install
+```
 
-**Solana:**
+### 2. Build Authority Mint Contract
 
-- Rust 1.70+
-- Solana CLI 2.3.x
-- Anchor CLI 0.31.1
+```bash
+bun run casper:build-authority-mint
+```
 
-**Casper:**
+### 3. Deploy Authority Mint
 
-- Rust nightly (required for Odra 2.4.0)
-- `cargo-odra` CLI (`cargo install cargo-odra --locked`)
-- `casper-client` 5.0.0+ (`cargo install casper-client`)
-- Casper testnet account with CSPR tokens
+```bash
+bun run casper:deploy-authority-mint
+```
 
-**EVM (Polygon, Lisk):**
+### 4. Allow Collections
 
-- Node.js 18+
-- Hardhat or Foundry
-- Wallet with testnet tokens
+```bash
+bun run casper:allow-collections
+```
+
+### 5. Mint NFT
+
+```bash
+bun run casper:mint-nft [RECIPIENT_ACCOUNT_HASH]
+```
+
+### 6. Validate Burn
+
+```bash
+bun run casper:validate-burn <BURN_TX_HASH>
+```
+
+---
+
+## Available Scripts
+
+| Script                         | Description                        |
+| ------------------------------ | ---------------------------------- |
+| `casper:build-authority-mint`  | Build authority mint WASM          |
+| `casper:deploy-authority-mint` | Deploy authority mint contract     |
+| `casper:allow-collections`     | Whitelist collections              |
+| `casper:deploy-collection-1o1` | Deploy Tixia 1/1 collection        |
+| `casper:deploy-collection-sft` | Deploy Tixia SFT collection        |
+| `casper:mint-nft`              | Mint NFT via TypeScript            |
+| `casper:validate-burn`         | Validate burn tx + extract data    |
+| `casper:deploy-all`            | Build + deploy + allow collections |
 
 ---
 
 ## Development Notes
 
-### Solana
+### Contract Development
 
-- Program uses `anchor-spl` token interface to support both SPL Token and Token-2022 mints
-- MOGA mint can be either Token or Token-2022; SDK auto-detects via interface
-- Randomness and zk-compression integration staged for minimal v0
-- See `docs/architecture.md` and `docs/architecture.svg` for flow
+- **Native Casper contracts** use `casper-contract` + `casper-types` crates
+- **CEP-78 collections** deployed from official reference implementation
+- **Authority mint** delegates minting to CEP-78 collections
+- **No Odra** - Native contracts are more stable and battle-tested
 
-### Casper
+### Building Contracts
 
-- Contracts built with Odra framework (v2.4.0)
-- Uses CEP-18 fungible token standard for MOGA
-- Account-based model simplifies participant tracking
-- Nightly Rust required: `rustup override set nightly` in repo root
-- Build contracts: `cargo build --manifest-path contracts/+odra_another_mint/Cargo.toml`
-- Deploy via `casper-client` or Odra livenet integration
-- See `docs/casper/` for Casper-specific architecture
+```bash
+cd contracts/+casper_authority_mint
+RUSTFLAGS='-C target-cpu=mvp' cargo +nightly-2025-02-04 build \
+  --release --target wasm32-unknown-unknown \
+  -Z build-std=std,panic_abort
+```
 
-### EVM
+### Deployment
 
-- Contracts use OpenZeppelin libraries for security
-- Chainlink VRF subscription required for randomness
-- Multi-chain deployment via shared contract base
-- See `docs/evm/` for EVM-specific architecture _(branches: polygon, lisk)_
+```bash
+# Deploy collection
+cd contracts/$moga-collection
+./deploy-tixia-1o1.sh
 
----
+# Deploy authority mint
+cd contracts/+casper_authority_mint
+./deploy-authority-mint.sh
 
-## Documentation Links
-
-### Solana-Specific
-
-- `docs/SIMPLIFIED_FLOW.md`
-- `docs/decision-flow-v2.svg`
-- `docs/REFUND_TICKET_SPEC.md`
-- `docs/ZK_COMPRESSION_USAGE.md`
-- `docs/RAFFLE_OPTIONS.md`
-
-### Casper-Specific
-
-- `docs/casper/` _(branch: casper-network)_
-
-### EVM-Specific
-
-- `docs/evm/` _(branches: polygon, lisk)_
+# Allow collections
+./allow-collections.sh
+```
 
 ---
 
-## Automation Options (Solana)
+## Documentation
 
-See `docs/RAFFLE_OPTIONS.md` for full details. Summary:
+### Casper-Specific Docs
 
-- **Draw Triggers**
+- **[CEP78 Collections Deployed](docs/casper/CEP78_COLLECTIONS_DEPLOYED.md)** - Collection deployment guide
+- **[Authority Mint Deployed](docs/casper/AUTHORITY_MINT_DEPLOYED.md)** - Authority mint guide
+- **[Burn Validator](offchain/backend/README-BURN-VALIDATOR.md)** - Burn validation system
+- **[Casper SDK](ts-sdk/README-CASPER.md)** - TypeScript SDK documentation
 
-  - Auto on full (client-chained): append `request_draw_arcium` after join
-  - Auto on full (worker): worker calls `request_draw_arcium` on `ThresholdReached`
-  - Scheduled reveal: worker waits until `reveal_time_unix_ts`
-  - Manual: any payer can call when `status == Drawing`
+### API Documentation
 
-- **Refund Modes**
+- **Mint NFT**: `POST /api/casper/mint`
+- **Validate Burn**: `POST /api/casper/validate-burn`
+- **Batch Validate**: `POST /api/casper/validate-burns`
+- **Get Burn Details**: `GET /api/casper/burn/:hash`
 
-  - Auto (worker crank): call `refund_batch()` at deadline; mint MRFT from events
-  - Self-service: users call `claim_refund()`; worker mints MRFT
-  - Hybrid: both enabled
+---
 
-- **Notifications**
+## Architecture
 
-  - Winners: after `draw_callback`
-  - Refunds: after `RefundTicketsRequested` / mint
+```
+Frontend/Backend
+      |
+      | calls mint_nft()
+      v
+Authority Mint Contract
+      |
+      | verifies collection allowed
+      | calls CEP-78 mint()
+      v
+CEP-78 Collection (Tixia 1/1 or SFT)
+      |
+      | mints NFT
+      v
+Recipient Account
+```
 
-- **Config (to add)**
-  - `auto_draw_on_full: bool`
-  - `reveal_time_unix_ts: Option<i64>`
-  - `refund_mode: enum { Auto, SelfService, Hybrid }`
-  - `prize_mode: enum { PreEscrow, MintOnClaim }`
+### Burn Validation Flow
 
-_Note: Casper and EVM implementations will have similar automation options with network-specific adaptations._
+```
+User burns NFT
+      |
+      | burn tx hash
+      v
+Burn Validator
+      |
+      | fetches deploy
+      | parses events
+      | queries contract state
+      v
+Returns: metadata URI + last owner
+```
+
+---
+
+## Network Configuration
+
+- **RPC Node**: `http://65.109.83.79:7777`
+- **Chain Name**: `casper-test`
+- **Explorer**: https://testnet.cspr.live
+
+---
+
+## Status
+
+✅ **Authority Mint** - Deployed and functional  
+✅ **CEP-78 Collections** - Deployed (Tixia 1/1 + SFT)  
+✅ **TypeScript SDK** - Complete with examples  
+✅ **Burn Validator** - Fully functional  
+✅ **REST API** - Backend endpoints ready  
+🚀 **Production Ready** - All contracts tested on testnet
+
+---
+
+## License
+
+Apache-2.0

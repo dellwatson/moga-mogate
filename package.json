@@ -4,15 +4,17 @@
   "description": "Mogate RWA Raffle Platform - Monorepo",
   "private": true,
   "scripts": {
-    "comment:casper": "=== Casper Scripts ===",
-    "casper:build-authority-mint": "cd contracts/+casper_authority_mint && RUSTFLAGS='-C target-cpu=mvp' cargo +nightly-2025-02-04 build --release --target wasm32-unknown-unknown -Z build-std=std,panic_abort",
-    "casper:deploy-authority-mint": "cd contracts/+casper_authority_mint && ./deploy-authority-mint.sh",
-    "casper:allow-collections": "cd contracts/+casper_authority_mint && ./allow-collections.sh",
-    "casper:deploy-collection-1o1": "cd contracts/$moga-collection && ./deploy-tixia-1o1.sh",
-    "casper:deploy-collection-sft": "cd contracts/$moga-collection && ./deploy-tixia-sft.sh",
-    "casper:mint-nft": "bun run scripts/casper/mint-nft.ts",
-    "casper:validate-burn": "bun run scripts/casper/validate-burn.ts",
-    "casper:deploy-all": "bun run casper:build-authority-mint && bun run casper:deploy-authority-mint && bun run casper:allow-collections"
+    "comment:casper": "=== Casper Deployment (matches Solana pattern) ===",
+    "casper:1-deploy-moga": "bash scripts/casper/1-deploy-moga-token.sh",
+    "casper:2-deploy-collection-1o1": "bash scripts/casper/2-deploy-tixia-1o1-collection.sh",
+    "casper:3-deploy-collection-sft": "bash scripts/casper/3-deploy-tixia-sft-collection.sh",
+    "casper:4-mint-nft": "bun run scripts/casper/mint-nft.ts",
+    "casper:5-validate-burn": "bun run scripts/casper/validate-burn.ts",
+    "comment:permit": "=== Permit System (Advanced) ===",
+    "casper:build-permit": "cd contracts/authority_mint_permit && RUSTFLAGS='-C target-cpu=mvp' cargo +nightly-2025-02-04 build --release --target wasm32-unknown-unknown -Z build-std=std,panic_abort",
+    "casper:deploy-permit": "cd contracts/authority_mint_permit && ./deploy-authority-mint-permit.sh",
+    "casper:request-permit": "bun run scripts/casper/request-permit.ts",
+    "casper:mint-with-permit": "bun run scripts/casper/mint-with-permit.ts"
   },
   "dependencies": {
     "casper-js-sdk": "^2.15.4",
