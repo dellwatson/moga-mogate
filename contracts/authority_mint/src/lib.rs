@@ -83,27 +83,16 @@ pub extern "C" fn is_collection_allowed() {
     runtime::ret(CLValue::from_t(is_allowed).unwrap_or_revert());
 }
 
-/// Mint an NFT to a recipient via delegated authority
+/// Mint an NFT to a recipient via delegated authority (CEP-78 format)
 /// Calls the CEP-78 mint entrypoint on the collection contract
+/// NO WHITELIST CHECK - Anyone can mint on any collection
 #[no_mangle]
 pub extern "C" fn mint_nft() {
     let collection_hash: ContractHash = runtime::get_named_arg("collection_hash");
     let token_owner: Key = runtime::get_named_arg("token_owner");
     let token_metadata: String = runtime::get_named_arg("token_metadata");
     
-    // Verify collection is allowed
-    let allowed_collections_uref = runtime::get_key(ALLOWED_COLLECTIONS_KEY)
-        .unwrap_or_revert()
-        .into_uref()
-        .unwrap_or_revert();
-    
-    let allowed: Vec<ContractHash> = storage::read(allowed_collections_uref)
-        .unwrap_or_revert()
-        .unwrap_or_default();
-    
-    if !allowed.contains(&collection_hash) {
-        runtime::revert(casper_types::ApiError::User(100)); // Collection not allowed
-    }
+    // WHITELIST CHECK REMOVED - Open minting... still on testing
     
     // Increment mint counter
     let mint_counter_uref = runtime::get_key(MINT_COUNTER_KEY)
@@ -121,6 +110,40 @@ pub extern "C" fn mint_nft() {
     let mint_args = runtime_args! {
         "token_owner" => token_owner,
         "token_meta_data" => token_metadata,
+    };
+    
+    runtime::call_contract::<()>(collection_hash, "mint", mint_args);
+}
+
+/// Mint an NFT to a recipient via delegated authority (CEP-95 format)
+/// Calls the CEP-95 mint entrypoint on the collection contract
+/// NO WHITELIST CHECK - Anyone can mint on any collection
+#[no_mangle]
+pub extern "C" fn mint_cep95() {
+    let collection_hash: ContractHash = runtime::get_named_arg("collection_hash");
+    let to: Key = runtime::get_named_arg("to");
+    let token_id: casper_types::U256 = runtime::get_named_arg("token_id");
+    let metadata: Vec<(String, String)> = runtime::get_named_arg("metadata");
+    
+    // WHITELIST CHECK REMOVED - Open minting... still on testing
+    
+    // Increment mint counter
+    let mint_counter_uref = runtime::get_key(MINT_COUNTER_KEY)
+        .unwrap_or_revert()
+        .into_uref()
+        .unwrap_or_revert();
+    
+    let mut counter: u64 = storage::read(mint_counter_uref)
+        .unwrap_or_revert()
+        .unwrap_or_default();
+    counter += 1;
+    storage::write(mint_counter_uref, counter);
+    
+    // Call CEP-95 mint entrypoint with correct parameters
+    let mint_args = runtime_args! {
+        "to" => to,
+        "token_id" => token_id,
+        "metadata" => metadata,
     };
     
     runtime::call_contract::<()>(collection_hash, "mint", mint_args);
@@ -188,6 +211,23 @@ pub extern "C" fn call() {
             Parameter::new("collection_hash", CLType::ByteArray(32)),
             Parameter::new("token_owner", CLType::Key),
             Parameter::new("token_metadata", CLType::String),
+        ],
+        CLType::Unit,
+        EntryPointAccess::Public,
+        EntryPointType::Called,
+        EntryPointPayment::Caller,
+    ));
+    
+    entry_points.add_entry_point(EntryPoint::new(
+        "mint_cep95",
+        vec![
+            Parameter::new("collection_hash", CLType::ByteArray(32)),
+            Parameter::new("to", CLType::Key),
+            Parameter::new("token_id", CLType::U256),
+            Parameter::new("metadata", CLType::List(alloc::boxed::Box::new(CLType::Tuple2([
+                alloc::boxed::Box::new(CLType::String),
+                alloc::boxed::Box::new(CLType::String),
+            ])))),
         ],
         CLType::Unit,
         EntryPointAccess::Public,

@@ -1,0 +1,13 @@
+[package]
+name = "cep95-mint-livenet"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "mint_cep95"
+path = "src/main.rs"
+
+[dependencies]
+odra = { path = "/Users/dellwatson/Desktop/casper/odra/odra" }
+odra-modules = { path = "/Users/dellwatson/Desktop/casper/odra/modules" }
+odra-casper-livenet-env = { path = "/Users/dellwatson/Desktop/casper/odra/odra-casper/livenet-env" }

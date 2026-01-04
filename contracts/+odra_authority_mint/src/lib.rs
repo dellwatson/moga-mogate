@@ -1,7 +1,13 @@
+use odra::casper_types::U256;
 use odra::prelude::*;
 
-/// Skeleton for an Odra-based authority mint contract.
-/// We'll later mirror the old Solana `authority_mint` behavior here.
+/// External trait for CEP-95 NFT contracts
+#[odra::external_contract]
+pub trait Cep95 {
+    fn mint(&mut self, to: Address, token_id: U256, metadata: Vec<(String, String)>);
+}
+
+/// Authority Mint contract - delegates minting to allowed NFT collections
 #[odra::module]
 pub struct AuthorityMint {
     allowed_collections: Var<Vec<Address>>,
@@ -38,16 +44,56 @@ impl AuthorityMint {
         list.contains(&collection)
     }
 
-    /// Record a delegated mint for an allowed collection.
-    /// Later we can replace this with a real cross-contract call into the
-    /// collection NFT contract on Casper.
-    pub fn mint_for_collection(&mut self, collection: Address, to: Address, token_id: u64) {
+    /// Mint NFT on a collection (like Solana's mint_nft)
+    /// This is the main function users call
+    pub fn mint_nft(
+        &mut self,
+        collection: Address,
+        recipient: Address,
+        token_id: U256,
+        name: String,
+        symbol: String,
+        token_uri: String,
+    ) {
+        // Check if collection is allowed
         if !self.is_collection_allowed(collection) {
-            return;
+            self.env().revert(Error::CollectionNotAllowed);
         }
 
+        // Build metadata in CEP-95 format
+        let metadata = vec![
+            ("name".to_string(), name),
+            ("symbol".to_string(), symbol),
+            ("token_uri".to_string(), token_uri),
+        ];
+
+        // Cross-contract call to NFT contract's mint function
+        let mut nft_contract = Cep95Ref::new(self.env(), collection);
+        nft_contract.mint(recipient, token_id, metadata);
+
+        // Record the mint
         let mut mints = self.mints.get_or_default();
-        mints.push((collection, to, token_id));
+        mints.push((collection, recipient, token_id.as_u64()));
+        self.mints.set(mints);
+    }
+
+    /// Low-level mint with custom metadata (for advanced use)
+    pub fn mint_for_collection(
+        &mut self, 
+        collection: Address, 
+        to: Address, 
+        token_id: U256,
+        metadata: Vec<(String, String)>
+    ) {
+        if !self.is_collection_allowed(collection) {
+            self.env().revert(Error::CollectionNotAllowed);
+        }
+
+        let mut nft_contract = Cep95Ref::new(self.env(), collection);
+        nft_contract.mint(to, token_id, metadata);
+
+        let mut mints = self.mints.get_or_default();
+        mints.push((collection, to, token_id.as_u64()));
         self.mints.set(mints);
     }
 
@@ -55,4 +101,9 @@ impl AuthorityMint {
     pub fn get_mints(&self) -> Vec<(Address, Address, u64)> {
         self.mints.get_or_default()
     }
+}
+
+#[odra::odra_error]
+pub enum Error {
+    CollectionNotAllowed = 1,
 }

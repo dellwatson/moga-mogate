@@ -10,9 +10,9 @@ COLLECTION_URI="https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/he
 
 NODE_ADDRESS="http://65.109.83.79:7777"
 CHAIN_NAME="casper-test"
-SECRET_KEY="../../Account 1_secret_key.pem"
+SECRET_KEY="/Users/dellwatson/Desktop/nov2025/mogate-rwa-raffle-monorepo/Account 1_secret_key.pem"
 PAYMENT_AMOUNT="700000000000"  # 700 CSPR
-WASM_PATH="./collections/cep78.wasm"
+WASM_PATH="/Users/dellwatson/Desktop/nov2025/mogate-rwa-raffle-monorepo/scripts/casper/collections/cep78.wasm"
 
 echo "🎨 Deploying CEP-78 Collection: $COLLECTION_NAME"
 echo "   Symbol: $COLLECTION_SYMBOL"

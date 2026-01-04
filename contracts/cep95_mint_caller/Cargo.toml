@@ -1,0 +1,17 @@
+[package]
+name = "cep95-mint-caller"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+casper-contract = "4.0.0"
+casper-types = "4.0.2"
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/main.rs"

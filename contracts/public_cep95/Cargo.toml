@@ -1,0 +1,19 @@
+[package]
+name = "public-cep95"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+odra = { version = "1.3.0", default-features = false }
+odra-modules = { version = "1.3.0", default-features = false }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+
+[features]
+default = []
