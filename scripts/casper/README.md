@@ -1,106 +1,68 @@
-# Casper Scripts
+# Casper NFT Scripts
 
-TypeScript scripts for interacting with Casper contracts.
+## Active Scripts (Clean Version)
 
-## Available Scripts
+### 1. Delegate Mint
 
-### Mint NFT
-
-```bash
-bun run casper:mint-nft [RECIPIENT_ACCOUNT_HASH]
-```
-
-Mints an NFT via the authority mint contract.
-
-- If no recipient provided, mints to deployer account
-- Uses Tixia 1/1 collection by default
-
-### Validate Burn
+Mint NFT via Authority Mint V2 to PUBLIC CEP-95 collection.
 
 ```bash
-bun run casper:validate-burn <BURN_TX_HASH>
+node delegate-mint.js <token-id>
 ```
 
-Validates a burn transaction and extracts:
-
-- Metadata URI
-- Last owner
-- Token ID
-- Collection info
-
-### Build Authority Mint
+**Example:**
 
 ```bash
-bun run casper:build-authority-mint
+node delegate-mint.js 1000
 ```
 
-Builds the authority mint contract WASM.
+### 2. Burn NFT
 
-### Deploy Authority Mint
+Burn an NFT and create a proof with metadata.
 
 ```bash
-bun run casper:deploy-authority-mint
+node burn-nft.js <token-id> <mint-deploy-hash>
 ```
 
-Deploys the authority mint contract to testnet.
-
-### Allow Collections
+**Example:**
 
 ```bash
-bun run casper:allow-collections
+node burn-nft.js 502 6cfa40c65ed8ee2057a34f2be65e5c802f647c4573c90f4f12e12ade74f43611
 ```
 
-Whitelists Tixia collections in authority mint contract.
+### 3. Verify Burn
 
-### Deploy Collection (1/1)
+Verify a burn transaction from just the deploy hash.
 
 ```bash
-bun run casper:deploy-collection-1o1
+./verify-burn.sh <burn-deploy-hash>
 ```
 
-Deploys Tixia 1/1 CEP-78 collection.
-
-### Deploy Collection (SFT)
+**Example:**
 
 ```bash
-bun run casper:deploy-collection-sft
+./verify-burn.sh a8d89548c8307601cc5d579f7a2ac7b8c27f32292444cafbdc9ce2de55959441
 ```
 
-Deploys Tixia SFT CEP-78 collection.
+## Contract Information
 
-### Deploy All
+**PUBLIC CEP-95:**
 
-```bash
-bun run casper:deploy-all
-```
+- Contract Hash: `hash-4062978348fc7e42473c496bf67143e01c748cc279a92f2cf6487043355b0739`
+- Package Hash: `contract-package-d5deb2361811d88a5ea274ce232fb400d676c187470b70b90242389a4d095ce9`
 
-Builds and deploys authority mint + allows collections.
+**Authority Mint V2:**
 
-## Examples
+- Contract Hash: `hash-187345749048e98e2ecbbc4acbc2221a04c6a121cc8c32ddf12aaa706d3f7ef2`
+- Package Hash: `hash-416204f80a9d08843d15035dd5bc4344133cd9da15d57aec7cf69ad0c418cbed`
 
-### Mint NFT to specific recipient
+## Workflow
 
-```bash
-bun run casper:mint-nft 1877cb2417eb4f7f93a1cdbf22fe658071e6bc3d11e1e4b7cbe6a8e7263094e8
-```
+1. **Mint NFT** → `delegate-mint.js` → Get deploy hash
+2. **Wait 1-2 minutes** → Check on explorer
+3. **Burn NFT** → `burn-nft.js` → Provide mint deploy hash
+4. **Verify Burn** → `verify-burn.sh` → Confirm burn success
 
-### Validate a burn
+## Archive
 
-```bash
-bun run casper:validate-burn abc123def456...
-```
-
-## Configuration
-
-Scripts use:
-
-- **Keys:** `Account 1_secret_key.pem` in repo root
-- **Network:** Casper testnet
-- **RPC:** http://65.109.83.79:7777
-- **Chain:** casper-test
-
-## Deployed Contracts
-
-- **Authority Mint:** `contract-b50dc5da60d9836fc36ae4250ebc11c40baae5d347030d29c8dc8ee937e1c2dc`
-- **Tixia 1/1:** `contract-376fb8f9264fd7cf232a3ee43c43ff606b30b89cbb92eda0f2537513b1463c97`
-- **Tixia SFT:** `contract-e3699ea7bbbcc74018b0c24d3557c6cfd34b9c30405cf4cf4bae3dfc589ccea0`
+Old/unused scripts are in `archive/` folder.
