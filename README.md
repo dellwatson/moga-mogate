@@ -1,6 +1,23 @@
-# RWA Raffle (Solana + Light zk-compression + Arcium randomness)
+# Mogate RWA Platform - Multi-chain RWA Raffle
 
-This monorepo contains an Anchor program and supporting tooling for a token-funded RWA raffle:
+This monorepo contains the Mogate RWA raffle platform across multiple chains. Each network has its own git branch with network-specific programs, SDKs, and offchain workers.
+
+## Network Branches
+
+This is a cross-chain project. Each blockchain has its own branch:
+
+- **`main` / `solana`** — Solana implementation ⭐ **YOU ARE HERE**
+- **`casper-network`** — Casper Network implementation
+- **`evm`** — EVM implementation
+- **`bridge-hub`** — Cross-chain middleware / bridging layer
+
+**Switch branches to view network-specific code and documentation.**
+
+---
+
+# Solana RWA Raffle (Light zk-compression + Arcium randomness)
+
+This branch contains an Anchor program and supporting tooling for a token-funded RWA raffle:
 
 - Participants deposit MOGA tokens into an escrow.
 - When the required amount is reached before the deadline, a randomness draw selects a winning ticket.
