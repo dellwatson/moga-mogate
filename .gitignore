@@ -1,5 +1,8 @@
 # Build artifacts
 /target/
+/artifacts/
+/cache/
+/company/
 /dist/
 /coverage/
 

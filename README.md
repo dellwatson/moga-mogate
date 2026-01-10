@@ -6,87 +6,127 @@ This monorepo contains the Mogate RWA raffle platform across multiple chains. Ea
 
 This is a cross-chain project. Each blockchain has its own branch:
 
-- **`main` / `solana`** — Solana implementation ⭐ **YOU ARE HERE**
+- **`main` / `svm`** — Solana implementation
 - **`casper-network`** — Casper Network implementation
-- **`evm`** — EVM implementation
+- **`evm-network`** — EVM implementation (LISK, polygon, base, etc )
+- **`starknet`** — Cairo VM implementation
+- **`move-vm`** — Sui and APTOS
+- **`tvm`** — Tron
 - **`bridge-hub`** — Cross-chain middleware / bridging layer
 
 **Switch branches to view network-specific code and documentation.**
 
 ---
 
-# Solana RWA Raffle (Light zk-compression + Arcium randomness)
+# EVM RWA Raffle (Sepolia / Polygon Amoy / Lisk-Sepolia)
 
-This branch contains an Anchor program and supporting tooling for a token-funded RWA raffle:
+This branch contains the **EVM implementation** of the Mogate RWA raffle system:
 
-- Participants deposit MOGA tokens into an escrow.
-- When the required amount is reached before the deadline, a randomness draw selects a winning ticket.
-- If the deadline passes without reaching the threshold, deposits are refundable.
-- Light Protocol zk-compression is planned for scalable participant/ticket state and batch claims.
-- Arcium MPC is planned for verifiable randomness generation and on-chain settlement via callback.
+- NFT collections on EVM chains (ERC-721, optional ERC-1155).
+- Authority minting (direct gateway + backend-signed permits).
+- Multi-raffle engine using native gas tokens (ETH / MATIC / Lisk-Sepolia gas).
+- Scripts to deploy, mint, burn, and verify burns on testnets.
 
-## Packages
+## Contracts
 
-- `programs/rwa_raffle/` — Anchor program (Solana)
-- `ts-sdk/` — TypeScript SDK for clients (bun-compatible)
-- `offchain/` — Offchain worker stub to integrate Arcium + Light and settle draws
-- `docs/` — Architecture docs and SVG diagram
+- `contracts/Collection.sol` — ERC-721 collection
 
-## Status
+  - Owner/operator model with `setMinter` to grant mint rights.
+  - `mintWithTokenId` so offchain can choose unix-ms token IDs.
+  - `burn` for owner / approved.
 
-- Initial program scaffolding with escrow and ticket accounting.
-- Randomness and compressed accounts integration planned in subsequent tasks.
+- `contracts/Collection1155.sol` — ERC-1155 collection
 
-## Prereqs
+  - Optional per-token URIs.
+  - Minting and burn support for batch-style assets.
 
-- Rust 1.70+
-- Solana CLI 2.3.x
-- Anchor CLI 0.31.1
-- Bun (user preference)
+- `contracts/AuthorityMintWithPermit.sol`
+
+  - Authority that mints into a single collection using ECDSA permits signed by a backend.
+  - Offchain service signs `(contract, recipient, uri, nonce, expiry)`; users submit via `mintWithPermit`.
+
+- `contracts/AuthorityMintGateway.sol`
+
+  - Collection-agnostic gateway mainly for **testing / faucet** flows.
+  - Owner-gated `mint` for allow-listed collections.
+  - Looser `mint_nft` helper for local faucets / scripts.
+
+- `contracts/Raffle.sol`
+  - EVM implementation of the chain-agnostic spec in `RAFFLE.md`.
+  - Uses:
+    - `raffleId: string` (hashed to `bytes32` key),
+    - explicit numbered slots per raffle,
+    - native token payments,
+    - external collection via `ICollectionMint.mintWithTokenId`.
+  - Core flows:
+    - `hostRaffle(...)` — create raffle with `totalSlots`, `maxSlotsPerAddress`, `pricePerSlot`, `metadataUri`, `collection`, `autoClaim`, `expiresAt`.
+    - `joinRaffle(raffleId, slotIds)` — user pays native token and buys specific free slots.
+    - `unsafeJoinHostRaffle(...)` — host + join + optional free slots in one tx.
+    - `claim(raffleId)` — winner mints prize if `autoClaim == false`.
+    - `withdrawProceeds(to, amount)` — owner withdraws accumulated native tokens.
+  - View helpers:
+    - `getRaffleLoad`, `getUserRaffles`, `getUserRaffleSlots`, `checkSlotsAvailability`.
+
+See `RAFFLE.md` for the chain-agnostic spec that this contract follows.
+
+## Scripts (bun + ethers v6)
+
+All scripts live under `scripts/` and are intended to be run with bun:
+
+- `1-deploy-collection.ts` — deploy `Collection.sol`.
+- `2-deploy-authority-mint.ts` — deploy basic `AuthorityMint` (single-collection authority).
+- `3-deploy-authority-mint-permit.ts` — deploy `AuthorityMintWithPermit`.
+- `4-deploy-raffle.ts` — deploy `Raffle.sol`.
+- `5-burn-nft.ts` — burn ERC-721 / ERC-1155 tokens.
+- `6-verify-burn-from-tx.ts` — read burn tx, recover pre-burn metadata URI.
+- `7-mint-from-collection.ts` — direct mint via `Collection`.
+- `8-mint-from-authority.ts` — mint via authority contract.
+
+Examples:
+
+```bash
+bun scripts/1-deploy-collection.ts
+bun scripts/4-deploy-raffle.ts
+bun scripts/7-mint-from-collection.ts
+bun scripts/8-mint-from-authority.ts
+```
+
+For concrete deployments (addresses + tx hashes), see:
+
+- `SEPOLIA_DEPLOYMENT_RECORD.md`
+- `lisk-amoy.md`
+
+## Networks / deployment records
+
+- **Ethereum Sepolia**
+
+  - Full flow exercised: deploy, mint (direct + authority), burn, verify burn.
+  - Detailed log: `SEPOLIA_DEPLOYMENT_RECORD.md`.
+
+- **Polygon Amoy**
+
+  - Collection + AuthorityMint deployed and sample NFT minted.
+  - Details: `lisk-amoy.md` (Polygon Amoy section).
+
+- **Lisk-Sepolia**
+  - Collection + AuthorityMint deployed and sample NFT minted.
+  - Details: `lisk-amoy.md` (Lisk-Sepolia section).
+
+## Prereqs (EVM)
+
+- Node.js 22.x (Hardhat 3 compatible).
+- Bun >= 1.0 (for running scripts).
+- RPC endpoints for at least one EVM testnet (e.g. Sepolia, Polygon Amoy, Lisk-Sepolia).
+- Environment variables (for scripts):
+  - `SEPOLIA_RPC_URL`
+  - `PRIVATE_KEY_ETH` (deployer / authority owner)
+  - `PRIVATE_KEY_ETH_2` (end-user wallet for mint/burn scripts)
+  - `COLLECTION_ADDRESS`, `AUTHORITY_MINT_ADDRESS`, `TOKEN_URI`, `TOKEN_ID` as required by specific scripts.
 
 ## Dev notes
 
-- Program uses `anchor-spl` token interface to support both SPL Token and Token-2022 mints.
-- MOGA mint can be either Token or Token-2022; default client SDK will detect via interface.
-- Randomness and zk-compression integration are staged to keep v0 minimal and testable.
-
-See `docs/architecture.md` and `docs/architecture.svg` for the flow.
-
----
-
-Links:
-
-- `docs/SIMPLIFIED_FLOW.md`
-- `docs/decision-flow-v2.svg`
-- `docs/REFUND_TICKET_SPEC.md`
-- `docs/ZK_COMPRESSION_USAGE.md`
-
----
-
-## Automation Options
-
-See `docs/RAFFLE_OPTIONS.md` for full details. Summary:
-
-- **Draw Triggers**
-
-  - Auto on full (client-chained): append `request_draw_arcium` after join
-  - Auto on full (worker): worker calls `request_draw_arcium` on `ThresholdReached`
-  - Scheduled reveal: worker waits until `reveal_time_unix_ts`
-  - Manual: any payer can call when `status == Drawing`
-
-- **Refund Modes**
-
-  - Auto (worker crank): call `refund_batch()` at deadline; mint MRFT from events
-  - Self-service: users call `claim_refund()`; worker mints MRFT
-  - Hybrid: both enabled
-
-- **Notifications**
-
-  - Winners: after `draw_callback`
-  - Refunds: after `RefundTicketsRequested` / mint
-
-- **Config (to add)**
-  - `auto_draw_on_full: bool`
-  - `reveal_time_unix_ts: Option<i64>`
-  - `refund_mode: enum { Auto, SelfService, Hybrid }`
-  - `prize_mode: enum { PreEscrow, MintOnClaim }`
+- Contracts use OpenZeppelin Contracts v5, Solidity `^0.8.20`, Hardhat with `viaIR` enabled.
+- All EVM scripts use `ethers` v6 directly (no Hardhat runtime).
+- Token IDs are typically unix-ms timestamps chosen offchain.
+- Metadata URIs point at GitHub raw JSON files under `metadata/v2-test/...`.
+- The raffle engine is designed to mirror the Casper / Solana logic so the same offchain raffle service can target multiple chains.
