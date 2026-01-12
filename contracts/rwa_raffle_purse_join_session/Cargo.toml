@@ -1,0 +1,18 @@
+[package]
+name = "rwa_raffle_purse_join_session"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "rwa_raffle_purse_join_session"
+crate-type = ["cdylib"]
+
+[dependencies]
+# Use older Casper SDK versions known to compile as session code on stable
+# tooling, independent of the main contract crate versions.
+casper-contract = "1.4.4"
+casper-types = "1.5.0"
+
+[profile.release]
+lto = true
+opt-level = "z"

@@ -10,8 +10,8 @@ name = "rwa_raffle_cspr"
 crate-type = ["cdylib"]
 
 [dependencies]
-casper-contract = { version = "1", default-features = false }
-casper-types = "1"
+casper-contract = "5.1.1"
+casper-types = "6.1.0"
 
 [profile.release]
 lto = true
