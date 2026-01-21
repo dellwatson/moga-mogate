@@ -1,0 +1,17 @@
+[package]
+name = "signature-verify"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+casper-contract = "4.0.0"
+casper-types = "4.0.1"
+blake2 = { version = "0.10", default-features = false }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "z"
+
+[lib]
+crate-type = ["cdylib"]

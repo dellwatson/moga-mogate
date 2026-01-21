@@ -1,0 +1,16 @@
+[package]
+name = "cspr-transfer-contract-purse"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+casper-contract = "5.1.1"
+casper-types = "6.1.0"
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+
+[lib]
+crate-type = ["cdylib"]
