@@ -18,10 +18,13 @@ interface ICollectionMint {
 /// external NFT collection for prizes.
 /// @dev Each raffle is identified by a string `raffleId` (hashed to bytes32
 /// for storage) and uses explicit slot numbers owned by participant addresses.
+
 contract Raffle is Ownable {
     constructor() Ownable(msg.sender) {}
 
-    // ==== Multi-raffle implementation (RAFFLE.md spec, native ETH) ====
+    // =============================================================
+    // Core types and storage
+    // =============================================================
 
     /// @notice High-level status for each raffle.
     enum MultiRaffleStatus {
@@ -36,7 +39,6 @@ contract Raffle is Ownable {
         string raffleId;
         uint256 totalSlots;
         uint256 maxSlotsPerAddress;
-        uint256 pricePerSlot;
         string metadataUri;
         address collection;
         bool premintContract;
@@ -56,9 +58,15 @@ contract Raffle is Ownable {
     mapping(bytes32 => mapping(uint256 => address)) private _slotOwnerMulti;
     mapping(bytes32 => mapping(address => uint256)) private _userSlotCountMulti;
     mapping(bytes32 => mapping(address => uint256[])) private _userSlotsMulti;
+    mapping(bytes32 => mapping(address => uint256)) private _userPaidMulti;
     mapping(address => string[]) private _userRafflesMulti;
 
     uint256 public nextPrizeTokenId;
+    uint256 public constant REFUND_FEE_BPS = 500;
+
+    // =============================================================
+    // Events
+    // =============================================================
 
     event MultiRaffleHosted(bytes32 indexed id, string raffleId, address indexed organizer);
     event MultiRaffleJoined(bytes32 indexed id, address indexed payer, uint256[] slots, uint256 paidAmount);
@@ -67,14 +75,37 @@ contract Raffle is Ownable {
     event MultiRafflePrizeMinted(bytes32 indexed id, address indexed to, uint256 tokenId, string metadataUri);
     event MultiRaffleProceedsWithdrawn(address indexed to, uint256 amount);
 
-    /// @notice Create a new raffle with the specified parameters.
-    /// @dev Reverts if a raffle with the same `raffleId` already exists.
-    /// Sets status to OPEN and resets counters.
+    // =============================================================
+    // External host/join (safe variants - signature based, TODO)
+    // =============================================================
+
+    /// @notice Host a raffle with off-chain pricing/signature (safe variant, not implemented yet).
     function hostRaffle(
         string calldata raffleId,
         uint256 totalSlots,
         uint256 maxSlotsPerAddress,
-        uint256 pricePerSlot,
+        string calldata metadataUri,
+        address collection,
+        bool premintContract,
+        bool premint,
+        bool autoClaim,
+        uint64 expiresAt,
+        bytes calldata /*signature*/
+    ) external returns (bytes32 id) {
+        revert("NotImplemented");
+    }
+
+    // =============================================================
+    // External host/join (unsafe variants - no signature)
+    // =============================================================
+
+    /// @notice Create a new raffle with the specified parameters (unsafe, no signature).
+    /// @dev Reverts if a raffle with the same `raffleId` already exists.
+    /// Sets status to OPEN and resets counters.
+    function unsafeHostRaffle(
+        string calldata raffleId,
+        uint256 totalSlots,
+        uint256 maxSlotsPerAddress,
         string calldata metadataUri,
         address collection,
         bool premintContract,
@@ -89,10 +120,10 @@ contract Raffle is Ownable {
         MultiRaffle storage r = _multiRaffles[id];
         require(bytes(r.raffleId).length == 0, "RaffleExists");
 
+        // need to update if it's not premint, then need the tokenID or perhaps request of hold of the NFT
         r.raffleId = raffleId;
         r.totalSlots = totalSlots;
         r.maxSlotsPerAddress = maxSlotsPerAddress;
-        r.pricePerSlot = pricePerSlot;
         r.metadataUri = metadataUri;
         r.collection = collection;
         r.premintContract = premintContract;
@@ -107,12 +138,25 @@ contract Raffle is Ownable {
         emit MultiRaffleHosted(id, raffleId, msg.sender);
     }
 
-    /// @notice Join an existing raffle by purchasing specific slot IDs.
-    /// @dev Payment is in native ETH; msg.value must equal pricePerSlot * (slots - bonusFreeSlots).
-    /// Reverts if raffle is not OPEN, expired, or any slot is invalid/taken.
+    /// @notice Join an existing raffle by purchasing specific slot IDs (safe variant, not implemented yet).
     function joinRaffle(
         string calldata raffleId,
-        uint256[] calldata slotIds
+        uint256[] calldata slotIds,
+        uint256 /*amount*/,
+        address /*token*/,
+        bytes calldata /*signature*/
+    ) external payable {
+        revert("NotImplemented");
+    }
+
+    /// @notice Join an existing raffle by purchasing specific slot IDs (unsafe, no signature).
+    /// @dev Payment amount and token are provided by the off-chain backend.
+    /// Reverts if raffle is not OPEN, expired, or any slot is invalid/taken.
+    function unsafeJoinRaffle(
+        string calldata raffleId,
+        uint256[] calldata slotIds,
+        uint256 amount,
+        address token
     ) external payable {
         require(slotIds.length > 0, "NoSlots");
 
@@ -124,16 +168,24 @@ contract Raffle is Ownable {
             require(block.timestamp <= r.expiresAt, "RaffleExpired");
         }
 
-        _joinRaffle(id, r, slotIds, msg.sender, 0);
+        if (amount > 0) {
+            if (token == address(0)) {
+                _handleNativePayment(id, msg.sender, amount);
+            } else {
+                // TODO: support ERC20 tokens in the future
+                // IERC20(token).transferFrom(msg.sender, address(this), amount);
+                revert("ERC20Disabled");
+            }
+        }
+
+        _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
     }
 
-    /// @notice Convenience helper that both hosts and joins a raffle in one tx.
-    /// @dev The first `min(bonusFreeSlots, slotIds.length)` slots are free.
-    function unsafeJoinHostRaffle(
+    /// @notice Host and join a raffle in a single call (safe variant, not implemented yet).
+    function hostAndJoinRaffle(
         string calldata raffleId,
         uint256 totalSlots,
         uint256 maxSlotsPerAddress,
-        uint256 pricePerSlot,
         string calldata metadataUri,
         address collection,
         bool premintContract,
@@ -141,24 +193,71 @@ contract Raffle is Ownable {
         bool autoClaim,
         uint64 expiresAt,
         uint256[] calldata slotIds,
+        uint256 /*amount*/,
+        address /*token*/,
+        uint256 /*bonusFreeSlots*/,
+        bytes calldata /*signature*/
+    ) external payable returns (bytes32 id) {
+        revert("NotImplemented");
+    }
+
+    /// @notice Convenience helper that both hosts and joins a raffle in one tx (unsafe, no signature).
+    /// @dev The first `min(bonusFreeSlots, slotIds.length)` slots are treated as free off-chain.
+    function unsafeHostAndJoinRaffle(
+        string calldata raffleId,
+        uint256 totalSlots,
+        uint256 maxSlotsPerAddress,
+        string calldata metadataUri,
+        address collection,
+        bool premintContract,
+        bool premint,
+        bool autoClaim,
+        uint64 expiresAt,
+        uint256[] calldata slotIds,
+        uint256 amount,
+        address token,
         uint256 bonusFreeSlots
     ) external payable returns (bytes32 id) {
-        id = hostRaffle(
-            raffleId,
-            totalSlots,
-            maxSlotsPerAddress,
-            pricePerSlot,
-            metadataUri,
-            collection,
-            premintContract,
-            premint,
-            autoClaim,
-            expiresAt
-        );
+        require(totalSlots > 0, "TotalSlotsZero");
+        require(maxSlotsPerAddress > 0, "MaxSlotsZero");
 
+        id = keccak256(bytes(raffleId));
         MultiRaffle storage r = _multiRaffles[id];
-        _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots);
+        require(bytes(r.raffleId).length == 0, "RaffleExists");
+
+        // need to update if it's not premint, then need the tokenID or perhaps request of hold of the NFT
+        r.raffleId = raffleId;
+        r.totalSlots = totalSlots;
+        r.maxSlotsPerAddress = maxSlotsPerAddress;
+        r.metadataUri = metadataUri;
+        r.collection = collection;
+        r.premintContract = premintContract;
+        r.premint = premint;
+        r.autoClaim = autoClaim;
+        r.createdAt = uint64(block.timestamp);
+        r.expiresAt = expiresAt;
+        r.status = MultiRaffleStatus.OPEN;
+        r.soldSlots = 0;
+        r.claimed = false;
+
+        emit MultiRaffleHosted(id, raffleId, msg.sender);
+
+        if (amount > 0) {
+            if (token == address(0)) {
+                _handleNativePayment(id, msg.sender, amount);
+            } else {
+                // TODO: support ERC20 tokens in the future
+                // IERC20(token).transferFrom(msg.sender, address(this), amount);
+                revert("ERC20Disabled");
+            }
+        }
+
+        _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
     }
+
+    // =============================================================
+    // External prize + treasury + refund
+    // =============================================================
 
     /// @notice Claim the prize for a raffle where the caller is the recorded winner.
     function claim(string calldata raffleId) external {
@@ -184,6 +283,10 @@ contract Raffle is Ownable {
         emit MultiRaffleProceedsWithdrawn(to, amount);
     }
 
+    // =============================================================
+    // View helpers
+    // =============================================================
+
     /// @notice Return basic load information for a raffle.
     /// @return totalSlots Total number of slots.
     /// @return soldSlots Number of slots sold.
@@ -196,8 +299,33 @@ contract Raffle is Ownable {
         require(bytes(r.raffleId).length != 0, "RaffleNotFound");
         return (r.totalSlots, r.soldSlots, uint8(r.status));
     }
+ 
+    /// @notice Return basic load information for multiple raffles in a single call.
+    /// @dev All returned arrays have the same length as `raffleIds` and are index-aligned.
+    function getRafflesLoad(
+        string[] calldata raffleIds
+    )
+        external
+        view
+        returns (uint256[] memory totalSlots, uint256[] memory soldSlots, uint8[] memory status)
+    {
+        uint256 len = raffleIds.length;
+        totalSlots = new uint256[](len);
+        soldSlots = new uint256[](len);
+        status = new uint8[](len);
+
+        for (uint256 i = 0; i < len; i++) {
+            bytes32 id = keccak256(bytes(raffleIds[i]));
+            MultiRaffle storage r = _multiRaffles[id];
+            require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+            totalSlots[i] = r.totalSlots;
+            soldSlots[i] = r.soldSlots;
+            status[i] = uint8(r.status);
+        }
+    }
 
     /// @notice Get all raffleIds that the given user has ever joined.
+    // this is for history -list raffle join
     function getUserRaffles(address user) external view returns (string[] memory) {
         string[] storage list = _userRafflesMulti[user];
         string[] memory out = new string[](list.length);
@@ -224,12 +352,11 @@ contract Raffle is Ownable {
     }
 
     /// @notice Check whether the given `slotIds` are free and in-range.
-    /// @return allAvailable True if no invalid/taken slots are found.
     /// @return unavailable List of slot numbers that are out-of-range or taken.
     function checkSlotsAvailability(
         string calldata raffleId,
         uint256[] calldata slotIds
-    ) external view returns (bool allAvailable, uint256[] memory unavailable) {
+    ) external view returns (uint256[] memory unavailable) {
         bytes32 id = keccak256(bytes(raffleId));
         MultiRaffle storage r = _multiRaffles[id];
         require(bytes(r.raffleId).length != 0, "RaffleNotFound");
@@ -250,7 +377,102 @@ contract Raffle is Ownable {
         for (uint256 i = 0; i < count; i++) {
             unavailable[i] = tmp[i];
         }
-        allAvailable = (count == 0);
+    }
+ 
+    /// @notice Get all taken slots in the given inclusive slot range for a raffle.
+    /// @dev Use (startSlot = 1, endSlot = totalSlots) for a full scan, or smaller ranges for paging.
+    function getTakenSlotsInRange(
+        string calldata raffleId,
+        uint256 startSlot,
+        uint256 endSlot
+    ) external view returns (uint256[] memory takenSlots) {
+        bytes32 id = keccak256(bytes(raffleId));
+        MultiRaffle storage r = _multiRaffles[id];
+        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+        require(startSlot >= 1 && endSlot >= startSlot && endSlot <= r.totalSlots, "InvalidRange");
+
+        uint256 len = endSlot - startSlot + 1;
+        uint256[] memory tmp = new uint256[](len);
+        uint256 count;
+
+        for (uint256 slot = startSlot; slot <= endSlot; slot++) {
+            if (_slotOwnerMulti[id][slot] != address(0)) {
+                tmp[count] = slot;
+                count++;
+            }
+        }
+
+        takenSlots = new uint256[](count);
+        for (uint256 i = 0; i < count; i++) {
+            takenSlots[i] = tmp[i];
+        }
+    }
+
+    /// @notice Get all available (free) slots in the given inclusive slot range for a raffle.
+    /// @dev Use (startSlot = 1, endSlot = totalSlots) for a full scan, or smaller ranges for paging.
+    function getAvailableSlotsInRange(
+        string calldata raffleId,
+        uint256 startSlot,
+        uint256 endSlot
+    ) external view returns (uint256[] memory availableSlots) {
+        bytes32 id = keccak256(bytes(raffleId));
+        MultiRaffle storage r = _multiRaffles[id];
+        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+        require(startSlot >= 1 && endSlot >= startSlot && endSlot <= r.totalSlots, "InvalidRange");
+
+        uint256 len = endSlot - startSlot + 1;
+        uint256[] memory tmp = new uint256[](len);
+        uint256 count;
+
+        for (uint256 slot = startSlot; slot <= endSlot; slot++) {
+            if (_slotOwnerMulti[id][slot] == address(0)) {
+                tmp[count] = slot;
+                count++;
+            }
+        }
+
+        availableSlots = new uint256[](count);
+        for (uint256 i = 0; i < count; i++) {
+            availableSlots[i] = tmp[i];
+        }
+    }
+
+    /// @notice Claim a refund for an expired raffle that did not sell out.
+    function claimRefund(string calldata raffleId) external {
+        bytes32 id = keccak256(bytes(raffleId));
+        MultiRaffle storage r = _multiRaffles[id];
+        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+        require(r.expiresAt != 0 && block.timestamp > r.expiresAt, "NotExpired");
+        require(r.soldSlots < r.totalSlots, "RaffleFilled");
+        require(
+            r.status == MultiRaffleStatus.OPEN || r.status == MultiRaffleStatus.CANCELLED,
+            "BadStatus"
+        );
+
+        uint256 paid = _userPaidMulti[id][msg.sender];
+        require(paid > 0, "NothingToRefund");
+
+        if (r.status == MultiRaffleStatus.OPEN) {
+            r.status = MultiRaffleStatus.CANCELLED;
+        }
+
+        _userPaidMulti[id][msg.sender] = 0;
+
+        uint256 refundAmount = (paid * (10000 - REFUND_FEE_BPS)) / 10000;
+
+        (bool ok, ) = msg.sender.call{value: refundAmount}("");
+        require(ok, "RefundFailed");
+    }
+
+    // =============================================================
+    // Internal helpers
+    // =============================================================
+
+    function _handleNativePayment(bytes32 id, address payer, uint256 amount) internal {
+        require(msg.value == amount, "BadPayment");
+        if (amount > 0) {
+            _userPaidMulti[id][payer] += amount;
+        }
     }
 
     function _joinRaffle(
@@ -258,7 +480,8 @@ contract Raffle is Ownable {
         MultiRaffle storage r,
         uint256[] calldata slotIds,
         address payer,
-        uint256 bonusFreeSlots
+        uint256 bonusFreeSlots,
+        uint256 paidAmount
     ) internal {
         uint256 requested = slotIds.length;
         require(requested > 0, "NoSlots");
@@ -280,11 +503,6 @@ contract Raffle is Ownable {
             require(_slotOwnerMulti[id][slot] == address(0), "SlotTaken");
         }
 
-        uint256 freeSlots = bonusFreeSlots < requested ? bonusFreeSlots : requested;
-        uint256 payableSlots = requested - freeSlots;
-        uint256 expectedPayment = r.pricePerSlot * payableSlots;
-        require(msg.value == expectedPayment, "BadPayment");
-
         if (current == 0) {
             _userRafflesMulti[payer].push(r.raffleId);
         }
@@ -298,7 +516,7 @@ contract Raffle is Ownable {
         _userSlotCountMulti[id][payer] = current + requested;
         r.soldSlots += requested;
 
-        emit MultiRaffleJoined(id, payer, slotIds, expectedPayment);
+        emit MultiRaffleJoined(id, payer, slotIds, paidAmount);
 
         if (r.soldSlots == r.totalSlots) {
             r.status = MultiRaffleStatus.FILLED;
