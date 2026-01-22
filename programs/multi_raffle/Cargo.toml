@@ -1,0 +1,19 @@
+[package]
+name = "multi_raffle"
+version = "0.1.0"
+edition = "2021"
+description = "Multi-raffle Anchor program (SOL-based, unsafe routes only)"
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "multi_raffle"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.32.0"
