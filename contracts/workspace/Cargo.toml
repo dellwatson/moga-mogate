@@ -1,0 +1,10 @@
+[workspace]
+members = [
+    "contracts/cspr_transfer_proxy",
+    "contracts/cspr_transfer_proxy_contract_purse"
+]
+resolver = "2"
+
+[workspace.dependencies]
+casper-contract = "5.1.1"
+casper-types = "6.1.0"

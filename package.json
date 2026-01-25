@@ -17,8 +17,8 @@
     "casper:mint-with-permit": "bun run scripts/casper/mint-with-permit.ts"
   },
   "dependencies": {
-    "casper-js-sdk": "^2.15.4",
-    "bs58": "^5.0.0"
+    "bs58": "^5.0.0",
+    "casper-js-sdk": "2.15.2"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
