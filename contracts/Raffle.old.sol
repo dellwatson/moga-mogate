@@ -11,11 +11,6 @@ interface ICollectionMint {
         uint256 tokenId,
         string calldata uri
     ) external returns (uint256);
-    /// @notice Mint a token with a specific `tokenId` and metadata URI to `to`.
-    function mintTo(
-        address to,
-        string calldata uri
-    ) external returns (uint256);
 }
 
 /// @title Multi-raffle engine (chain-agnostic spec, EVM implementation)
@@ -39,14 +34,6 @@ contract Raffle is Ownable {
         CANCELLED
     }
 
-    /// @notice Type of prize token.
-    enum PrizeTokenType {
-        NONE,
-        ERC721,
-        ERC1155,
-        ERC404
-    }
-
     /// @notice Per-raffle configuration and runtime state.
     struct MultiRaffle {
         string raffleId;
@@ -56,14 +43,7 @@ contract Raffle is Ownable {
         address collection;
         bool premintContract;
         bool premint;
-        /// @notice Whether the raffle should automatically draw a winner when all slots are sold.
-        bool autoDraw;
-        /// @notice Whether the prize should be automatically claimed (minted) when the raffle is drawn.
         bool autoClaim;
-        /// @notice Type of prize token (ERC721 / ERC1155 / ERC404 / NONE).
-        PrizeTokenType prizeType;
-        /// @notice Amount of prize tokens to mint to the winner (for ERC721 this is normally 1).
-        uint256 prizeAmount;
         uint64 createdAt;
         uint64 expiresAt;
         MultiRaffleStatus status;
@@ -81,22 +61,8 @@ contract Raffle is Ownable {
     mapping(bytes32 => mapping(address => uint256)) private _userPaidMulti;
     mapping(address => string[]) private _userRafflesMulti;
 
-    /// @notice Refund fee in basis points (out of 10_000). Default is 500 = 5%.
-    uint256 public refundFeeBps = 500;
-
-    function _statusToString(MultiRaffleStatus s) internal pure returns (string memory) {
-        if (s == MultiRaffleStatus.OPEN) return "OPEN";
-        if (s == MultiRaffleStatus.FILLED) return "FILLED";
-        if (s == MultiRaffleStatus.DRAWN) return "DRAWN";
-        return "CANCELLED";
-    }
-
-    function _prizeTypeToString(PrizeTokenType t) internal pure returns (string memory) {
-        if (t == PrizeTokenType.ERC721) return "ERC721";
-        if (t == PrizeTokenType.ERC1155) return "ERC1155";
-        if (t == PrizeTokenType.ERC404) return "ERC404";
-        return "NONE";
-    }
+    uint256 public nextPrizeTokenId;
+    uint256 public constant REFUND_FEE_BPS = 500;
 
     // =============================================================
     // Events
@@ -144,9 +110,6 @@ contract Raffle is Ownable {
         address collection,
         bool premintContract,
         bool premint,
-        PrizeTokenType prizeType,
-        uint256 prizeAmount,
-        bool autoDraw,
         bool autoClaim,
         uint64 expiresAt
     ) external returns (bytes32 id) {
@@ -165,10 +128,7 @@ contract Raffle is Ownable {
         r.collection = collection;
         r.premintContract = premintContract;
         r.premint = premint;
-        r.autoDraw = autoDraw;
         r.autoClaim = autoClaim;
-        r.prizeType = prizeType;
-        r.prizeAmount = prizeAmount;
         r.createdAt = uint64(block.timestamp);
         r.expiresAt = expiresAt;
         r.status = MultiRaffleStatus.OPEN;
@@ -251,9 +211,6 @@ contract Raffle is Ownable {
         address collection,
         bool premintContract,
         bool premint,
-        PrizeTokenType prizeType,
-        uint256 prizeAmount,
-        bool autoDraw,
         bool autoClaim,
         uint64 expiresAt,
         uint256[] calldata slotIds,
@@ -315,17 +272,6 @@ contract Raffle is Ownable {
         r.claimed = true;
     }
 
-    /// @notice Admin function (or backend) to manually execute raffle draw for a filled raffle.
-    /// @dev Useful when autoDraw is disabled to avoid pushing gas cost to the last joiner.
-    function drawRaffle(string calldata raffleId) external {
-        bytes32 id = keccak256(bytes(raffleId));
-        MultiRaffle storage r = _multiRaffles[id];
-        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-        require(r.status == MultiRaffleStatus.FILLED, "NotFilled");
-        
-        _endRaffleInternal(id, r);
-    }
-
     /// @notice Withdraw native token proceeds accumulated in this contract.
     /// @param to Recipient address.
     /// @param amount Amount of wei to withdraw.
@@ -341,176 +287,19 @@ contract Raffle is Ownable {
     // View helpers
     // =============================================================
 
-    /// @notice Return comprehensive information for a raffle.
+    /// @notice Return basic load information for a raffle.
     /// @return totalSlots Total number of slots.
     /// @return soldSlots Number of slots sold.
-    /// @return maxSlotsPerAddress Maximum slots per address.
-    /// @return metadataUri Metadata URI for the raffle.
-    /// @return collection NFT collection address for prizes.
-    /// @return premintContract Whether collection uses premint contract.
-    /// @return premint Whether prize is preminted.
-    /// @return autoDraw Whether the raffle auto-draws when all slots are sold.
-    /// @return autoClaim Whether prize auto-claims (mints) on draw.
-    /// @return createdAt Creation timestamp (UNIX).
-    /// @return expiresAt Expiration timestamp (UNIX, 0 = no expiry).
     /// @return status Raffle status as uint8.
-    /// @return statusString Raffle status as string (e.g. "OPEN", "DRAWN").
-    /// @return winnerSlot Winning slot number (0 = not drawn).
-    /// @return winner Winner address (zero address = not drawn).
-    /// @return prizeAmount Amount of NFTs awarded.
-    /// @return prizeType Prize token type as uint8.
-    /// @return prizeTypeString Prize token type as string (e.g. "ERC721").
-    /// @return claimed Whether prize has been claimed.
-    function getRaffleLoadDetail(
+    function getRaffleLoad(
         string calldata raffleId
-    ) external view returns (
-        uint256 totalSlots,
-        uint256 soldSlots,
-        uint256 maxSlotsPerAddress,
-        string memory metadataUri,
-        address collection,
-        bool premintContract,
-        bool premint,
-        bool autoDraw,
-        bool autoClaim,
-        uint64 createdAt,
-        uint64 expiresAt,
-        uint8 status,
-        string memory statusString,
-        uint256 winnerSlot,
-        address winner,
-        uint256 prizeAmount,
-        uint8 prizeType,
-        string memory prizeTypeString,
-        bool claimed
-    ) {
+    ) external view returns (uint256 totalSlots, uint256 soldSlots, uint8 status) {
         bytes32 id = keccak256(bytes(raffleId));
         MultiRaffle storage r = _multiRaffles[id];
         require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-
-        string memory statusStr = _statusToString(r.status);
-        string memory prizeTypeStr = _prizeTypeToString(r.prizeType);
-
-        return (
-            r.totalSlots,
-            r.soldSlots,
-            r.maxSlotsPerAddress,
-            r.metadataUri,
-            r.collection,
-            r.premintContract,
-            r.premint,
-            r.autoDraw,
-            r.autoClaim,
-            r.createdAt,
-            r.expiresAt,
-            uint8(r.status),
-            statusStr,
-            r.winnerSlot,
-            r.winner,
-            r.prizeAmount,
-            uint8(r.prizeType),
-            prizeTypeStr,
-            r.claimed
-        );
+        return (r.totalSlots, r.soldSlots, uint8(r.status));
     }
-
-
-
-    // todo: we can make it into pagination later
-    /// @notice Return comprehensive information for multiple raffles in a single call.
-    /// @dev All returned arrays have the same length as `raffleIds` and are index-aligned.
-    function getRafflesLoadDetail(
-        string[] calldata raffleIds
-    )
-        external
-        view
-        returns (
-            uint256[] memory totalSlots,
-            uint256[] memory soldSlots,
-            uint256[] memory maxSlotsPerAddress,
-            string[] memory metadataUri,
-            address[] memory collection,
-            bool[] memory premintContract,
-            bool[] memory premint,
-            bool[] memory autoDraw,
-            bool[] memory autoClaim,
-            uint64[] memory createdAt,
-            uint64[] memory expiresAt,
-            uint8[] memory status,
-            uint256[] memory winnerSlot,
-            address[] memory winner,
-            uint256[] memory prizeAmount,
-            uint8[] memory prizeType,
-            bool[] memory claimed
-        )
-    {
-        uint256 len = raffleIds.length;
-        totalSlots = new uint256[](len);
-        soldSlots = new uint256[](len);
-        maxSlotsPerAddress = new uint256[](len);
-        metadataUri = new string[](len);
-        collection = new address[](len);
-        premintContract = new bool[](len);
-        premint = new bool[](len);
-        autoDraw = new bool[](len);
-        autoClaim = new bool[](len);
-        createdAt = new uint64[](len);
-        expiresAt = new uint64[](len);
-        status = new uint8[](len);
-        winnerSlot = new uint256[](len);
-        winner = new address[](len);
-        prizeAmount = new uint256[](len);
-        prizeType = new uint8[](len);
-        claimed = new bool[](len);
-
-        for (uint256 i = 0; i < len; i++) {
-            bytes32 id = keccak256(bytes(raffleIds[i]));
-            MultiRaffle storage r = _multiRaffles[id];
-            require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-
-            totalSlots[i] = r.totalSlots;
-            soldSlots[i] = r.soldSlots;
-            maxSlotsPerAddress[i] = r.maxSlotsPerAddress;
-            metadataUri[i] = r.metadataUri;
-            collection[i] = r.collection;
-            premintContract[i] = r.premintContract;
-            premint[i] = r.premint;
-            autoDraw[i] = r.autoDraw;
-            autoClaim[i] = r.autoClaim;
-            createdAt[i] = r.createdAt;
-            expiresAt[i] = r.expiresAt;
-            status[i] = uint8(r.status);
-            winnerSlot[i] = r.winnerSlot;
-            winner[i] = r.winner;
-            prizeAmount[i] = r.prizeAmount;
-            prizeType[i] = uint8(r.prizeType);
-            claimed[i] = r.claimed;
-        }
-    }
-
-    // /// @notice Check if joining specific slots will fill the raffle and trigger draw.
-    // /// @return willFill True if joining these slots will fill the raffle.
-    // /// @return willAutoDraw True if filling will trigger automatic draw (gas intensive).
-    // /// @return remainingSlots Number of slots remaining before fill.
-    // function checkJoinWillFill(
-    //     string calldata raffleId,
-    //     uint256 slotCount
-    // ) external view returns (
-    //     bool willFill,
-    //     bool willAutoDraw,
-    //     uint256 remainingSlots
-    // ) {
-    //     bytes32 id = keccak256(bytes(raffleId));
-    //     MultiRaffle storage r = _multiRaffles[id];
-    //     require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-        
-    //     remainingSlots = r.totalSlots - r.soldSlots;
-    //     willFill = slotCount >= remainingSlots;
-    //     willAutoDraw = willFill && !r.autoClaim;
-        
-    //     return (willFill, willAutoDraw, remainingSlots);
-    // }
-
+ 
     /// @notice Return basic load information for multiple raffles in a single call.
     /// @dev All returned arrays have the same length as `raffleIds` and are index-aligned.
     function getRafflesLoad(
@@ -533,49 +322,6 @@ contract Raffle is Ownable {
             soldSlots[i] = r.soldSlots;
             status[i] = uint8(r.status);
         }
-    }
-
-    /// @notice Return winner and prize information for a raffle.
-    /// @return winnerSlot Winning slot number (0 = not drawn).
-    /// @return winner Winner address (zero address = not drawn).
-    /// @return status Raffle status as uint8.
-    /// @return statusString Raffle status as string.
-    /// @return claimed Whether the prize has been claimed.
-    /// @return collection NFT collection address for the prize.
-    /// @return prizeAmount Amount of NFTs awarded.
-    /// @return prizeType Prize token type as uint8.
-    /// @return prizeTypeString Prize token type as string.
-    function getRaffleResult(
-        string calldata raffleId
-    )
-        external
-        view
-        returns (
-            uint256 winnerSlot,
-            address winner,
-            uint8 status,
-            string memory statusString,
-            bool claimed,
-            address collection,
-            uint256 prizeAmount,
-            uint8 prizeType,
-            string memory prizeTypeString
-        )
-    {
-        bytes32 id = keccak256(bytes(raffleId));
-        MultiRaffle storage r = _multiRaffles[id];
-        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-        return (
-            r.winnerSlot,
-            r.winner,
-            uint8(r.status),
-            _statusToString(r.status),
-            r.claimed,
-            r.collection,
-            r.prizeAmount,
-            uint8(r.prizeType),
-            _prizeTypeToString(r.prizeType)
-        );
     }
 
     /// @notice Get all raffleIds that the given user has ever joined.
@@ -692,7 +438,6 @@ contract Raffle is Ownable {
     }
 
     /// @notice Claim a refund for an expired raffle that did not sell out.
-    /// todo add: if subscribed (then return full) ->> this using signature
     function claimRefund(string calldata raffleId) external {
         bytes32 id = keccak256(bytes(raffleId));
         MultiRaffle storage r = _multiRaffles[id];
@@ -713,57 +458,10 @@ contract Raffle is Ownable {
 
         _userPaidMulti[id][msg.sender] = 0;
 
-        uint256 refundAmount = (paid * (10000 - refundFeeBps)) / 10000;
+        uint256 refundAmount = (paid * (10000 - REFUND_FEE_BPS)) / 10000;
 
         (bool ok, ) = msg.sender.call{value: refundAmount}("");
         require(ok, "RefundFailed");
-    }
-
-    /// @notice View helper giving detailed refund status for a user in a raffle.
-    /// @return paid Total amount the user has paid into this raffle.
-    /// @return refundableAmount Amount the user would receive if claiming a refund now.
-    /// @return expired Whether the raffle is past its expiry time.
-    /// @return canClaim Whether the user currently satisfies the on-chain conditions to claim a refund.
-    /// @return status Raffle status as uint8.
-    function getRefundStatus(
-        string calldata raffleId,
-        address user
-    )
-        external
-        view
-        returns (
-            uint256 paid,
-            uint256 refundableAmount,
-            bool expired,
-            bool canClaim,
-            uint8 status
-        )
-    {
-        bytes32 id = keccak256(bytes(raffleId));
-        MultiRaffle storage r = _multiRaffles[id];
-        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-
-        status = uint8(r.status);
-        expired = (r.expiresAt != 0 && block.timestamp > r.expiresAt);
-        bool notFilled = r.soldSlots < r.totalSlots;
-
-        paid = _userPaidMulti[id][user];
-        if (paid > 0) {
-            refundableAmount = (paid * (10000 - refundFeeBps)) / 10000;
-        }
-
-        canClaim = (
-            expired &&
-            notFilled &&
-            (r.status == MultiRaffleStatus.OPEN || r.status == MultiRaffleStatus.CANCELLED) &&
-            paid > 0
-        );
-    }
-
-    /// @notice Owner can update the refund fee in basis points (out of 10_000).
-    function setRefundFeeBps(uint256 newFeeBps) external onlyOwner {
-        require(newFeeBps <= 10_000, "FeeTooHigh");
-        refundFeeBps = newFeeBps;
     }
 
     // =============================================================
@@ -823,18 +521,12 @@ contract Raffle is Ownable {
         if (r.soldSlots == r.totalSlots) {
             r.status = MultiRaffleStatus.FILLED;
             emit MultiRaffleFilled(id, r.totalSlots);
-
-            // Auto-draw is now controlled by the explicit autoDraw flag.
-            if (r.autoDraw) {
-                _endRaffleInternal(id, r);
-            }
+            _endRaffleInternal(id, r);
         }
     }
 
-
-    // will be called by draw or by join
     function _endRaffleInternal(bytes32 id, MultiRaffle storage r) internal {
-        require(r.status == MultiRaffleStatus.FILLED, "BadStatus");
+        require(r.status == MultiRaffleStatus.FILLED || r.status == MultiRaffleStatus.OPEN, "BadStatus");
 
         uint256 winnerSlot = (block.timestamp % r.totalSlots) + 1;
         address winner = _slotOwnerMulti[id][winnerSlot];
@@ -847,7 +539,6 @@ contract Raffle is Ownable {
         emit MultiRaffleDrawn(id, winnerSlot, winner);
 
         if (r.autoClaim) {
-            // todo: check if prize erc721, erc1155, erc404
             _mintPrize(id, r, winner);
             r.claimed = true;
         }
@@ -856,29 +547,13 @@ contract Raffle is Ownable {
     function _mintPrize(bytes32 id, MultiRaffle storage r, address to) internal {
         require(r.collection != address(0), "NoCollection");
 
-        // Default values for legacy raffles that did not specify prize type/amount.
-        if (r.prizeType == PrizeTokenType.NONE) {
-            r.prizeType = PrizeTokenType.ERC721;
-        }
-        if (r.prizeAmount == 0) {
-            r.prizeAmount = 1;
-        }
+        uint256 tokenId = ++nextPrizeTokenId;
+        uint256 mintedId = ICollectionMint(r.collection).mintWithTokenId(
+            to,
+            tokenId,
+            r.metadataUri
+        );
 
-        if (r.prizeType == PrizeTokenType.ERC721) {
-            uint256 amountToMint = r.prizeAmount;
-            for (uint256 i = 0; i < amountToMint; i++) {
-                uint256 mintedId = ICollectionMint(r.collection).mintTo(
-                    to,
-                    r.metadataUri
-                );
-                emit MultiRafflePrizeMinted(id, to, mintedId, r.metadataUri);
-            }
-        } else if (r.prizeType == PrizeTokenType.ERC1155) {
-            revert("ERC1155PrizeNotImplemented");
-        } else if (r.prizeType == PrizeTokenType.ERC404) {
-            revert("ERC404PrizeNotImplemented");
-        } else {
-            revert("UnknownPrizeType");
-        }
+        emit MultiRafflePrizeMinted(id, to, mintedId, r.metadataUri);
     }
 }
