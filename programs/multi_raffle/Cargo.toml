@@ -17,3 +17,5 @@ default = []
 
 [dependencies]
 anchor-lang = "0.32.0"
+anchor-spl = { version = "0.32.0", features = ["metadata"] }
+mpl-token-metadata = "5.0.0"

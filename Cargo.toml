@@ -4,6 +4,7 @@ members = [
   "programs/direct_sell",
   "programs/direct_sell_anchor",  # Anchor IDL-compatible variant
   "programs/rwa_redeem",
+  "programs/multi_raffle",
   # "encrypted-ixs",  # Disabled - requires nightly Rust for arcis-interpreter
 ]
 resolver = "2"
