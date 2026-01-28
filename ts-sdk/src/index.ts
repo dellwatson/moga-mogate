@@ -22,7 +22,7 @@ export const TICKET_SEED = "ticket";
 export async function deriveRafflePda(
   programId: Address,
   mint: Address,
-  organizer: Address
+  organizer: Address,
 ): Promise<[Address, number]> {
   const encoder = getAddressEncoder();
   const seeds = [
@@ -35,7 +35,7 @@ export async function deriveRafflePda(
 
 export async function deriveSlotsPda(
   programId: Address,
-  raffle: Address
+  raffle: Address,
 ): Promise<[Address, number]> {
   const encoder = getAddressEncoder();
   const seeds = [new TextEncoder().encode("slots"), encoder.encode(raffle)];
@@ -46,7 +46,7 @@ export async function deriveTicketPda(
   programId: Address,
   raffle: Address,
   owner: Address,
-  startIndex: bigint
+  startIndex: bigint,
 ): Promise<[Address, number]> {
   const encoder = getAddressEncoder();
   const le8 = new Uint8Array(8);
@@ -136,3 +136,4 @@ export * from "./tickets";
 export * from "./solanaKit";
 export * from "./rwa";
 export * from "./cnft";
+export * from "./multiRaffle";

@@ -109,7 +109,7 @@ async function main() {
   try {
     const existingConfig = await program.account.config.fetch(configPda);
     console.log("\n⚠️  Config already initialized!");
-    console.log("   Admin:", existingConfig.admin.toBase58());
+    console.log("   Admin:", existingConfig.admin.toString());
     console.log(
       "   Refund Fee BPS:",
       existingConfig.refundFeeBps,
@@ -125,9 +125,10 @@ async function main() {
 
     console.log("\n💡 Config is already set up. No action needed.");
     return;
-  } catch (err) {
+  } catch (err: any) {
     // Config doesn't exist, proceed with initialization
     console.log("\n✅ Config not initialized yet, proceeding...");
+    console.log("   Error:", err.message);
   }
 
   console.log("\n🚀 Initializing config...");
