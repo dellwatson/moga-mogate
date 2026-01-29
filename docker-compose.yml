@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  aleo-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aleo-dev
+    volumes:
+      - .:/workspace
+      - cargo-cache:/usr/local/cargo/registry
+      - leo-cache:/root/.leo
+    working_dir: /workspace
+    environment:
+      - ALEO_PVT_KEY=${ALEO_PVT_KEY}
+    stdin_open: true
+    tty: true
+
+volumes:
+  cargo-cache:
+  leo-cache:

@@ -1,0 +1,13 @@
+{
+  "program": "authority_mint_gateway.aleo",
+  "version": "0.0.0",
+  "description": "Authority Mint Gateway program migrated from Solidity",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "collection.aleo",
+      "location": "local",
+      "path": "../collection"
+    }
+  ]
+}
