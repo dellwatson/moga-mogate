@@ -3,12 +3,27 @@ import fs from "node:fs";
 import path from "node:path";
 
 async function main() {
-  const rpcUrl = process.env.SEPOLIA_RPC_URL;
-  const pk = process.env.SEPOLIA_PRIVATE_KEY || process.env.PRIVATE_KEY_ETH;
-  if (!rpcUrl) throw new Error("SEPOLIA_RPC_URL env var is required");
+  const target = process.env.TARGET_NETWORK || "sepolia";
+
+  let rpcUrl: string | undefined;
+  if (target === "polygonAmoy") {
+    rpcUrl = process.env.POLYGON_AMOY_RPC_URL;
+  } else if (target === "arbitrumSepolia") {
+    rpcUrl = process.env.ARBITRUM_SEPOLIA_RPC_URL;
+  } else {
+    rpcUrl = process.env.SEPOLIA_RPC_URL;
+  }
+
+  const pk =
+    process.env.PRIVATE_KEY_ETH ||
+    process.env.SEPOLIA_PRIVATE_KEY ||
+    process.env.PRIVATE_KEY_ETH_2;
+
+  if (!rpcUrl)
+    throw new Error("RPC URL env var is required for target network");
   if (!pk)
     throw new Error(
-      "SEPOLIA_PRIVATE_KEY or PRIVATE_KEY_ETH env var is required"
+      "PRIVATE_KEY_ETH / PRIVATE_KEY_ETH_2 or SEPOLIA_PRIVATE_KEY env var is required",
     );
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
@@ -22,14 +37,14 @@ async function main() {
     "artifacts",
     "contracts",
     "Raffle.sol",
-    "Raffle.json"
+    "Raffle.json",
   );
   const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
 
   const factory = new ethers.ContractFactory(
     artifact.abi,
     artifact.bytecode,
-    deployer
+    deployer,
   );
   const raffle = await factory.deploy();
   const receipt = await raffle.deploymentTransaction()?.wait();

@@ -13,7 +13,9 @@
     "evm:burn-nft": "bun run scripts/5-burn-nft.ts",
     "evm:verify-burn": "bun run scripts/6-verify-burn-from-tx.ts",
     "evm:mint:collection": "bun run scripts/7-mint-from-collection.ts",
-    "evm:mint:authority": "bun run scripts/8-mint-from-authority.ts"
+    "evm:mint:authority": "bun run scripts/8-mint-from-authority.ts",
+    "evm:raffle:host": "bun run scripts/evm-raffle-host.ts",
+    "evm:raffle:join": "bun run scripts/evm-raffle-join.ts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
