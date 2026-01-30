@@ -1,0 +1,64 @@
+{
+  "name": "Economy Indonesia Domestic",
+  "symbol": "FLT-ID-ECO",
+  "description": "Economy class flight credit for domestic 🇮🇩 Indonesia routes. Any airline, any price. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "Unlimited"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Economy"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇮🇩 Any"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🇮🇩 Indonesia Domestic"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 25
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1200
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

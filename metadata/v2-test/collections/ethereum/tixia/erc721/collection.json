@@ -1,0 +1,13 @@
+{
+  "name": "Tixia Credits ERC721",
+  "company": "tixia",
+  "network": "ethereum",
+  "standard": "erc721",
+  "description": "Tixia credit ERC721 collection on Ethereum testnet.",
+  "image": "",
+  "banner": "",
+  "external_url": "",
+  "royalties_bps": 0,
+  "creator": "",
+  "tags": ["travel", "credit"]
+}

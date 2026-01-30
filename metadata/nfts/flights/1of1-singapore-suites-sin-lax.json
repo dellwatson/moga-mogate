@@ -1,0 +1,84 @@
+{
+  "name": "Singapore Suites SIN-LAX",
+  "symbol": "SQ-SUITES",
+  "description": "Specific 🇸🇬 Singapore Airlines A380 Suites class booking: 🇸🇬 Singapore (🇸🇬 SIN) to Los Angeles (🇺🇸 LAX). Booking ID: SQ-SUITES-2025-001. Private suite with double bed. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Specific Booking"
+    },
+    {
+      "trait_type": "Booking ID",
+      "value": "SQ-SUITES-2025-001"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Suites (Beyond First)"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇸🇬 Singapore Airlines"
+    },
+    {
+      "trait_type": "Aircraft",
+      "value": "A380"
+    },
+    {
+      "trait_type": "Route",
+      "value": "🇸🇬 SIN → 🇺🇸 LAX"
+    },
+    {
+      "trait_type": "Trip Type",
+      "value": "One Way"
+    },
+    {
+      "trait_type": "Departure",
+      "value": "🇸🇬 Singapore (SIN)"
+    },
+    {
+      "trait_type": "Destination",
+      "value": "🇺🇸 Los Angeles (LAX)"
+    },
+    {
+      "trait_type": "Special Features",
+      "value": "Private Suite + Double Bed"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 100
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

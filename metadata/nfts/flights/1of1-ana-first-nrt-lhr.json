@@ -1,0 +1,80 @@
+{
+  "name": "ANA First NRT-LHR",
+  "symbol": "NH-FIRST",
+  "description": "Specific ANA first class booking: Tokyo Narita (🇯🇵 NRT) to London Heathrow (🇬🇧 LHR). Booking ID: NH-FIRST-2025-001. Japanese hospitality at its finest. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Specific Booking"
+    },
+    {
+      "trait_type": "Booking ID",
+      "value": "NH-FIRST-2025-001"
+    },
+    {
+      "trait_type": "Class",
+      "value": "First Class"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🇯🇵 ANA (All Nippon Airways)"
+    },
+    {
+      "trait_type": "Route",
+      "value": "🇯🇵 NRT → 🇬🇧 LHR"
+    },
+    {
+      "trait_type": "Trip Type",
+      "value": "One Way"
+    },
+    {
+      "trait_type": "Departure",
+      "value": "🇯🇵 Tokyo Narita (NRT)"
+    },
+    {
+      "trait_type": "Destination",
+      "value": "🇬🇧 London Heathrow (LHR)"
+    },
+    {
+      "trait_type": "Special Features",
+      "value": "Japanese Kaiseki Dining"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 95
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

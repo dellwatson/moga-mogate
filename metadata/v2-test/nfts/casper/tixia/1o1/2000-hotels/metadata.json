@@ -1,0 +1,35 @@
+{
+  "name": "Tixia $2000 Hotel Credit",
+  "symbol": "TIX",
+  "description": "$2000 Tixia hotel credit. Any hotel. Worldwide.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/hotels/hotel-credit-2000.png",
+  "external_url": "",
+  "attributes": [
+    { "trait_type": "Type", "value": "Credit Voucher" },
+    { "trait_type": "Credit Amount", "value": 2000 },
+    { "trait_type": "Credit Currency", "value": "USD" },
+    { "trait_type": "Category", "value": "Hotel" },
+    { "trait_type": "Region", "value": "Worldwide" },
+    { "trait_type": "Expiration", "value": "Never" },
+    { "trait_type": "Company", "value": "Tixia" },
+    { "trait_type": "Network", "value": "casper" },
+    { "trait_type": "Environment", "value": "testnet" },
+    { "trait_type": "Token Standard", "value": "CEP-78" },
+    { "trait_type": "Creator", "value": "tixia" }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/hotels/hotel-credit-2000.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "tixia",
+        "share": 100
+      }
+    ]
+  }
+}

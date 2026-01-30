@@ -1,0 +1,17 @@
+{
+  "name": "Tixia $200 Credit",
+  "company": "tixia",
+  "network": "casper",
+  "standard": "sft",
+  "amount_usd": 200,
+  "category": "flight",
+  "restrictions": [],
+  "description": "$200 Tixia flight credit.",
+  "image": "../../../../../images/worldwide-economy-exclude.png",
+  "detail_images": [],
+  "attributes": [
+    { "trait_type": "Credit", "value": "$200" },
+    { "trait_type": "Type", "value": "Flight" }
+  ],
+  "external_url": ""
+}

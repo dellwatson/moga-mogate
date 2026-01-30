@@ -1,0 +1,17 @@
+{
+  "name": "Mentari Gold $12000 (Any)",
+  "company": "mentari-gold",
+  "network": "polygon",
+  "standard": "erc721",
+  "amount_usd": 12000,
+  "category": "jewelry",
+  "restrictions": ["diamond_or_gold"],
+  "description": "$12000 Mentari Gold credit for diamond or gold.",
+  "image": "../../../../../images/mentari-12000.png",
+  "detail_images": [],
+  "attributes": [
+    { "trait_type": "Credit", "value": "$12000" },
+    { "trait_type": "Material", "value": "Any" }
+  ],
+  "external_url": ""
+}

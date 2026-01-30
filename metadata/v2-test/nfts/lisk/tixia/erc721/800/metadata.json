@@ -1,0 +1,37 @@
+{
+  "name": "Tixia $800 Flight Credit",
+  "symbol": "TIX",
+  "description": "$800 Tixia flight credit. Any airline. Worldwide.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
+  "external_url": "",
+  "attributes": [
+    { "trait_type": "Type", "value": "Credit Voucher" },
+    { "trait_type": "Credit Amount", "value": 800 },
+    { "trait_type": "Credit Currency", "value": "USD" },
+    { "trait_type": "Category", "value": "Flight" },
+    { "trait_type": "Class", "value": "Economy" },
+    { "trait_type": "Airline", "value": "Any" },
+    { "trait_type": "Region", "value": "Worldwide" },
+    { "trait_type": "Expiration", "value": "Never" },
+    { "trait_type": "Company", "value": "Tixia" },
+    { "trait_type": "Network", "value": "lisk" },
+    { "trait_type": "Environment", "value": "testnet" },
+    { "trait_type": "Token Standard", "value": "ERC-721" },
+    { "trait_type": "Creator", "value": "tixia" }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "tixia",
+        "share": 100
+      }
+    ]
+  }
+}

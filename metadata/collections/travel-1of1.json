@@ -1,0 +1,17 @@
+{
+  "name": "Tixia Travel",
+  "symbol": "TIXIA-TRV",
+  "description": "Unique flight tickets and hotel bookings with specific booking IDs",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/travel-1of1.png",
+  "external_url": "https://mogate.io/travel",
+  "attributes": [
+    {
+      "trait_type": "Collection Type",
+      "value": "Travel Bookings"
+    },
+    {
+      "trait_type": "Token Type",
+      "value": "Unique (1/1)"
+    }
+  ]
+}

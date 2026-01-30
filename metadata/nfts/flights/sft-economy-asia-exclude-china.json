@@ -1,0 +1,64 @@
+{
+  "name": "Economy Asia Ex-China",
+  "symbol": "FLT-AS-ECO",
+  "description": "Economy class flight credit for Asian routes. Excludes China region. Any airline, any price. Redeemable only on emiless.com.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+  "external_url": "https://emiless.com",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Flight Credit"
+    },
+    {
+      "trait_type": "Credit Value",
+      "value": "Unlimited"
+    },
+    {
+      "trait_type": "Class",
+      "value": "Economy"
+    },
+    {
+      "trait_type": "Airline",
+      "value": "🌏 Any"
+    },
+    {
+      "trait_type": "Region",
+      "value": "🌏 🌏 Asia (Exclude China)"
+    },
+    {
+      "trait_type": "Expiration",
+      "value": "Never"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Rarity Score",
+      "value": 30
+    },
+    {
+      "trait_type": "Supply",
+      "value": 1000
+    },
+    {
+      "trait_type": "Creator",
+      "value": "emiless.com"
+    }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "emiless.com",
+        "share": 100
+      }
+    ]
+  }
+}

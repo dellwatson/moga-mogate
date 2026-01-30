@@ -1,0 +1,37 @@
+{
+  "name": "Tixia $300 Flight Credit",
+  "symbol": "TIX",
+  "description": "$300 Tixia flight credit voucher. Any airline. Worldwide.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-300.png",
+  "external_url": "",
+  "attributes": [
+    { "trait_type": "Type", "value": "Credit Voucher" },
+    { "trait_type": "Credit Amount", "value": 300 },
+    { "trait_type": "Credit Currency", "value": "USD" },
+    { "trait_type": "Category", "value": "Flight" },
+    { "trait_type": "Class", "value": "Economy" },
+    { "trait_type": "Airline", "value": "Any" },
+    { "trait_type": "Region", "value": "Worldwide" },
+    { "trait_type": "Expiration", "value": "Never" },
+    { "trait_type": "Company", "value": "Tixia" },
+    { "trait_type": "Network", "value": "aleo" },
+    { "trait_type": "Environment", "value": "testnet" },
+    { "trait_type": "Token Standard", "value": "ARC721" },
+    { "trait_type": "Creator", "value": "tixia" }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-300.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "tixia",
+        "share": 100
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Tixia Credits ARC721",
+  "company": "tixia",
+  "network": "aleo",
+  "standard": "arc721",
+  "description": "Tixia credit ARC721 collection on Aleo testnet.",
+  "image": "",
+  "banner": "",
+  "external_url": "",
+  "royalties_bps": 0,
+  "creator": "",
+  "tags": ["travel", "credit"]
+}
