@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # Interactive development environment
   aleo-dev:
     build:
       context: .
@@ -13,8 +14,84 @@ services:
     working_dir: /workspace
     environment:
       - ALEO_PVT_KEY=${ALEO_PVT_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
     stdin_open: true
     tty: true
+
+  # Deploy collection program
+  deploy-collection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aleo-deploy-collection
+    volumes:
+      - .:/workspace
+      - cargo-cache:/usr/local/cargo/registry
+      - leo-cache:/root/.leo
+    working_dir: /workspace/programs/collection
+    environment:
+      - ALEO_PVT_KEY=${ALEO_PVT_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+    command: >
+      bash -c "
+        echo '🚀 Deploying mogate_nft_collection_rwa.aleo...' &&
+        leo build &&
+        leo deploy --private-key \"$$PRIVATE_KEY\" --endpoint \"https://api.provable.com/v2\" --network testnet --broadcast
+      "
+
+  # Deploy gateway program
+  deploy-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aleo-deploy-gateway
+    volumes:
+      - .:/workspace
+      - cargo-cache:/usr/local/cargo/registry
+      - leo-cache:/root/.leo
+    working_dir: /workspace/programs/authority_mint_gateway
+    environment:
+      - ALEO_PVT_KEY=${ALEO_PVT_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+    command: >
+      bash -c "
+        echo '🚀 Deploying mogate_authority_mint_gateway.aleo...' &&
+        leo build &&
+        leo deploy --private-key \"$$PRIVATE_KEY\" --endpoint \"https://api.provable.com/v2\" --network testnet --broadcast
+      "
+
+  # Deploy all programs sequentially
+  deploy-all:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aleo-deploy-all
+    volumes:
+      - .:/workspace
+      - cargo-cache:/usr/local/cargo/registry
+      - leo-cache:/root/.leo
+    working_dir: /workspace
+    environment:
+      - ALEO_PVT_KEY=${ALEO_PVT_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+    command: >
+      bash -c "
+        echo '🚀 Deploying all Aleo programs...' &&
+        echo '' &&
+        echo '📦 1/2 Deploying mogate_nft_collection_rwa.aleo...' &&
+        cd /workspace/programs/collection &&
+        leo build &&
+        leo deploy --private-key \"$$PRIVATE_KEY\" --endpoint \"https://api.provable.com/v2\" --network testnet --broadcast &&
+        echo '' &&
+        echo '✅ Collection deployed!' &&
+        echo '' &&
+        echo '📦 2/2 Deploying mogate_authority_mint_gateway.aleo...' &&
+        cd /workspace/programs/authority_mint_gateway &&
+        leo build &&
+        leo deploy --private-key \"$$PRIVATE_KEY\" --endpoint \"https://api.provable.com/v2\" --network testnet --broadcast &&
+        echo '' &&
+        echo '✅ All programs deployed successfully!'
+      "
 
 volumes:
   cargo-cache:

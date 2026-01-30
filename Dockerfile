@@ -1,5 +1,5 @@
 # Aleo Development & Deployment Dockerfile
-FROM rust:1.79-slim-bookworm
+FROM rust:1.90-slim-bookworm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,11 +11,8 @@ RUN apt-get update && apt-get install -y \
     clang \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Leo from source
-RUN git clone --recurse-submodules https://github.com/ProvableHQ/leo /tmp/leo && \
-    cd /tmp/leo && \
-    cargo install --path . && \
-    rm -rf /tmp/leo
+# Install Leo from crates.io
+RUN cargo install leo-lang
 
 # Verify Leo installation
 RUN leo --version
