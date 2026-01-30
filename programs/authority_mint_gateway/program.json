@@ -1,13 +1,13 @@
 {
-  "program": "authority_mint_gateway.aleo",
+  "program": "mogate_authority_mint_v2.aleo",
   "version": "0.0.0",
-  "description": "Authority Mint Gateway program migrated from Solidity",
+  "description": "Authority Mint Gateway V2 - Public minting with signature support",
   "license": "MIT",
   "dependencies": [
     {
-      "name": "collection.aleo",
-      "location": "local",
-      "path": "../collection"
+      "name": "mogate_nft_collection_rwa.aleo",
+      "location": "network",
+      "network": "testnet"
     }
   ]
 }

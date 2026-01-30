@@ -1,6 +1,6 @@
 {
-  "program": "collection.aleo",
-  "version": "0.0.0",
-  "description": "NFT Collection program migrated from Solidity",
+  "program": "mogate_nft_collection_rwa.aleo",
+  "version": "1.0.0",
+  "description": "NFT Collection V1 (DEPLOYED)",
   "license": "MIT"
 }

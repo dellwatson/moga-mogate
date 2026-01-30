@@ -11,9 +11,11 @@ async function main(
 ) {
   // Parse arguments - prioritize function params, then CLI args, then env/defaults
   const toAddress =
-    toAddressParam || process.argv[2] || process.env.PRIVATE_KEY;
+    toAddressParam ||
+    process.argv[2] ||
+    "aleo1yv0wuzhwr68dkstlcl4keu4j6s0d3fzhqz0fzge6fz4w3wjwmq9s6jza3u";
   const uriHash = uriHashParam || process.argv[3] || "123456789field";
-  const tokenId = tokenIdParam || process.argv[4] || "1u64";
+  const tokenId = tokenIdParam || process.argv[4] || `${Date.now()}u64`;
 
   if (!toAddress) {
     console.error("❌ Error: No address provided and PRIVATE_KEY not set");
@@ -58,7 +60,7 @@ async function main(
 }
 
 // Run if called directly
-if (import.meta.main) {
+if ((import.meta as any).main) {
   main();
 }
 

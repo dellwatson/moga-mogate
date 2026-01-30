@@ -54,7 +54,7 @@ async function main(toAddressParam?: string, uriHashParam?: string) {
 }
 
 // Run if called directly
-if (import.meta.main) {
+if ((import.meta as any).main) {
   main();
 }
 

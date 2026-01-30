@@ -3,3 +3,4 @@ build/
 *.avm
 *.prover
 *.verifier
+.env

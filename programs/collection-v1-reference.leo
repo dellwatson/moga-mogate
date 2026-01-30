@@ -1,5 +1,7 @@
 // Collection NFT Program for Aleo - V1 (DEPLOYED)
 // Migrated from Collection.sol
+// Program Name: mogate_nft_collection_rwa.aleo
+// Status: DEPLOYED on testnet
 // TX: at1as952eycv6h7ypdph0rj8tfzr0c89arg7gtsyztsr8x08n9hkc9sf62wjd
  
 program mogate_nft_collection_rwa.aleo {

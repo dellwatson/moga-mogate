@@ -1,3 +1,12 @@
+// Load environment variables from project root
+import { config } from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+config({ path: join(__dirname, "../../.env") });
+
 // Aleo Network Configuration
 export const ALEO_CONFIG = {
   network: "testnet" as const,
@@ -11,7 +20,7 @@ export const ALEO_CONFIG = {
     },
     gateway: {
       v1: "mogate_authority_mint_gateway.aleo",
-      v2: "mogate_authority_mint_gateway_v2.aleo",
+      v2: "mogate_authority_mint_v2.aleo",
     },
   },
 
@@ -28,8 +37,10 @@ export const ALEO_CONFIG = {
       status: "pending", // Failed with HTTP 500, needs retry
     },
     gateway_v2: {
-      programName: "mogate_authority_mint_gateway_v2.aleo",
-      status: "pending", // Has compiler bug, needs SDK deployment
+      programName: "mogate_authority_mint_v2.aleo",
+      transactionId:
+        "at1h5uauul7hvn63qpka495vxtpglgvfjkp4y5eh06cdwqwtrznwv8qrkl2uj",
+      status: "deployed",
     },
   },
 } as const;

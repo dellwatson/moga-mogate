@@ -1,0 +1,5 @@
+// Mint inputs
+[mint]
+to: address = aleo1yv0wuzhwr68dkstlcl4keu4j6s0d3fzhqz0fzge6fz4w3wjwmq9s6jza3u;
+uri_hash: field = 123456789field;
+token_id: u64 = 1769768671476u64;
