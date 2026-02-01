@@ -1247,6 +1247,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
 
 [[package]]
+name = "inco-lightning"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0e056accb58463217b321a5a9a7d3e6887b5ae0c396fec384661d2d95c5018df"
+dependencies = [
+ "anchor-lang 0.31.1",
+]
+
+[[package]]
 name = "indexmap"
 version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1447,6 +1456,26 @@ version = "0.1.0"
 dependencies = [
  "anchor-lang 0.32.1",
  "anchor-spl 0.32.1",
+ "mpl-token-metadata",
+]
+
+[[package]]
+name = "multi_raffle_inco_auto"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang 0.32.1",
+ "anchor-spl 0.32.1",
+ "inco-lightning",
+ "mpl-token-metadata",
+]
+
+[[package]]
+name = "multi_raffle_inco_b"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang 0.32.1",
+ "anchor-spl 0.32.1",
+ "inco-lightning",
  "mpl-token-metadata",
 ]
 

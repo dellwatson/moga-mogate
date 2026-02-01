@@ -21,7 +21,7 @@
     "build:redeem": "cargo build-sbf --manifest-path programs/rwa_redeem/Cargo.toml"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.32.1",
+    "@coral-xyz/anchor": "0.31.1",
     "@metaplex-foundation/js": "^0.19.4",
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
     "@solana/kit": "^5.5.1",

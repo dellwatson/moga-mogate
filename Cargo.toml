@@ -5,7 +5,21 @@ members = [
   "programs/direct_sell_anchor",  # Anchor IDL-compatible variant
   "programs/rwa_redeem",
   "programs/multi_raffle",
+  # "programs/multi_raffle-light-modularized",  # Build standalone to avoid version conflicts
   # "encrypted-ixs",  # Disabled - requires nightly Rust for arcis-interpreter
+]
+exclude = [
+  "programs/ant_mint_test",
+  "programs/authority_mint",
+  "programs/authority_mint_permit",
+  "programs/multi_raffle-inco-guess",
+  "programs/multi_raffle-inco-auto",
+  "programs/multi_raffle-light",
+  "programs/multi_raffle-light-modularized",
+  "programs/multi_raffle-inco-B",
+  "programs/multi_raffle-inco-C",
+  "programs/multi_raffle-inco-B-clean",
+  "programs/multi_raffle-inco-A",
 ]
 resolver = "2"
 

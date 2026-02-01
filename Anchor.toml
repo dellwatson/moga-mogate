@@ -7,14 +7,20 @@ rwa_raffle = "RWAwMRRTxAsRhaWPSj4MS2yrVAPbySsCDQAf9s5dyjr"
 direct_sell = "SeLx2bBokdXRzDqvqVB8m8FHT3Ts4VvPjvPaNetHZnn"
 direct_sell_anchor = "DE9rqqvye7rExak5cjYdkBup5wR9PRYMrbZw17xPooCt"
 rwa_redeem = "reDwZbFJt4fRJg5Ro5pGhszt9bcGCfjgnsxCiTp9eNf"
-multi_raffle = "2qaxQY3shNquV8STxFPoJW6bL9FUAEzUqinZSP163znG"
+multi_raffle = "5Nb1Mtm2VfjxqfkA9rKZVt294QSx1vUVCYT7Hi1DrZeM"
+multi_raffle_inco = "2J4FHGb2mesv6vgZUqUAKtDZe6xjyjiQAgW6nsFokx7P"
+multi_raffle_inco_guess = "A8mc29NUS6B3shDNf9V86yziMtxF4sKYcAWzwQgdDeXS"
+multi_raffle_inco_auto = "DjJGjfc48jo9xkat64JZrGJ7yk4FKTQzknqRehgeW63B"
 
 [programs.devnet]
 rwa_raffle = "RWAwMRRTxAsRhaWPSj4MS2yrVAPbySsCDQAf9s5dyjr"
 direct_sell = "SeLx2bBokdXRzDqvqVB8m8FHT3Ts4VvPjvPaNetHZnn"
 direct_sell_anchor = "DE9rqqvye7rExak5cjYdkBup5wR9PRYMrbZw17xPooCt"
 rwa_redeem = "reDwZbFJt4fRJg5Ro5pGhszt9bcGCfjgnsxCiTp9eNf"
-multi_raffle = "2qaxQY3shNquV8STxFPoJW6bL9FUAEzUqinZSP163znG"
+multi_raffle = "5Nb1Mtm2VfjxqfkA9rKZVt294QSx1vUVCYT7Hi1DrZeM"
+multi_raffle_inco = "2J4FHGb2mesv6vgZUqUAKtDZe6xjyjiQAgW6nsFokx7P"
+multi_raffle_inco_guess = "A8mc29NUS6B3shDNf9V86yziMtxF4sKYcAWzwQgdDeXS"
+multi_raffle_inco_auto = "DjJGjfc48jo9xkat64JZrGJ7yk4FKTQzknqRehgeW63B"
 
 [programs.mainnet]
 # rwa_raffle = "REPLACE_WITH_MAINNET_ID"
