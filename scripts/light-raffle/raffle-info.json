@@ -1,0 +1,9 @@
+{
+  "raffleId": "light-large-20k",
+  "rafflePda": "5PBMzTSeRL6qzAznBLH93kRtGq6uAaNB9iopKkypDMGB",
+  "slotsPda": "6v1tz4cnhhFCYP12DvWUvzEBZHb9aokY8LQhPu5qrGGC",
+  "treasuryPda": "tC6LPPgNMoGrnp6sSpDaDzmon5y1jNVBgeGEUMARzTY",
+  "totalSlots": 20000,
+  "signature": "3uctGrH8k1LfmPDUz6gwAMkixZSy6GE2mKaSnwuiCdczqurVxsZkeU6PzP2jw4c5YqT6eGfs2u9XdbAjwtcBy5Bq",
+  "expiresAt": "1770044562"
+}

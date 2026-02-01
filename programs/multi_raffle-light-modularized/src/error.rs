@@ -1,0 +1,55 @@
+use anchor_lang::prelude::*;
+
+#[error_code]
+pub enum RaffleError {
+    #[msg("TotalSlotsZero")] 
+    TotalSlotsZero,
+    #[msg("MaxSlotsZero")] 
+    MaxSlotsZero,
+    #[msg("RaffleExists")] 
+    RaffleExists,
+    #[msg("RaffleNotFound")] 
+    RaffleNotFound,
+    #[msg("NotOpen")] 
+    NotOpen,
+    #[msg("RaffleExpired")] 
+    RaffleExpired,
+    #[msg("NoSlots")] 
+    NoSlots,
+    #[msg("OverCapacity")] 
+    OverCapacity,
+    #[msg("MaxSlotsPerAddress")] 
+    MaxSlotsPerAddress,
+    #[msg("SlotOutOfRange")] 
+    SlotOutOfRange,
+    #[msg("DuplicateSlot")] 
+    DuplicateSlot,
+    #[msg("SlotTaken")] 
+    SlotTaken,
+    #[msg("NothingPaid")] 
+    NothingPaid,
+    #[msg("NotAdmin")] 
+    NotAdmin,
+    #[msg("NotWinner")] 
+    NotWinner,
+    #[msg("NotDrawn")] 
+    NotDrawn,
+    #[msg("AlreadyClaimed")] 
+    AlreadyClaimed,
+    #[msg("BadStatus")] 
+    BadStatus,
+    #[msg("NotImplemented")] 
+    NotImplemented,
+    #[msg("InvalidProof")] 
+    InvalidProof,
+    #[msg("RaffleNotOpen")] 
+    RaffleNotOpen,
+    #[msg("NoSlotsProvided")] 
+    NoSlotsProvided,
+    #[msg("ExceedsMaxSlots")] 
+    ExceedsMaxSlots,
+    #[msg("InvalidSlotId")] 
+    InvalidSlotId,
+    #[msg("Overflow")] 
+    Overflow,
+}

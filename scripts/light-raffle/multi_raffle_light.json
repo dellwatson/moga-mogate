@@ -1,0 +1,1155 @@
+{
+  "address": "6Y8EAiRxwfT7AHNvRpVWjihWfpncLEi5f66bBmGEgZ44",
+  "metadata": {
+    "name": "multi_raffle",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Multi-raffle with Light Protocol ZK compression"
+  },
+  "instructions": [
+    {
+      "name": "claim",
+      "docs": [
+        "Winner claims prize NFT"
+      ],
+      "discriminator": [
+        62,
+        198,
+        214,
+        193,
+        213,
+        159,
+        108,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "is_sized_collection",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "claim_refund",
+      "docs": [
+        "User claims refund for expired raffle"
+      ],
+      "discriminator": [
+        15,
+        16,
+        30,
+        161,
+        255,
+        228,
+        97,
+        60
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config"
+        },
+        {
+          "name": "raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              },
+              {
+                "kind": "account",
+                "path": "caller"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "draw_raffle",
+      "docs": [
+        "Phase 1: Pick winner slot deterministically"
+      ],
+      "discriminator": [
+        117,
+        70,
+        132,
+        142,
+        127,
+        14,
+        224,
+        160
+      ],
+      "accounts": [
+        {
+          "name": "raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slots",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  108,
+                  111,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "finalize_winner",
+      "docs": [
+        "Phase 2: Finalize winner with proof"
+      ],
+      "discriminator": [
+        146,
+        228,
+        187,
+        253,
+        58,
+        192,
+        194,
+        177
+      ],
+      "accounts": [
+        {
+          "name": "raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slots",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  108,
+                  111,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "claimed_winner",
+          "type": "pubkey"
+        },
+        {
+          "name": "merkle_proof",
+          "type": {
+            "vec": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "get_raffle_load",
+      "discriminator": [
+        76,
+        121,
+        152,
+        38,
+        131,
+        150,
+        230,
+        160
+      ],
+      "accounts": [
+        {
+          "name": "raffle",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "get_user_raffle_slots",
+      "discriminator": [
+        177,
+        11,
+        235,
+        236,
+        82,
+        25,
+        78,
+        11
+      ],
+      "accounts": [
+        {
+          "name": "raffle",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_raffle",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user"
+        }
+      ],
+      "args": [],
+      "returns": {
+        "vec": "u32"
+      }
+    },
+    {
+      "name": "initialize_config",
+      "docs": [
+        "Initialize global config (one-time setup)"
+      ],
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "refund_fee_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "unsafe_host_raffle",
+      "docs": [
+        "Create a new raffle (ZK-compressed slots)"
+      ],
+      "discriminator": [
+        160,
+        5,
+        187,
+        247,
+        139,
+        37,
+        171,
+        139
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config"
+        },
+        {
+          "name": "raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "raffle_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slots",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  108,
+                  111,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "raffle_id",
+          "type": "string"
+        },
+        {
+          "name": "total_slots",
+          "type": "u32"
+        },
+        {
+          "name": "max_slots_per_address",
+          "type": "u32"
+        },
+        {
+          "name": "metadata_uri",
+          "type": "string"
+        },
+        {
+          "name": "collection",
+          "type": "pubkey"
+        },
+        {
+          "name": "premint_contract",
+          "type": "bool"
+        },
+        {
+          "name": "premint",
+          "type": "bool"
+        },
+        {
+          "name": "prize_type",
+          "type": "u8"
+        },
+        {
+          "name": "prize_amount",
+          "type": "u64"
+        },
+        {
+          "name": "auto_draw",
+          "type": "bool"
+        },
+        {
+          "name": "auto_claim",
+          "type": "bool"
+        },
+        {
+          "name": "expires_at",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "unsafe_join_raffle",
+      "docs": [
+        "Join raffle with Merkle proofs (ZK-compressed)"
+      ],
+      "discriminator": [
+        64,
+        30,
+        147,
+        80,
+        77,
+        48,
+        87,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config"
+        },
+        {
+          "name": "raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  97,
+                  102,
+                  102,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle.raffle_id",
+                "account": "Raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slots",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  108,
+                  111,
+                  116,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_raffle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              },
+              {
+                "kind": "account",
+                "path": "payer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "light_state_tree"
+        },
+        {
+          "name": "light_system_program"
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "slot_ids",
+          "type": {
+            "vec": "u32"
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "merkle_proofs",
+          "type": {
+            "vec": {
+              "vec": {
+                "array": [
+                  "u8",
+                  32
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "withdraw_proceeds",
+      "docs": [
+        "Admin withdraws proceeds"
+      ],
+      "discriminator": [
+        124,
+        68,
+        215,
+        12,
+        201,
+        136,
+        54,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "config"
+        },
+        {
+          "name": "raffle"
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "raffle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "to",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
+      "name": "Raffle",
+      "discriminator": [
+        143,
+        133,
+        63,
+        173,
+        138,
+        10,
+        142,
+        200
+      ]
+    },
+    {
+      "name": "RaffleSlots",
+      "discriminator": [
+        226,
+        126,
+        109,
+        33,
+        184,
+        135,
+        2,
+        4
+      ]
+    },
+    {
+      "name": "UserRaffle",
+      "discriminator": [
+        36,
+        239,
+        235,
+        224,
+        106,
+        201,
+        55,
+        115
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TotalSlotsZero",
+      "msg": "TotalSlotsZero"
+    },
+    {
+      "code": 6001,
+      "name": "MaxSlotsZero",
+      "msg": "MaxSlotsZero"
+    },
+    {
+      "code": 6002,
+      "name": "RaffleExists",
+      "msg": "RaffleExists"
+    },
+    {
+      "code": 6003,
+      "name": "RaffleNotFound",
+      "msg": "RaffleNotFound"
+    },
+    {
+      "code": 6004,
+      "name": "NotOpen",
+      "msg": "NotOpen"
+    },
+    {
+      "code": 6005,
+      "name": "RaffleExpired",
+      "msg": "RaffleExpired"
+    },
+    {
+      "code": 6006,
+      "name": "NoSlots",
+      "msg": "NoSlots"
+    },
+    {
+      "code": 6007,
+      "name": "OverCapacity",
+      "msg": "OverCapacity"
+    },
+    {
+      "code": 6008,
+      "name": "MaxSlotsPerAddress",
+      "msg": "MaxSlotsPerAddress"
+    },
+    {
+      "code": 6009,
+      "name": "SlotOutOfRange",
+      "msg": "SlotOutOfRange"
+    },
+    {
+      "code": 6010,
+      "name": "DuplicateSlot",
+      "msg": "DuplicateSlot"
+    },
+    {
+      "code": 6011,
+      "name": "SlotTaken",
+      "msg": "SlotTaken"
+    },
+    {
+      "code": 6012,
+      "name": "NothingPaid",
+      "msg": "NothingPaid"
+    },
+    {
+      "code": 6013,
+      "name": "NotAdmin",
+      "msg": "NotAdmin"
+    },
+    {
+      "code": 6014,
+      "name": "NotWinner",
+      "msg": "NotWinner"
+    },
+    {
+      "code": 6015,
+      "name": "NotDrawn",
+      "msg": "NotDrawn"
+    },
+    {
+      "code": 6016,
+      "name": "AlreadyClaimed",
+      "msg": "AlreadyClaimed"
+    },
+    {
+      "code": 6017,
+      "name": "BadStatus",
+      "msg": "BadStatus"
+    },
+    {
+      "code": 6018,
+      "name": "NotImplemented",
+      "msg": "NotImplemented"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidProof",
+      "msg": "InvalidProof"
+    }
+  ],
+  "types": [
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "refund_fee_bps",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Raffle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "raffle_id",
+            "type": "string"
+          },
+          {
+            "name": "total_slots",
+            "type": "u32"
+          },
+          {
+            "name": "max_slots_per_address",
+            "type": "u32"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "string"
+          },
+          {
+            "name": "collection",
+            "type": "pubkey"
+          },
+          {
+            "name": "premint_contract",
+            "type": "bool"
+          },
+          {
+            "name": "premint",
+            "type": "bool"
+          },
+          {
+            "name": "auto_draw",
+            "type": "bool"
+          },
+          {
+            "name": "auto_claim",
+            "type": "bool"
+          },
+          {
+            "name": "prize_type",
+            "type": "u8"
+          },
+          {
+            "name": "prize_amount",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "type": "u8"
+          },
+          {
+            "name": "sold_slots",
+            "type": "u32"
+          },
+          {
+            "name": "winner_slot",
+            "type": "u32"
+          },
+          {
+            "name": "winner",
+            "type": "pubkey"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RaffleSlots",
+      "docs": [
+        "RaffleSlots - metadata for ZK-compressed slot storage",
+        "Actual slot ownership is stored in Light Protocol compressed accounts"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "raffle",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_slots",
+            "type": "u32"
+          },
+          {
+            "name": "sold_slots",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserRaffle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "raffle",
+            "type": "pubkey"
+          },
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "slots",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "paid",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}
