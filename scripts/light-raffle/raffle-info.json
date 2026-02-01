@@ -1,9 +1,9 @@
 {
-  "raffleId": "light-large-20k",
-  "rafflePda": "5PBMzTSeRL6qzAznBLH93kRtGq6uAaNB9iopKkypDMGB",
-  "slotsPda": "6v1tz4cnhhFCYP12DvWUvzEBZHb9aokY8LQhPu5qrGGC",
-  "treasuryPda": "tC6LPPgNMoGrnp6sSpDaDzmon5y1jNVBgeGEUMARzTY",
-  "totalSlots": 20000,
-  "signature": "3uctGrH8k1LfmPDUz6gwAMkixZSy6GE2mKaSnwuiCdczqurVxsZkeU6PzP2jw4c5YqT6eGfs2u9XdbAjwtcBy5Bq",
-  "expiresAt": "1770044562"
+  "raffleId": "zk-50slots-1769986509824",
+  "rafflePda": "GgQkPVRLgMCypCEajHr91UBqfkKrcpLdhU8Yty8kYJ68",
+  "slotsPda": "5r7d7wpmHTXdWg2rUbpp46TR21QU1PBYHVRMKwHbxaSL",
+  "treasuryPda": "FofcujcyRqx3CtWPu25PRhEPU6Qbma6Ej9Rq4KhxKT2e",
+  "configPda": "GNBunLjRakBKtGjCrWNfRezY5dVw8ee28erHHeQsqpUX",
+  "totalSlots": 50,
+  "timestamp": 1769986511794
 }

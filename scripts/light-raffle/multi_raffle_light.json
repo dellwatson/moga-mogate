@@ -998,6 +998,31 @@
       "code": 6019,
       "name": "InvalidProof",
       "msg": "InvalidProof"
+    },
+    {
+      "code": 6020,
+      "name": "RaffleNotOpen",
+      "msg": "RaffleNotOpen"
+    },
+    {
+      "code": 6021,
+      "name": "NoSlotsProvided",
+      "msg": "NoSlotsProvided"
+    },
+    {
+      "code": 6022,
+      "name": "ExceedsMaxSlots",
+      "msg": "ExceedsMaxSlots"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidSlotId",
+      "msg": "InvalidSlotId"
+    },
+    {
+      "code": 6024,
+      "name": "Overflow",
+      "msg": "Overflow"
     }
   ],
   "types": [
