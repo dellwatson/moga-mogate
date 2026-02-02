@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "raffleId": "verC-test-1770013471154",
+  "rafflePda": "BnqLSEds4KxyPv43jTVvEpJJ5PH4pjZeF8WZpLBMHXvt",
+  "slotsPda": "Dnu4XQiSXY5TzLk4HmaC4zbJVRjetqsyQxNpZF1YP138",
+  "treasuryPda": "BUpAMqps6iwVYtQFiN7ZWR7KTHp1aSQF7gu92bUKojeH",
+  "maxNumber": 1000000,
+  "signature": "3jE1rrTQsWz5xm72r6GBTUdAjEjvUi2FBmTP5ZiBM1tpg7QhaLxidcFYb6PiJe2X3dq6gu39c9K3MHfHGJWZQZES",
+  "timestamp": 1770013473481
+}

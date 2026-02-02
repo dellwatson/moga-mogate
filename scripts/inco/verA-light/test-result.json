@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "raffleId": "test-1769994119512",
+  "rafflePda": "AJeE3eVr6EMzqgXFPoaHSNPTdybYLXrzpCpHHiDmAxUG",
+  "slotsPda": "2ePubjvpvb3Q5SR25yBuQUsjVRVjABwnXygMAPiMKX1R",
+  "treasuryPda": "CDMYpUCgZ9xukVxWdcBokWibG7pnHmT3KmmGdZwM3Psf",
+  "signature": "3mWuSkdKJtoyw59gy5uXBFMrjhWaDK9EfifV9J26mPyA8aPqiF4sYSy4UvZZnRR4GaujAMgbYC7XguD8aZnbviFK",
+  "timestamp": 1769994121254
+}

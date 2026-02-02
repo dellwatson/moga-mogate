@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "raffleId": "test-1769994119512",
+  "userRafflePda": "67oZQMVUFuvWXGKAPdS6XYATszAoFnB3kfhyic9msydx",
+  "slotIds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "amount": 100000000,
+  "signature": "5uGVRT4gpus8XTjuCgiH6YRNCMygdZmcE4WnMHr4gvwCtxn6VYxsAbQQw8hLcY7LfRz2nUyDH946YtKDSrhELkVZ",
+  "timestamp": 1769994964266
+}

@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "raffleId": "verC-test-1770013471154",
+  "totalTickets": 3,
+  "joinResults": [
+    {
+      "walletIndex": 1,
+      "userPublicKey": "85wwoN1k3B3gt2vxt9U2fpoiCnmVCp4o5vxu6kuEUdFu",
+      "userRafflePda": "CfsMGf6R5ax4dHS8bWXe1ZG1usPVuLw8jzzEHG976s5v",
+      "amount": 100000000,
+      "signature": "2Vw7KeL8YnUKCCAV68QGWs8kw4xWYqAKqtko4A9pFe16r55FXp1apbUzYH8hBRk4Vs7THkPLEJTbdgFVBEN3qNEf",
+      "timestamp": 1770013785785
+    },
+    {
+      "walletIndex": 2,
+      "userPublicKey": "8p6iii9a53d7rQoRo6GsZckkYnSiKcnLjHRwe6kmU34n",
+      "userRafflePda": "9CZQETGFYD2XMjn4hiDCZSJHzRb5k2t7KvBWbFYkDqm4",
+      "amount": 100000000,
+      "signature": "3nvggK7eCXwEqmPRb9oNCKgZe8astaCRwqpjvyH7vSyBZVBmjzef4eht9mDsho3s5jYZxB4ykghBLqJLxeN7vi4H",
+      "timestamp": 1770013787587
+    },
+    {
+      "walletIndex": 3,
+      "userPublicKey": "EPWDhG9MhXC2ZFjTZS9oKEC3fF1opZ96oAVXaT44D887",
+      "userRafflePda": "32fmHSrnn56qAN66v3g2vSkubqS2A8urHsaWnwoUqaCj",
+      "amount": 100000000,
+      "signature": "2vrghzimoPtot2PQjt7V1bSw7F9RsSc7xZ2Nzhy4skXp4vkGyCLCqXwptgZuTFpxvVqF8bwhzbhFpvhBRUbButcq",
+      "timestamp": 1770013789389
+    }
+  ],
+  "timestamp": 1770013789389
+}

@@ -28,14 +28,8 @@ pub struct CreateRaffle<'info> {
     pub slots: Account<'info, RaffleSlots>,
 
     /// CHECK: Treasury PDA
-    #[account(
-        init,
-        payer = authority,
-        space = 0,
-        seeds = [TREASURY_SEED, raffle.key().as_ref()],
-        bump
-    )]
-    pub treasury: AccountInfo<'info>,
+    #[account(mut, seeds = [TREASURY_SEED, raffle.key().as_ref()], bump)]
+    pub treasury: SystemAccount<'info>,
 
     pub system_program: Program<'info, System>,
 }
