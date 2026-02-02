@@ -1,0 +1,123 @@
+{
+  "address": "86okKaT6umcjVHcwpcgH1FWKfov2PywWrnTbsYWfmo5o",
+  "metadata": {
+    "name": "multi_raffle_inco_a_light",
+    "version": "0.1.0",
+    "spec": "0.1.0"
+  },
+  "accounts": [
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "admin", "type": "publicKey" },
+          { "name": "refundFeeBps", "type": "u16" }
+        ]
+      }
+    },
+    {
+      "name": "Raffle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "raffleId", "type": "string" },
+          { "name": "authority", "type": "publicKey" },
+          { "name": "ticketPrice", "type": "u64" },
+          { "name": "maxNumber", "type": "u32" },
+          { "name": "metadataUri", "type": "string" },
+          { "name": "collection", "type": "publicKey" },
+          { "name": "prizeType", "type": "u8" },
+          { "name": "prizeAmount", "type": "u64" },
+          { "name": "createdAt", "type": "i64" },
+          { "name": "expiresAt", "type": "i64" },
+          { "name": "status", "type": "u8" },
+          { "name": "totalTickets", "type": "u32" },
+          { "name": "winningNumberHandle", "type": "u128" },
+          { "name": "claimed", "type": "bool" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    },
+    {
+      "name": "RaffleSlots",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "raffle", "type": "publicKey" },
+          { "name": "totalTickets", "type": "u32" },
+          { "name": "soldTickets", "type": "u32" }
+        ]
+      }
+    }
+  ],
+  "instructions": [
+    {
+      "name": "initializeConfig",
+      "accounts": [
+        { "name": "admin", "writable": true, "signer": true },
+        { "name": "config", "writable": true },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [{ "name": "refundFeeBps", "type": "u16" }]
+    },
+    {
+      "name": "unsafeHostRaffle",
+      "accounts": [
+        { "name": "authority", "writable": true, "signer": true },
+        { "name": "raffle", "writable": true },
+        { "name": "slots", "writable": true },
+        { "name": "treasury", "writable": true },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        { "name": "raffleId", "type": "string" },
+        { "name": "totalSlots", "type": "u32" },
+        { "name": "maxSlotsPerAddress", "type": "u32" },
+        { "name": "metadataUri", "type": "string" },
+        { "name": "collection", "type": "publicKey" },
+        { "name": "premintContract", "type": "bool" },
+        { "name": "premint", "type": "bool" },
+        { "name": "prizeType", "type": "u8" },
+        { "name": "prizeAmount", "type": "u64" },
+        { "name": "autoDraw", "type": "bool" },
+        { "name": "autoClaim", "type": "bool" },
+        { "name": "expiresAt", "type": "i64" }
+      ]
+    },
+    {
+      "name": "unsafeJoinRaffle",
+      "accounts": [
+        { "name": "payer", "writable": true, "signer": true },
+        { "name": "raffle", "writable": true },
+        { "name": "slots", "writable": true },
+        { "name": "userRaffle", "writable": true },
+        { "name": "treasury", "writable": true },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        { "name": "slotIds", "type": "vec<u32>" },
+        { "name": "amount", "type": "u64" },
+        { "name": "encryptedGuess", "type": "vec<u8>" }
+      ]
+    }
+  ],
+  "errors": [
+    { "code": 6000, "name": "RaffleNotOpen", "msg": "Raffle is not open" },
+    { "code": 6001, "name": "Unauthorized", "msg": "Unauthorized" },
+    { "code": 6002, "name": "NoWinningNumber", "msg": "No winning number" },
+    { "code": 6003, "name": "NotWinner", "msg": "Not winner" },
+    { "code": 6004, "name": "NoFunds", "msg": "No funds" },
+    { "code": 6005, "name": "InvalidAmount", "msg": "Invalid amount" },
+    { "code": 6006, "name": "AlreadyClaimed", "msg": "Already claimed" }
+  ]
+}

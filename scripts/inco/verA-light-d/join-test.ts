@@ -12,9 +12,12 @@ import {
   Keypair,
   PublicKey,
   SystemProgram,
+  Transaction,
+  TransactionInstruction,
   LAMPORTS_PER_SOL,
+  sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import * as anchor from "@coral-xyz/anchor";
+import { createHash } from "crypto";
 import fs from "fs";
 import path from "path";
 
@@ -73,6 +76,44 @@ function deriveTreasuryPda(raffle: PublicKey): [PublicKey, number] {
   );
 }
 
+// Join instruction data serializer
+function serializeJoinRaffleData(
+  slotIds: number[],
+  amount: number,
+  encryptedGuess: Uint8Array,
+): Buffer {
+  const buffer = Buffer.alloc(1000);
+  let offset = 0;
+
+  // Anchor discriminator: first 8 bytes of sha256("global:unsafe_join_raffle")
+  const discriminator = createHash("sha256")
+    .update("global:unsafe_join_raffle")
+    .digest()
+    .slice(0, 8);
+  discriminator.copy(buffer, offset);
+  offset += 8;
+
+  // Slot IDs (vector)
+  buffer.writeUInt32LE(slotIds.length, offset);
+  offset += 4;
+  for (const slotId of slotIds) {
+    buffer.writeUInt32LE(slotId, offset);
+    offset += 4;
+  }
+
+  // Amount
+  buffer.writeBigUInt64LE(BigInt(amount), offset);
+  offset += 8;
+
+  // Encrypted guess (vector)
+  buffer.writeUInt32LE(encryptedGuess.length, offset);
+  offset += 4;
+  encryptedGuess.copy(buffer, offset);
+  offset += encryptedGuess.length;
+
+  return buffer.slice(0, offset);
+}
+
 // Main function
 async function main() {
   console.log(
@@ -96,47 +137,14 @@ async function main() {
   const walletKeypair = Keypair.fromSecretKey(
     Uint8Array.from(JSON.parse(fs.readFileSync(WALLET_PATH, "utf8"))),
   );
-  const wallet = new anchor.Wallet(walletKeypair);
-  const provider = new anchor.AnchorProvider(connection, wallet, {
-    commitment: "confirmed",
-  });
 
   console.log(`👤 Wallet: ${walletKeypair.publicKey.toString()}`);
   console.log(`📋 Program: ${PROGRAM_ID.toString()}`);
 
-  // Load program IDL
-  const idlPath = path.join(
-    __dirname,
-    "../../../target/idl/multi_raffle_inco_a_light.json",
-  );
-
-  if (!fs.existsSync(idlPath)) {
-    console.error("❌ IDL not found. Please run: anchor build");
-    process.exit(1);
-  }
-
-  const idl = JSON.parse(fs.readFileSync(idlPath, "utf8"));
-  const program = new anchor.Program(idl, PROGRAM_ID, provider);
-
-  // Load LIGHT proof + address tree info
-  const proofPath = path.join(__dirname, "light-proof.json");
-  if (!fs.existsSync(proofPath)) {
-    console.error(
-      "❌ LIGHT proof not found. Please generate light-proof.json with the zk-compression CLI.",
-    );
-    process.exit(1);
-  }
-
-  const proofData = JSON.parse(fs.readFileSync(proofPath, "utf8"));
-  const proof = Buffer.from(proofData.proof, "base64");
-  const addressTreeInfo = Buffer.from(proofData.addressTreeInfo, "base64");
-  const outputStateTreeIndex = proofData.outputStateTreeIndex as number;
-  const lightStateTree = new PublicKey(proofData.lightStateTree);
-  const lightSystemProgram = new PublicKey(proofData.lightSystemProgram);
-
   // Join parameters
   const amount = 0.1 * LAMPORTS_PER_SOL; // 0.1 SOL
   const slotIds = [1, 2, 3, 4, 5]; // Explicit slot selection
+  const encryptedGuess = Buffer.from("placeholder-encrypted-guess-32-bytes"); // TODO: Replace with actual FHE encrypted guess
 
   try {
     console.log(`🎟️  Joining raffle with explicit slots`);
@@ -144,7 +152,7 @@ async function main() {
     console.log(`🎫 Selected slots: ${slotIds.join(", ")}`);
 
     // Derive PDAs
-    const [configPda] = deriveConfigPda();
+    const [configPda] = deriveConfigPda(); // Generate config PDA since it's not in test result
     const rafflePda = new PublicKey(raffleTest.rafflePda);
     const slotsPda = new PublicKey(raffleTest.slotsPda);
     const treasuryPda = new PublicKey(raffleTest.treasuryPda);
@@ -155,34 +163,48 @@ async function main() {
 
     console.log(`👤 User Raffle PDA: ${userRafflePda.toString()}`);
 
+    // Create instruction
+    const instructionData = serializeJoinRaffleData(
+      slotIds,
+      amount,
+      encryptedGuess,
+    );
+
+    const instruction = new TransactionInstruction({
+      keys: [
+        { pubkey: walletKeypair.publicKey, isSigner: true, isWritable: true }, // payer
+        { pubkey: configPda, isSigner: false, isWritable: false }, // config
+        { pubkey: rafflePda, isSigner: false, isWritable: true }, // raffle
+        { pubkey: slotsPda, isSigner: false, isWritable: true }, // slots
+        { pubkey: userRafflePda, isSigner: false, isWritable: true }, // userRaffle
+        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }, // light_state_tree placeholder (system program account)
+        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }, // light_system_program placeholder (system program account)
+        { pubkey: treasuryPda, isSigner: false, isWritable: true }, // treasury
+        { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }, // system_program
+        {
+          pubkey: new PublicKey("5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj"),
+          isSigner: false,
+          isWritable: false,
+        }, // inco_lightning_program (actual ID)
+      ],
+      programId: PROGRAM_ID,
+      data: instructionData,
+    });
+
+    // Create and send transaction
+    const transaction = new Transaction().add(instruction);
+
     console.log(
       `💰 Balance: ${await connection.getBalance(walletKeypair.publicKey)} lamports`,
     );
-    console.log(`📤 Sending join transaction via Anchor...`);
+    console.log(`📤 Sending join transaction...`);
 
-    const signature = await program.methods
-      .unsafeJoinRaffle(
-        slotIds,
-        amount,
-        proof,
-        addressTreeInfo,
-        outputStateTreeIndex,
-      )
-      .accounts({
-        payer: walletKeypair.publicKey,
-        config: configPda,
-        raffle: rafflePda,
-        slots: slotsPda,
-        userRaffle: userRafflePda,
-        lightStateTree,
-        lightSystemProgram,
-        treasury: treasuryPda,
-        systemProgram: SystemProgram.programId,
-        incoLightningProgram: new PublicKey(
-          "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj",
-        ),
-      })
-      .rpc();
+    const signature = await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [walletKeypair],
+      { commitment: "confirmed" },
+    );
 
     console.log(`✅ Successfully joined raffle!`);
     console.log(

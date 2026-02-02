@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 use light_sdk::{
     cpi::CpiSigner,
     derive_light_cpi_signer,
+    instruction::{PackedAddressTreeInfo, ValidityProof},
 };
 
 pub mod constants;
@@ -61,13 +62,16 @@ pub mod multi_raffle_inco_a_light {
         )
     }
 
-    /// Unsafe join: pay SOL and take explicit slots with FHE privacy (Inco) and LIGHT metadata
+    /// Unsafe join: pay SOL and take explicit slots with FHE privacy (Inco) and LIGHT compression
     pub fn unsafe_join_raffle<'info>(
         ctx: Context<'_, '_, '_, 'info, UnsafeJoinRaffle<'info>>,
         slot_ids: Vec<u32>,
         amount: u64,
+        proof: ValidityProof,
+        address_tree_info: PackedAddressTreeInfo,
+        output_state_tree_index: u8,
     ) -> Result<()> {
-        instructions::unsafe_join_raffle::handler(ctx, slot_ids, amount)
+        instructions::unsafe_join_raffle::handler(ctx, slot_ids, amount, proof, address_tree_info, output_state_tree_index)
     }
 
     /// Draw winner with FHE-encrypted slot index

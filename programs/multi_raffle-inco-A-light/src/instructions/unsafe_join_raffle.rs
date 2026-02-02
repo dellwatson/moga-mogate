@@ -6,13 +6,21 @@ use inco_lightning::{
 	types::Euint128,
 	ID as INCO_LIGHTNING_ID,
 };
-use crate::state::{Config, Raffle, RaffleSlots, UserRaffle};
+use light_sdk::{
+    account::LightAccount,
+    address::v2::derive_address,
+    instruction::{account_meta::CompressedAccountMeta, PackedAddressTreeInfo, ValidityProof},
+    LightDiscriminator,
+};
+use light_sdk::cpi::{v2::CpiAccounts, InvokeLightSystemProgram, LightCpiInstruction, v2::LightSystemProgramCpi};
+use crate::state::{Config, Raffle, RaffleSlots, UserRaffle, CompressedTicket};
 use crate::error::RaffleError;
 use crate::types::MultiRaffleStatus;
 use crate::constants::{RAFFLE_SEED, SLOTS_SEED, USER_SEED, TREASURY_SEED};
+use crate::LIGHT_CPI_SIGNER;
 
 #[derive(Accounts)]
-#[instruction(slot_ids: Vec<u32>, amount: u64)]
+#[instruction(slot_ids: Vec<u32>, amount: u64, proof: ValidityProof, address_tree_info: PackedAddressTreeInfo, output_state_tree_index: u8)]
 pub struct UnsafeJoinRaffle<'info> {
 	#[account(mut)]
 	pub payer: Signer<'info>,
@@ -54,6 +62,9 @@ pub fn handler<'info>(
 	ctx: Context<'_, '_, '_, 'info, UnsafeJoinRaffle<'info>>,
 	slot_ids: Vec<u32>,
 	amount: u64,
+	proof: ValidityProof,
+	address_tree_info: PackedAddressTreeInfo,
+	output_state_tree_index: u8,
 ) -> Result<()> {
 	require!(!slot_ids.is_empty(), RaffleError::NoSlots);
 
@@ -118,9 +129,53 @@ pub fn handler<'info>(
 		raffle.status = MultiRaffleStatus::Filled as u8;
 	}
 
-	msg!("Joined raffle with {} slots (FHE + Light)", slot_ids.len());
+	// === LIGHT ZK-COMPRESSION: Create compressed ticket ===
+	// Build LIGHT CPI accounts from remaining accounts (address/state trees)
+	let light_cpi_accounts = CpiAccounts::new(
+		ctx.accounts.payer.as_ref(),
+		ctx.remaining_accounts,
+		LIGHT_CPI_SIGNER,
+	);
+
+	// Get the address tree pubkey from the packed tree info
+	let address_tree_pubkey = address_tree_info
+		.get_tree_pubkey(&light_cpi_accounts)
+		.map_err(|_| RaffleError::InvalidProof)?;
+
+	// Derive compressed ticket address: [b"ticket", raffle, user]
+	let (ticket_address, ticket_seed) = derive_address(
+		&[b"ticket", raffle.key().as_ref(), ctx.accounts.payer.key().as_ref()],
+		&address_tree_pubkey,
+		&crate::ID,
+	);
+
+	// Create compressed ticket with real data
+	let mut compressed_ticket = LightAccount::<CompressedTicket>::new_init(
+		&crate::ID,
+		Some(ticket_address),
+		output_state_tree_index,
+	);
+
+	compressed_ticket.raffle = raffle.key();
+	compressed_ticket.user = ctx.accounts.payer.key();
+	compressed_ticket.slot_ids = slot_ids.clone();
+	compressed_ticket.amount = amount;
+	compressed_ticket.created_at = clock.unix_timestamp;
+
+	// Build new address parameters for the compressed ticket
+	let new_address_params = address_tree_info
+		.into_new_address_params_assigned_packed(ticket_seed, Some(0));
+
+	// Invoke LIGHT system program to create compressed ticket
+	LightSystemProgramCpi::new_cpi(LIGHT_CPI_SIGNER, proof)
+		.with_light_account(compressed_ticket)?
+		.with_new_addresses(&[new_address_params])
+		.invoke(light_cpi_accounts)?;
+
+	msg!("Joined raffle with {} slots (FHE + LIGHT compression)", slot_ids.len());
 	msg!("   Slots: {:?}", slot_ids);
 	msg!("   Amount paid: {} lamports", amount);
+	msg!("   Compressed ticket created at: {:?}", ticket_address);
 	msg!("   Ownership encrypted (delayed transparency)");
 
 	Ok(())

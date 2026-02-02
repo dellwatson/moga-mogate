@@ -90,6 +90,22 @@ async function main() {
   const raffleInfo = JSON.parse(fs.readFileSync(raffleInfoPath, "utf8"));
   console.log(`📋 Raffle ID: ${raffleInfo.raffleId}`);
 
+  // Load LIGHT proof + address tree info
+  const proofPath = path.join(__dirname, "light-proof.json");
+  if (!fs.existsSync(proofPath)) {
+    console.error(
+      "❌ LIGHT proof not found. Please generate light-proof.json with the zk-compression CLI.",
+    );
+    process.exit(1);
+  }
+
+  const proofData = JSON.parse(fs.readFileSync(proofPath, "utf8"));
+  const proof = Buffer.from(proofData.proof, "base64");
+  const addressTreeInfo = Buffer.from(proofData.addressTreeInfo, "base64");
+  const outputStateTreeIndex = proofData.outputStateTreeIndex as number;
+  const lightStateTree = new PublicKey(proofData.lightStateTree);
+  const lightSystemProgram = new PublicKey(proofData.lightSystemProgram);
+
   // Setup connection and wallet
   const connection = new Connection(RPC_URL, "confirmed");
   const walletKeypair = anchor.web3.Keypair.fromSecretKey(
@@ -101,7 +117,10 @@ async function main() {
   });
 
   // Load program IDL
-  const idlPath = path.join(__dirname, "multi_raffle_inco_a_light.json");
+  const idlPath = path.join(
+    __dirname,
+    "../../../target/idl/multi_raffle_inco_a_light.json",
+  );
 
   if (!fs.existsSync(idlPath)) {
     console.error("❌ IDL not found. Please run: anchor build");
@@ -114,7 +133,6 @@ async function main() {
   // Join parameters
   const amount = 0.1 * LAMPORTS_PER_SOL; // 0.1 SOL
   const slotIds = [1, 2, 3, 4, 5]; // Explicit slot selection
-  const encryptedGuess = new Uint8Array(32); // TODO: Replace with actual FHE encrypted guess
 
   try {
     console.log(`💰 Amount: ${amount / LAMPORTS_PER_SOL} SOL`);
@@ -134,20 +152,26 @@ async function main() {
 
     // Call unsafe_join_raffle
     const tx = await program.methods
-      .unsafeJoinRaffle(slotIds, amount, Array.from(encryptedGuess))
+      .unsafeJoinRaffle(
+        slotIds,
+        amount,
+        proof,
+        addressTreeInfo,
+        outputStateTreeIndex,
+      )
       .accounts({
         payer: wallet.publicKey,
         config: configPda,
         raffle: rafflePda,
         slots: slotsPda,
         userRaffle: userRafflePda,
-        lightStateTree: new PublicKey("11111111111111111111111111111112"), // TODO: Get actual LIGHT state tree
-        lightSystemProgram: new PublicKey("11111111111111111111111111112"), // TODO: Get actual LIGHT system program
+        lightStateTree,
+        lightSystemProgram,
         treasury: treasuryPda,
         systemProgram: SystemProgram.programId,
         incoLightningProgram: new PublicKey(
-          "6jT4xT1FJFq6gGhVJkK2J3d4e5f6g7h8i9j0k1l2m3",
-        ), // TODO: Get actual Inco Lightning program ID
+          "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj",
+        ),
       })
       .rpc();
 

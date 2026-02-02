@@ -1,10 +1,10 @@
 /**
- * Join Raffle Test for verA-light
+ * Join Raffle Script for verA-light
  *
- * Raw transaction test to join raffle with explicit slot selection
+ * Joins a raffle with explicit slot selection + LIGHT compressed storage + FHE
  *
  * Usage:
- *   bun run scripts/inco/verA-light/join-test.ts
+ *   bun run scripts/inco/verA-light/join.ts
  */
 
 import {
@@ -24,6 +24,7 @@ const PROGRAM_ID = new PublicKey(
 );
 
 // Network config
+const NETWORK = "devnet";
 const RPC_URL = "https://api.devnet.solana.com";
 const WALLET_PATH = path.join(
   process.env.HOME || "~",
@@ -76,24 +77,22 @@ function deriveTreasuryPda(raffle: PublicKey): [PublicKey, number] {
 // Main function
 async function main() {
   console.log(
-    "🎯 Join raffle test for verA-light (Explicit Slots + LIGHT + FHE)",
+    "🎯 Joining raffle with verA-light (Explicit Slots + LIGHT + FHE)",
   );
 
-  // Load previous test result
-  const testResultPath = path.join(__dirname, "test-result.json");
-  if (!fs.existsSync(testResultPath)) {
-    console.error(
-      "❌ No raffle test result found. Please run simple-test.ts first.",
-    );
+  // Load raffle info
+  const raffleInfoPath = path.join(__dirname, "raffle-info.json");
+  if (!fs.existsSync(raffleInfoPath)) {
+    console.error("❌ Raffle info not found. Please run host.ts first.");
     process.exit(1);
   }
 
-  const raffleTest = JSON.parse(fs.readFileSync(testResultPath, "utf8"));
-  console.log(`📋 Using raffle: ${raffleTest.raffleId}`);
+  const raffleInfo = JSON.parse(fs.readFileSync(raffleInfoPath, "utf8"));
+  console.log(`📋 Raffle ID: ${raffleInfo.raffleId}`);
 
   // Setup connection and wallet
   const connection = new Connection(RPC_URL, "confirmed");
-  const walletKeypair = Keypair.fromSecretKey(
+  const walletKeypair = anchor.web3.Keypair.fromSecretKey(
     Uint8Array.from(JSON.parse(fs.readFileSync(WALLET_PATH, "utf8"))),
   );
   const wallet = new anchor.Wallet(walletKeypair);
@@ -101,14 +100,8 @@ async function main() {
     commitment: "confirmed",
   });
 
-  console.log(`👤 Wallet: ${walletKeypair.publicKey.toString()}`);
-  console.log(`📋 Program: ${PROGRAM_ID.toString()}`);
-
   // Load program IDL
-  const idlPath = path.join(
-    __dirname,
-    "../../../target/idl/multi_raffle_inco_a_light.json",
-  );
+  const idlPath = path.join(__dirname, "multi_raffle_inco_a_light.json");
 
   if (!fs.existsSync(idlPath)) {
     console.error("❌ IDL not found. Please run: anchor build");
@@ -118,112 +111,71 @@ async function main() {
   const idl = JSON.parse(fs.readFileSync(idlPath, "utf8"));
   const program = new anchor.Program(idl, PROGRAM_ID, provider);
 
-  // Load LIGHT proof + address tree info
-  const proofPath = path.join(__dirname, "light-proof.json");
-  if (!fs.existsSync(proofPath)) {
-    console.error(
-      "❌ LIGHT proof not found. Please generate light-proof.json with the zk-compression CLI.",
-    );
-    process.exit(1);
-  }
-
-  const proofData = JSON.parse(fs.readFileSync(proofPath, "utf8"));
-  const proof = Buffer.from(proofData.proof, "base64");
-  const addressTreeInfo = Buffer.from(proofData.addressTreeInfo, "base64");
-  const outputStateTreeIndex = proofData.outputStateTreeIndex as number;
-  const lightStateTree = new PublicKey(proofData.lightStateTree);
-  const lightSystemProgram = new PublicKey(proofData.lightSystemProgram);
-
   // Join parameters
   const amount = 0.1 * LAMPORTS_PER_SOL; // 0.1 SOL
   const slotIds = [1, 2, 3, 4, 5]; // Explicit slot selection
+  const encryptedGuess = new Uint8Array(32); // TODO: Replace with actual FHE encrypted guess
 
   try {
-    console.log(`🎟️  Joining raffle with explicit slots`);
     console.log(`💰 Amount: ${amount / LAMPORTS_PER_SOL} SOL`);
     console.log(`🎫 Selected slots: ${slotIds.join(", ")}`);
 
     // Derive PDAs
-    const [configPda] = deriveConfigPda();
-    const rafflePda = new PublicKey(raffleTest.rafflePda);
-    const slotsPda = new PublicKey(raffleTest.slotsPda);
-    const treasuryPda = new PublicKey(raffleTest.treasuryPda);
+    const configPda = new PublicKey(raffleInfo.configPda);
+    const rafflePda = new PublicKey(raffleInfo.rafflePda);
+    const slotsPda = new PublicKey(raffleInfo.slotsPda);
+    const treasuryPda = new PublicKey(raffleInfo.treasuryPda);
     const [userRafflePda, userRaffleBump] = deriveUserRafflePda(
       rafflePda,
-      walletKeypair.publicKey,
+      wallet.publicKey,
     );
 
     console.log(`👤 User Raffle PDA: ${userRafflePda.toString()}`);
 
-    console.log(
-      `💰 Balance: ${await connection.getBalance(walletKeypair.publicKey)} lamports`,
-    );
-    console.log(`📤 Sending join transaction via Anchor...`);
-
-    const signature = await program.methods
-      .unsafeJoinRaffle(
-        slotIds,
-        amount,
-        proof,
-        addressTreeInfo,
-        outputStateTreeIndex,
-      )
+    // Call unsafe_join_raffle
+    const tx = await program.methods
+      .unsafeJoinRaffle(slotIds, amount, Array.from(encryptedGuess))
       .accounts({
-        payer: walletKeypair.publicKey,
+        payer: wallet.publicKey,
         config: configPda,
         raffle: rafflePda,
         slots: slotsPda,
         userRaffle: userRafflePda,
-        lightStateTree,
-        lightSystemProgram,
+        lightStateTree: new PublicKey("11111111111111111111111111111112"), // TODO: Get actual LIGHT state tree
+        lightSystemProgram: new PublicKey("11111111111111111111111111112"), // TODO: Get actual LIGHT system program
         treasury: treasuryPda,
         systemProgram: SystemProgram.programId,
         incoLightningProgram: new PublicKey(
-          "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj",
-        ),
+          "6jT4xT1FJFq6gGhVJkK2J3d4e5f6g7h8i9j0k1l2m3",
+        ), // TODO: Get actual Inco Lightning program ID
       })
       .rpc();
 
-    console.log(`✅ Successfully joined raffle!`);
+    console.log(`✅ Joined raffle successfully!`);
     console.log(
-      `🔗 Explorer: https://explorer.solana.com/tx/${signature}?cluster=devnet`,
+      `🔗 Transaction: https://explorer.solana.com/tx/${tx}?cluster=devnet`,
     );
     console.log(
       `👤 User Raffle: https://explorer.solana.com/account/${userRafflePda.toString()}?cluster=devnet`,
     );
 
-    // Save join result
-    const joinResult = {
-      success: true,
-      raffleId: raffleTest.raffleId,
+    // Save join info
+    const joinInfo = {
       userRafflePda: userRafflePda.toString(),
       slotIds,
       amount,
-      signature,
+      tx,
       timestamp: Date.now(),
     };
 
     fs.writeFileSync(
-      path.join(__dirname, "join-result.json"),
-      JSON.stringify(joinResult, null, 2),
+      path.join(__dirname, "join-info.json"),
+      JSON.stringify(joinInfo, null, 2),
     );
 
-    console.log(`💾 Join result saved to join-result.json`);
+    console.log(`💾 Join info saved to join-info.json`);
   } catch (error) {
-    console.error("❌ Join test failed:", error);
-
-    // Save error result
-    const joinResult = {
-      success: false,
-      error: error.message,
-      timestamp: Date.now(),
-    };
-
-    fs.writeFileSync(
-      path.join(__dirname, "join-result.json"),
-      JSON.stringify(joinResult, null, 2),
-    );
-
+    console.error("❌ Error joining raffle:", error);
     process.exit(1);
   }
 }
