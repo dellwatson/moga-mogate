@@ -10,7 +10,7 @@ pub mod utils;
 use instructions::*;
 use types::*;
 
-declare_id!("2qaxQY3shNquV8STxFPoJW6bL9FUAEzUqinZSP163znG");
+declare_id!("6yaPeUdcDXLtj2om1G22a67hFCXKD3drTkQzHe8WmsfM");
 
 #[program]
 pub mod multi_raffle {

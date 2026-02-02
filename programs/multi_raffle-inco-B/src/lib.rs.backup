@@ -1,0 +1,500 @@
+use anchor_lang::prelude::*;
+use anchor_lang::system_program::{self, Transfer};
+use anchor_spl::token::{self, Token, TokenAccount, Mint};
+use inco_lightning::{
+    cpi::{self, accounts::{Allow, Operation, VerifySignature}},
+    program::IncoLightning,
+    types::{Ebool, Euint128},
+    ID as INCO_LIGHTNING_ID,
+};
+
+declare_id!("A8mc29NUS6B3shDNf9V86yziMtxF4sKYcAWzwQgdDeXS");
+
+const CONFIG_SEED: &[u8] = b"config";
+const RAFFLE_SEED: &[u8] = b"raffle";
+const TICKET_SEED: &[u8] = b"ticket";
+const TREASURY_SEED: &[u8] = b"treasury";
+const PRIZE_VAULT_SEED: &[u8] = b"prize_vault";
+
+const MAX_RAFFLE_ID_LEN: usize = 64;
+const MAX_URI_LEN: usize = 256;
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq)]
+pub enum RaffleStatus {
+    Open = 0,
+    Closed = 1,
+    Drawn = 2,
+    Cancelled = 3,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, PartialEq, Eq)]
+pub enum PrizeTokenType {
+    None = 0,
+    Spl = 1,
+    Sft = 2,
+    CNft = 3,
+    ZkCompressed = 4,
+}
+
+#[account]
+pub struct Config {
+    pub admin: Pubkey,
+    pub refund_fee_bps: u16,
+}
+
+impl Config {
+    pub const LEN: usize = 8 + 32 + 2;
+}
+
+#[account]
+pub struct Raffle {
+    pub raffle_id: String,
+    pub authority: Pubkey,
+    pub ticket_price: u64,
+    pub max_number: u32,
+    pub metadata_uri: String,
+    pub collection: Pubkey,
+    pub prize_type: u8,
+    pub prize_amount: u64,
+    pub prize_mint: Pubkey,  // SPL token mint for distributed prizes
+    pub prize_per_winner: u64,  // Amount each winner receives
+    pub created_at: i64,
+    pub expires_at: i64,
+    pub status: u8,
+    pub total_tickets: u32,
+    pub total_winners: u32,  // Count of winners who claimed
+    pub winning_number_handle: u128,
+    pub bump: u8,
+}
+
+impl Raffle {
+    pub const LEN: usize =
+        8 +                     // discriminator
+        4 + MAX_RAFFLE_ID_LEN + // raffle_id
+        4 + MAX_URI_LEN +       // metadata_uri
+        32 + 32 +               // authority, collection
+        8 +                     // ticket_price
+        4 +                     // max_number
+        1 +                     // prize_type
+        8 +                     // prize_amount
+        32 +                    // prize_mint
+        8 +                     // prize_per_winner
+        8 + 8 +                 // created_at, expires_at
+        1 +                     // status
+        4 +                     // total_tickets
+        4 +                     // total_winners
+        16 +                    // winning_number_handle
+        1 +                     // bump
+        32;                     // buffer
+}
+
+#[account]
+pub struct Ticket {
+    pub raffle: Pubkey,
+    pub owner: Pubkey,
+    pub guess_handle: u128,
+    pub is_winner_handle: u128,
+    pub claimed: bool,  // Track if this winner claimed their share
+    pub bump: u8,
+}
+
+impl Ticket {
+    pub const LEN: usize = 8 + 32 + 32 + 16 + 16 + 1 + 1;
+}
+
+#[error_code]
+pub enum RaffleError {
+    #[msg("Raffle is not open")]
+    RaffleNotOpen,
+    #[msg("Not authorized")]
+    Unauthorized,
+    #[msg("No winning number")]
+    NoWinningNumber,
+    #[msg("Not ticket owner")]
+    NotOwner,
+    #[msg("Already claimed")]
+    AlreadyClaimed,
+    #[msg("Not checked yet")]
+    NotChecked,
+    #[msg("Not winner")]
+    NotWinner,
+    #[msg("No funds")]
+    NoFunds,
+}
+
+#[program]
+pub mod multi_raffle_inco_full {
+    use super::*;
+
+    pub fn initialize_config(ctx: Context<InitializeConfig>, refund_fee_bps: u16) -> Result<()> {
+        let config = &mut ctx.accounts.config;
+        config.admin = ctx.accounts.admin.key();
+        config.refund_fee_bps = refund_fee_bps;
+        Ok(())
+    }
+
+    /// Unsafe host: create raffle without off-chain signature (pure-FHE, no slot picking)
+    pub fn unsafe_host_raffle(
+        ctx: Context<CreateRaffle>,
+        raffle_id: String,
+        max_number: u32,
+        metadata_uri: String,
+        collection: Pubkey,
+        prize_type: u8,
+        prize_amount: u64,
+        prize_per_winner: u64,
+        expires_at: i64,
+    ) -> Result<()> {
+        let raffle = &mut ctx.accounts.raffle;
+        
+        raffle.raffle_id = raffle_id;
+        raffle.authority = ctx.accounts.authority.key();
+        raffle.ticket_price = 0; // Offchain pricing - no on-chain ticket_price
+        raffle.max_number = max_number;
+        raffle.metadata_uri = metadata_uri;
+        raffle.collection = collection;
+        raffle.prize_type = prize_type;
+        raffle.prize_amount = prize_amount;
+        raffle.prize_mint = ctx.accounts.prize_mint.key();
+        raffle.prize_per_winner = prize_per_winner;
+        raffle.created_at = Clock::get()?.unix_timestamp;
+        raffle.expires_at = expires_at;
+        raffle.status = RaffleStatus::Open as u8;
+        raffle.total_tickets = 0;
+        raffle.total_winners = 0;
+        raffle.winning_number_handle = 0;
+        raffle.bump = ctx.bumps.raffle;
+
+        Ok(())
+    }
+
+    /// Unsafe join: pay amount and submit encrypted guess (pure-FHE, no slot picking)
+    pub fn unsafe_join_raffle(
+        ctx: Context<BuyTicket>,
+        amount: u64,
+        encrypted_guess: Vec<u8>,
+    ) -> Result<()> {
+        let raffle = &ctx.accounts.raffle;
+        let ticket = &mut ctx.accounts.ticket;
+
+        require!(raffle.status == RaffleStatus::Open as u8, RaffleError::RaffleNotOpen);
+
+        let inco = ctx.accounts.inco_lightning_program.to_account_info();
+        let cpi_ctx = CpiContext::new(inco.clone(), Operation { signer: ctx.accounts.buyer.to_account_info() });
+        let guess_handle: Euint128 = cpi::new_euint128(cpi_ctx, encrypted_guess, 0)?;
+
+        ticket.raffle = raffle.key();
+        ticket.owner = ctx.accounts.buyer.key();
+        ticket.guess_handle = guess_handle.0;
+        ticket.is_winner_handle = 0;
+        ticket.bump = ctx.bumps.ticket;
+
+        let raffle_mut = &mut ctx.accounts.raffle;
+        raffle_mut.total_tickets += 1;
+
+        let transfer_cpi = CpiContext::new(
+            ctx.accounts.system_program.to_account_info(),
+            Transfer {
+                from: ctx.accounts.buyer.to_account_info(),
+                to: ctx.accounts.treasury.to_account_info(),
+            },
+        );
+        system_program::transfer(transfer_cpi, amount)?;
+
+        if ctx.remaining_accounts.len() >= 2 {
+            let allow_cpi = CpiContext::new(inco, Allow {
+                allowance_account: ctx.remaining_accounts[0].clone(),
+                signer: ctx.accounts.buyer.to_account_info(),
+                allowed_address: ctx.remaining_accounts[1].clone(),
+                system_program: ctx.accounts.system_program.to_account_info(),
+            });
+            cpi::allow(allow_cpi, guess_handle.0, true, ctx.accounts.buyer.key())?;
+        }
+
+        msg!("Ticket purchased! Guess handle: {}", guess_handle.0);
+        Ok(())
+    }
+
+    pub fn draw_winner(ctx: Context<DrawWinner>) -> Result<()> {
+        let raffle = &mut ctx.accounts.raffle;
+        
+        require!(raffle.authority == ctx.accounts.authority.key(), RaffleError::Unauthorized);
+        require!(raffle.status == RaffleStatus::Open as u8, RaffleError::RaffleNotOpen);
+
+        let inco = ctx.accounts.inco_lightning_program.to_account_info();
+        let signer = ctx.accounts.authority.to_account_info();
+
+        let cpi_ctx = CpiContext::new(inco.clone(), Operation { signer: signer.clone() });
+        let random: Euint128 = cpi::e_rand(cpi_ctx, 0)?;
+
+        let cpi_ctx = CpiContext::new(inco.clone(), Operation { signer: signer.clone() });
+        let max_number: Euint128 = cpi::as_euint128(cpi_ctx, raffle.max_number as u128)?;
+
+        let cpi_ctx = CpiContext::new(inco.clone(), Operation { signer: signer.clone() });
+        let bounded: Euint128 = cpi::e_rem(cpi_ctx, random, max_number, 0)?;
+
+        let cpi_ctx = CpiContext::new(inco.clone(), Operation { signer: signer.clone() });
+        let one: Euint128 = cpi::as_euint128(cpi_ctx, 1u128)?;
+
+        let cpi_ctx = CpiContext::new(inco, Operation { signer });
+        let winning_number: Euint128 = cpi::e_add(cpi_ctx, bounded, one, 0)?;
+
+        raffle.winning_number_handle = winning_number.0;
+        raffle.status = RaffleStatus::Drawn as u8;
+
+        msg!("Winning number drawn! Handle: {}", winning_number.0);
+        msg!("(Encrypted 1-{} - nobody knows!)", raffle.max_number);
+        Ok(())
+    }
+
+    pub fn check_winner(ctx: Context<CheckWinner>) -> Result<()> {
+        let raffle = &ctx.accounts.raffle;
+        let ticket = &mut ctx.accounts.ticket;
+
+        require!(raffle.status == RaffleStatus::Drawn as u8, RaffleError::RaffleNotOpen);
+        require!(raffle.winning_number_handle != 0, RaffleError::NoWinningNumber);
+
+        let inco = ctx.accounts.inco_lightning_program.to_account_info();
+        let cpi_ctx = CpiContext::new(inco.clone(), Operation { signer: ctx.accounts.checker.to_account_info() });
+
+        let is_winner: Ebool = cpi::e_eq(
+            cpi_ctx,
+            Euint128(ticket.guess_handle),
+            Euint128(raffle.winning_number_handle),
+            0,
+        )?;
+
+        ticket.is_winner_handle = is_winner.0;
+
+        if ctx.remaining_accounts.len() >= 2 {
+            let allow_cpi = CpiContext::new(inco, Allow {
+                allowance_account: ctx.remaining_accounts[0].clone(),
+                signer: ctx.accounts.checker.to_account_info(),
+                allowed_address: ctx.remaining_accounts[1].clone(),
+                system_program: ctx.accounts.system_program.to_account_info(),
+            });
+            cpi::allow(allow_cpi, is_winner.0, true, ctx.accounts.checker.key())?;
+        }
+
+        msg!("Winner check completed! Result handle: {}", is_winner.0);
+        Ok(())
+    }
+
+    pub fn withdraw_prize(
+        ctx: Context<WithdrawPrize>,
+        handle: Vec<u8>,
+        plaintext: Vec<u8>,
+    ) -> Result<()> {
+        let ticket = &mut ctx.accounts.ticket;
+        let raffle = &mut ctx.accounts.raffle;
+
+        require!(ticket.owner == ctx.accounts.winner.key(), RaffleError::NotOwner);
+        require!(ticket.is_winner_handle != 0, RaffleError::NotChecked);
+        require!(!ticket.claimed, RaffleError::AlreadyClaimed);
+
+        let verify_cpi = CpiContext::new(
+            ctx.accounts.inco_lightning_program.to_account_info(),
+            VerifySignature {
+                instructions: ctx.accounts.instructions.to_account_info(),
+                signer: ctx.accounts.winner.to_account_info(),
+            },
+        );
+
+        cpi::is_validsignature(verify_cpi, 1, Some(vec![handle]), Some(vec![plaintext.clone()]))?;
+
+        let is_winner = parse_plaintext_to_bool(&plaintext)?;
+        require!(is_winner, RaffleError::NotWinner);
+
+        // Mark this ticket as claimed
+        ticket.claimed = true;
+        raffle.total_winners += 1;
+
+        // Transfer SPL tokens from prize vault to winner
+        let raffle_key = raffle.key();
+        let vault_seeds: &[&[u8]] = &[
+            PRIZE_VAULT_SEED,
+            raffle_key.as_ref(),
+            &[ctx.bumps.prize_vault],
+        ];
+
+        let transfer_cpi = CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(),
+            token::Transfer {
+                from: ctx.accounts.prize_vault.to_account_info(),
+                to: ctx.accounts.winner_token_account.to_account_info(),
+                authority: ctx.accounts.prize_vault.to_account_info(),
+            },
+            &[vault_seeds],
+        );
+        token::transfer(transfer_cpi, raffle.prize_per_winner)?;
+
+        msg!("Prize withdrawn: {} tokens!", raffle.prize_per_winner);
+        msg!("Total winners claimed: {}", raffle.total_winners);
+        Ok(())
+    }
+}
+
+fn parse_plaintext_to_bool(plaintext: &[u8]) -> Result<bool> {
+    if plaintext.is_empty() {
+        return Ok(false);
+    }
+
+    let any_nonzero = plaintext.iter().any(|&b| b != 0 && b != b'0');
+
+    if let Ok(s) = std::str::from_utf8(plaintext) {
+        if s == "0" || s == "false" {
+            return Ok(false);
+        }
+        if s == "1" || s == "true" {
+            return Ok(true);
+        }
+    }
+
+    Ok(any_nonzero)
+}
+
+#[derive(Accounts)]
+pub struct InitializeConfig<'info> {
+    #[account(mut)]
+    pub admin: Signer<'info>,
+
+    #[account(
+        init,
+        payer = admin,
+        space = Config::LEN,
+        seeds = [CONFIG_SEED],
+        bump
+    )]
+    pub config: Account<'info, Config>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+#[instruction(raffle_id: String)]
+pub struct CreateRaffle<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    #[account(
+        init,
+        payer = authority,
+        space = Raffle::LEN,
+        seeds = [RAFFLE_SEED, raffle_id.as_bytes()],
+        bump
+    )]
+    pub raffle: Account<'info, Raffle>,
+
+    pub prize_mint: Account<'info, Mint>,
+
+    #[account(
+        init,
+        payer = authority,
+        token::mint = prize_mint,
+        token::authority = prize_vault,
+        seeds = [PRIZE_VAULT_SEED, raffle.key().as_ref()],
+        bump
+    )]
+    pub prize_vault: Account<'info, TokenAccount>,
+
+    #[account(
+        init,
+        payer = authority,
+        space = 8,
+        seeds = [TREASURY_SEED, raffle.key().as_ref()],
+        bump
+    )]
+    pub treasury: SystemAccount<'info>,
+
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct BuyTicket<'info> {
+    #[account(mut)]
+    pub buyer: Signer<'info>,
+
+    #[account(mut)]
+    pub raffle: Account<'info, Raffle>,
+
+    #[account(
+        init,
+        payer = buyer,
+        space = Ticket::LEN,
+        seeds = [TICKET_SEED, raffle.key().as_ref(), &raffle.total_tickets.to_le_bytes()],
+        bump
+    )]
+    pub ticket: Account<'info, Ticket>,
+
+    /// CHECK: Treasury PDA
+    #[account(mut, seeds = [TREASURY_SEED, raffle.key().as_ref()], bump)]
+    pub treasury: AccountInfo<'info>,
+
+    pub system_program: Program<'info, System>,
+
+    #[account(address = INCO_LIGHTNING_ID)]
+    pub inco_lightning_program: Program<'info, IncoLightning>,
+}
+
+#[derive(Accounts)]
+pub struct DrawWinner<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    #[account(mut)]
+    pub raffle: Account<'info, Raffle>,
+
+    pub system_program: Program<'info, System>,
+
+    #[account(address = INCO_LIGHTNING_ID)]
+    pub inco_lightning_program: Program<'info, IncoLightning>,
+}
+
+#[derive(Accounts)]
+pub struct CheckWinner<'info> {
+    #[account(mut)]
+    pub checker: Signer<'info>,
+
+    pub raffle: Account<'info, Raffle>,
+
+    #[account(mut)]
+    pub ticket: Account<'info, Ticket>,
+
+    pub system_program: Program<'info, System>,
+
+    #[account(address = INCO_LIGHTNING_ID)]
+    pub inco_lightning_program: Program<'info, IncoLightning>,
+}
+
+#[derive(Accounts)]
+pub struct WithdrawPrize<'info> {
+    #[account(mut)]
+    pub winner: Signer<'info>,
+
+    #[account(mut)]
+    pub raffle: Account<'info, Raffle>,
+
+    #[account(mut)]
+    pub ticket: Account<'info, Ticket>,
+
+    #[account(
+        mut,
+        seeds = [PRIZE_VAULT_SEED, raffle.key().as_ref()],
+        bump
+    )]
+    pub prize_vault: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub winner_token_account: Account<'info, TokenAccount>,
+
+    /// CHECK: Instructions sysvar
+    #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
+    pub instructions: AccountInfo<'info>,
+
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+
+    #[account(address = INCO_LIGHTNING_ID)]
+    pub inco_lightning_program: Program<'info, IncoLightning>,
+}

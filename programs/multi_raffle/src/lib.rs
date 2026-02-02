@@ -8,7 +8,7 @@ use anchor_spl::metadata::{
 };
 use anchor_spl::token::{Mint, MintTo, Token, TokenAccount, mint_to};
 
-declare_id!("2qaxQY3shNquV8STxFPoJW6bL9FUAEzUqinZSP163znG");
+declare_id!("5Nb1Mtm2VfjxqfkA9rKZVt294QSx1vUVCYT7Hi1DrZeM");
 
 const CONFIG_SEED: &[u8] = b"config";
 const RAFFLE_SEED: &[u8] = b"raffle";
@@ -663,7 +663,7 @@ pub mod multi_raffle {
     }
 
     // =========================
-    // View helpers (Solidity equivalents)
+    // TESTING - View helpers: removed on mainnet (mainnet use -direct account)
     // =========================
 
     /// Basic raffle load (legacy, kept for compatibility)
@@ -1281,14 +1281,6 @@ pub struct UnsafeHostRaffle<'info> {
         bump,
     )]
     pub slots: Account<'info, RaffleSlots>,
-    #[account(
-        init,
-        payer = payer,
-        space = 8 + UserRaffle::space(),
-        seeds = [USER_SEED, raffle.key().as_ref(), payer.key().as_ref()],
-        bump,
-    )]
-    pub user_raffle: Account<'info, UserRaffle>,
     #[account(mut, seeds = [TREASURY_SEED, raffle.key().as_ref()], bump)]
     pub treasury: SystemAccount<'info>,
     pub system_program: Program<'info, System>,
