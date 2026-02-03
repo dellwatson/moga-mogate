@@ -1,0 +1,6 @@
+{
+  "program": "mogate_arc721_collection.aleo",
+  "version": "1.0.0",
+  "description": "ARC-721-style NFT collection for Mogate RWA",
+  "license": "MIT"
+}
