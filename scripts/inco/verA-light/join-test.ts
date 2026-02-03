@@ -13,6 +13,7 @@ import {
   PublicKey,
   SystemProgram,
   LAMPORTS_PER_SOL,
+  ComputeBudgetProgram,
 } from "@solana/web3.js";
 import * as anchor from "@coral-xyz/anchor";
 import fs from "fs";
@@ -122,17 +123,32 @@ async function main() {
   const proofPath = path.join(__dirname, "light-proof.json");
   if (!fs.existsSync(proofPath)) {
     console.error(
-      "❌ LIGHT proof not found. Please generate light-proof.json with the zk-compression CLI.",
+      "❌ LIGHT proof not found. Please generate light-proof.json with generate-ligh-proof.ts.",
     );
     process.exit(1);
   }
 
   const proofData = JSON.parse(fs.readFileSync(proofPath, "utf8"));
-  const proof = Buffer.from(proofData.proof, "base64");
-  const addressTreeInfo = Buffer.from(proofData.addressTreeInfo, "base64");
+
+  const proof = proofData.proof as any;
+  const addressTreeInfo = proofData.addressTreeInfo as any;
   const outputStateTreeIndex = proofData.outputStateTreeIndex as number;
+
   const lightStateTree = new PublicKey(proofData.lightStateTree);
   const lightSystemProgram = new PublicKey(proofData.lightSystemProgram);
+
+  const remainingAccountsMeta =
+    (proofData.remainingAccounts as {
+      pubkey: string;
+      isSigner: boolean;
+      isWritable: boolean;
+    }[]) || [];
+
+  const remainingAccounts = remainingAccountsMeta.map((meta) => ({
+    pubkey: new PublicKey(meta.pubkey),
+    isSigner: meta.isSigner,
+    isWritable: meta.isWritable,
+  }));
 
   // Join parameters
   const amount = 0.1 * LAMPORTS_PER_SOL; // 0.1 SOL
@@ -160,6 +176,10 @@ async function main() {
     );
     console.log(`📤 Sending join transaction via Anchor...`);
 
+    const computeBudgetIx = ComputeBudgetProgram.setComputeUnitLimit({
+      units: 1_000_000,
+    });
+
     const signature = await program.methods
       .unsafeJoinRaffle(
         slotIds,
@@ -182,6 +202,8 @@ async function main() {
           "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj",
         ),
       })
+      .preInstructions([computeBudgetIx])
+      .remainingAccounts(remainingAccounts)
       .rpc();
 
     console.log(`✅ Successfully joined raffle!`);

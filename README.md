@@ -15,78 +15,51 @@ This is a cross-chain project. Each blockchain has its own branch:
 
 ---
 
-# Solana RWA Raffle (Light zk-compression + Arcium randomness)
+# Solana RWA Raffle (Privacy + Compression)
 
-This branch contains an Anchor program and supporting tooling for a token-funded RWA raffle:
+This branch contains the **Solana** implementation of the Mogate RWA raffle
+platform, focused on privacy and scalability using:
 
-- Participants deposit MOGA tokens into an escrow.
-- When the required amount is reached before the deadline, a randomness draw selects a winning ticket.
-- If the deadline passes without reaching the threshold, deposits are refundable.
-- Light Protocol zk-compression is planned for scalable participant/ticket state and batch claims.
-- Arcium MPC is planned for verifiable randomness generation and on-chain settlement via callback.
+- **Inco Lightning FHE** for private slot ownership and delayed transparency.
+- **Light Protocol ZK Compression** for scalable, compressed ticket storage.
 
-## Packages
+## Packages (Solana)
 
-- `programs/rwa_raffle/` — Anchor program (Solana)
-- `ts-sdk/` — TypeScript SDK for clients (bun-compatible)
-- `offchain/` — Offchain worker stub to integrate Arcium + Light and settle draws
-- `docs/` — Architecture docs and SVG diagram
+- `programs/` — all on-chain programs:
+  - `programs/multi_raffle/` — baseline multi-raffle implementation.
+  - `programs/multi_raffle_modularized/` — refactor with cleaner module boundaries.
+  - `programs/multi_raffle-inco-A/` — ver-A raffle with Inco Lightning (FHE) only.
+  - `programs/multi_raffle-inco-A-light/` — ver-A + Inco FHE **and** Light zk-compressed
+    tickets (this is the variant used for the Privacy on Solana work).
+  - `programs/multi_raffle-inco-B/` and `...-B-light/` — alternate layout / config
+    experiments with and without LIGHT.
+  - `programs/multi_raffle-inco-C/` and `...-C-light/` — further design variants
+    exploring different privacy / compression tradeoffs.
 
-## Status
+- `ts-sdk/` — TypeScript SDK and helpers (bun-compatible) for clients.
+- `scripts/` — executable scripts for hosting/joining raffles and running
+  end-to-end flows. In particular, see `scripts/inco/verA-light` for the
+  Inco + Light integration harness.
+- `offchain/` — stubs for off-chain workers (randomness, automation, indexing).
+- `docs/` — architecture notes, diagrams, and flow descriptions.
 
-- Initial program scaffolding with escrow and ticket accounting.
-- Randomness and compressed accounts integration planned in subsequent tasks.
+## Privacy on Solana Hackathon
 
-## Prereqs
+For the **Privacy on Solana** hackathon, the focus is on the
+`multi_raffle-inco-*` program family:
 
-- Rust 1.70+
-- Solana CLI 2.3.x
-- Anchor CLI 0.31.1
-- Bun (user preference)
+- **Inco Lightning** is used to store each user’s slot ownership as encrypted
+  FHE handles (`Euint128`), supporting private joins, draws, and claims.
+- **Light Protocol zk-compression** is used in the `*-light` variants to store
+  per-user tickets as compressed accounts in Merkle trees instead of regular
+  Solana accounts, enabling 1M+ slots per raffle.
 
-## Dev notes
+Among these, the **primary reference implementation** is:
 
-- Program uses `anchor-spl` token interface to support both SPL Token and Token-2022 mints.
-- MOGA mint can be either Token or Token-2022; default client SDK will detect via interface.
-- Randomness and zk-compression integration are staged to keep v0 minimal and testable.
+- `programs/multi_raffle-inco-A-light` — ver-A raffle with both Inco FHE and
+  Light zk-compressed tickets.
 
-See `docs/architecture.md` and `docs/architecture.svg` for the flow.
+For full details on how to **deploy** and **test** this variant on devnet,
+including how to generate LIGHT proofs and run the host/join scripts, see:
 
----
-
-Links:
-
-- `docs/SIMPLIFIED_FLOW.md`
-- `docs/decision-flow-v2.svg`
-- `docs/REFUND_TICKET_SPEC.md`
-- `docs/ZK_COMPRESSION_USAGE.md`
-
----
-
-## Automation Options
-
-See `docs/RAFFLE_OPTIONS.md` for full details. Summary:
-
-- **Draw Triggers**
-
-  - Auto on full (client-chained): append `request_draw_arcium` after join
-  - Auto on full (worker): worker calls `request_draw_arcium` on `ThresholdReached`
-  - Scheduled reveal: worker waits until `reveal_time_unix_ts`
-  - Manual: any payer can call when `status == Drawing`
-
-- **Refund Modes**
-
-  - Auto (worker crank): call `refund_batch()` at deadline; mint MRFT from events
-  - Self-service: users call `claim_refund()`; worker mints MRFT
-  - Hybrid: both enabled
-
-- **Notifications**
-
-  - Winners: after `draw_callback`
-  - Refunds: after `RefundTicketsRequested` / mint
-
-- **Config (to add)**
-  - `auto_draw_on_full: bool`
-  - `reveal_time_unix_ts: Option<i64>`
-  - `refund_mode: enum { Auto, SelfService, Hybrid }`
-  - `prize_mode: enum { PreEscrow, MintOnClaim }`
+- `scripts/inco/verA-light/README.md`
