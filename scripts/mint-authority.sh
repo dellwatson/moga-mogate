@@ -18,7 +18,7 @@ if [ -z "$PRIVATE_KEY" ]; then
 fi
 
 # Parameters
-TO_ADDRESS="${1:-$PRIVATE_KEY}"  # Default to self if not provided
+TO_ADDRESS="${1:-aleo1yv0wuzhwr68dkstlcl4tcw7rs6wynw86xnm7w9ume49t6gtnx5zqalxdf2}"  # Default to your actual address
 URI_HASH="${2:-123456789field}"   # Default URI hash
 TOKEN_ID="${3:-1u64}"             # Default token ID
 
@@ -33,7 +33,7 @@ echo ""
 cd ../programs/authority_mint_gateway
 
 # Execute mint transition
-leo run mint \
+leo execute mint \
     "$TO_ADDRESS" \
     "$URI_HASH" \
     "$TOKEN_ID" \

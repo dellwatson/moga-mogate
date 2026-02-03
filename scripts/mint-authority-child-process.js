@@ -12,7 +12,7 @@ import { spawn } from "child_process";
 // ============================================
 
 const TO_ADDRESS =
-  "aleo1yv0wuzhwr68dkstlcl4keu4j6s0d3fzhqz0fzge6fz4w3wjwmq9s6jza3u";
+  "aleo1yv0wuzhwr68dkstlcl4tcw7rs6wynw86xnm7w9ume49t6gtnx5zqalxdf2";
 const URI_HASH = "123456789field";
 const TOKEN_ID = `${Date.now()}u64`;
 
