@@ -1,0 +1,6 @@
+{
+  "program": "mogate_sealed_bid_auction.aleo",
+  "version": "1.0.0",
+  "description": "Sealed-bid auction program for ARC-721 NFTs",
+  "license": "MIT"
+}
