@@ -26,7 +26,7 @@ async function main() {
 
   // Read standard JSON input
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
-  const jsonPath = path.join(__dirname, "..", "raffle-standard-input.json");
+  const jsonPath = path.join(__dirname, "..", "..", "raffle-standard-input.json");
   const standardInput = fs.readFileSync(jsonPath, "utf8");
 
   const params = new URLSearchParams({

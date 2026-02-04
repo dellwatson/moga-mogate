@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import {
   createRaffleClient,
   unsafeJoinRaffleWithReport,
-} from "./raffle-sdk.ts";
+} from "../../ts-sdk/src/evm/index.ts";
 
 dotenv.config();
 

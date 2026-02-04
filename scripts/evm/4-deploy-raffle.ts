@@ -31,9 +31,9 @@ async function main() {
   console.log("Deploying Raffle with:", await deployer.getAddress());
 
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
+  const repoRoot = path.join(__dirname, "..", "..");
   const artifactPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "artifacts",
     "contracts",
     "Raffle.sol",

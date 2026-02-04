@@ -24,9 +24,9 @@ async function main() {
 
   // Read contract source
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
+  const repoRoot = path.join(__dirname, "..", "..");
   const contractPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "contracts",
     "Collection.sol",
   );
@@ -34,8 +34,7 @@ async function main() {
 
   // Read ERC721URIStorage dependency
   const erc721URIStoragePath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -48,8 +47,7 @@ async function main() {
 
   // Read ERC721 dependency
   const erc721Path = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -61,8 +59,7 @@ async function main() {
 
   // Read IERC721Metadata dependency
   const ierc721MetadataPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -75,8 +72,7 @@ async function main() {
 
   // Read IERC721 dependency
   const ierc721Path = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -88,8 +84,7 @@ async function main() {
 
   // Read IERC165 dependency
   const ierc165Path = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -101,8 +96,7 @@ async function main() {
 
   // Read ERC165 dependency
   const erc165Path = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -114,8 +108,7 @@ async function main() {
 
   // Read IERC721Receiver dependency
   const ierc721ReceiverPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -127,8 +120,7 @@ async function main() {
 
   // Read ERC721Utils dependency
   const erc721UtilsPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -141,8 +133,7 @@ async function main() {
 
   // Read draft-IERC6093 dependency
   const ierc6093Path = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -153,8 +144,7 @@ async function main() {
 
   // Read Ownable dependency
   const ownablePath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -165,8 +155,7 @@ async function main() {
 
   // Read Context dependency (required by Ownable)
   const contextPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -177,8 +166,7 @@ async function main() {
 
   // Read Strings dependency
   const stringsPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -189,8 +177,7 @@ async function main() {
 
   // Read Math dependency
   const mathPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -202,8 +189,7 @@ async function main() {
 
   // Read SignedMath dependency
   const signedMathPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",

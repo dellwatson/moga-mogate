@@ -3,15 +3,15 @@ import path from "node:path";
 
 async function main() {
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
+  const repoRoot = path.join(__dirname, "..", "..");
 
   // Read contract source
-  const contractPath = path.join(__dirname, "..", "contracts", "Raffle.sol");
+  const contractPath = path.join(repoRoot, "contracts", "Raffle.sol");
   const contractSource = fs.readFileSync(contractPath, "utf8");
 
   // Read Ownable dependency
   const ownablePath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -22,8 +22,7 @@ async function main() {
 
   // Read Context dependency (required by Ownable)
   const contextPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -51,7 +50,7 @@ async function main() {
     },
   };
 
-  const outputPath = path.join(__dirname, "..", "raffle-standard-input.json");
+  const outputPath = path.join(repoRoot, "raffle-standard-input.json");
   fs.writeFileSync(outputPath, JSON.stringify(standardInput, null, 2));
 
   console.log("✅ Standard JSON input generated at:", outputPath);

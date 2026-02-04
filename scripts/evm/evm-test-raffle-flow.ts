@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
-import fs from "node:fs";
-import path from "node:path";
+import { createRaffleClient, PrizeTokenType } from "../../ts-sdk/src/evm/index.ts";
 
 async function main() {
   const target = process.env.TARGET_NETWORK || "sepolia";
@@ -35,25 +34,18 @@ async function main() {
   if (!raffleAddress)
     throw new Error("RAFFLE_ADDRESS env var for target network is required");
 
-  const provider = new ethers.JsonRpcProvider(rpcUrl);
-  const signer = new ethers.Wallet(pk, provider);
+  const client = createRaffleClient({
+    rpcUrl,
+    privateKey: pk,
+    raffleAddress,
+  });
+
+  const { raffle, signer } = client;
+  if (!signer) throw new Error("Signer missing for test flow");
 
   console.log("Using network:", target);
   console.log("Deployer:", await signer.getAddress());
   console.log("Raffle contract:", raffleAddress);
-
-  const __dirname = path.dirname(new URL(import.meta.url).pathname);
-  const artifactPath = path.join(
-    __dirname,
-    "..",
-    "artifacts",
-    "contracts",
-    "Raffle.sol",
-    "Raffle.json",
-  );
-  const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
-
-  const raffle = new ethers.Contract(raffleAddress, artifact.abi, signer);
 
   const raffleId = `test-${Date.now()}`;
   const totalSlots = 5n;
@@ -66,7 +58,7 @@ async function main() {
   const premintContract = false;
   const premint = false;
   // Prize config: simple 1x ERC721 for now.
-  const prizeType = 1; // PrizeTokenType.ERC721
+  const prizeType = PrizeTokenType.ERC721;
   const prizeAmount = 1n;
   const autoClaim = collection !== ethers.ZeroAddress;
   const autoDraw = !autoClaim;
@@ -111,13 +103,11 @@ async function main() {
   const joinRc = await joinTx.wait();
   console.log("Joined raffle. Tx:", joinRc?.hash);
 
-  const [totalSlotsOut, soldSlots, status] = await raffle.getRaffleLoad(
-    raffleId,
-  );
+  const load = await raffle.getRaffleLoadDetail(raffleId);
   console.log("Raffle load:", {
-    totalSlots: totalSlotsOut.toString(),
-    soldSlots: soldSlots.toString(),
-    status,
+    totalSlots: load[0].toString(),
+    soldSlots: load[1].toString(),
+    status: load[11],
   });
 
   const [winnerSlot, winner, statusAfter] = await raffle.getRaffleResult(

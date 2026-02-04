@@ -22,13 +22,13 @@ async function main() {
 
   // Read contract source
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
-  const contractPath = path.join(__dirname, "..", "contracts", "Raffle.sol");
+  const repoRoot = path.join(__dirname, "..", "..");
+  const contractPath = path.join(repoRoot, "contracts", "Raffle.sol");
   const contractSource = fs.readFileSync(contractPath, "utf8");
 
   // Read Ownable dependency
   const ownablePath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",
@@ -39,8 +39,7 @@ async function main() {
 
   // Read Context dependency (required by Ownable)
   const contextPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "node_modules",
     "@openzeppelin",
     "contracts",

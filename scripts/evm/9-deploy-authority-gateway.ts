@@ -19,9 +19,9 @@ async function main() {
   );
 
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
+  const repoRoot = path.join(__dirname, "..", "..");
   const artifactPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "artifacts",
     "contracts",
     "AuthorityMintGateway.sol",

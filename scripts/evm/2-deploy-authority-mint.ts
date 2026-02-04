@@ -13,33 +13,23 @@ async function main() {
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const deployer = new ethers.Wallet(pk, provider);
-  console.log(
-    "Deploying AuthorityMintWithPermit with:",
-    await deployer.getAddress()
-  );
+  console.log("Deploying AuthorityMint with:", await deployer.getAddress());
 
   const collectionAddress = process.env.COLLECTION_ADDRESS;
-  const backendSigner = process.env.BACKEND_SIGNER_ADDRESS;
-
   if (!collectionAddress) {
     throw new Error(
       "COLLECTION_ADDRESS env var must be set to the deployed Collection address"
     );
   }
-  if (!backendSigner) {
-    throw new Error(
-      "BACKEND_SIGNER_ADDRESS env var must be set to the backend signer EOA address"
-    );
-  }
 
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
+  const repoRoot = path.join(__dirname, "..", "..");
   const artifactPath = path.join(
-    __dirname,
-    "..",
+    repoRoot,
     "artifacts",
     "contracts",
-    "AuthorityMintWithPermit.sol",
-    "AuthorityMintWithPermit.json"
+    "AuthorityMint.sol",
+    "AuthorityMint.json"
   );
   const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
 
@@ -48,15 +38,12 @@ async function main() {
     artifact.bytecode,
     deployer
   );
-  const authorityMintWithPermit = await factory.deploy(
-    backendSigner,
-    collectionAddress
-  );
-  const receipt = await authorityMintWithPermit.deploymentTransaction()?.wait();
+  const authorityMint = await factory.deploy(collectionAddress);
+  const receipt = await authorityMint.deploymentTransaction()?.wait();
 
-  const address = await authorityMintWithPermit.getAddress();
+  const address = await authorityMint.getAddress();
 
-  console.log("AuthorityMintWithPermit deployed to:", address);
+  console.log("AuthorityMint deployed to:", address);
   if (receipt) {
     console.log("Deploy tx:", receipt.hash, "block:", receipt.blockNumber);
   }
