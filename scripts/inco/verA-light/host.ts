@@ -15,6 +15,13 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import * as anchor from "@coral-xyz/anchor";
+import {
+  createRpc,
+  featureFlags,
+  VERSION,
+  selectStateTreeInfo,
+  getDefaultAddressTreeInfo,
+} from "@lightprotocol/stateless.js";
 import fs from "fs";
 import path from "path";
 
@@ -23,8 +30,6 @@ const PROGRAM_ID = new PublicKey(
   "86okKaT6umcjVHcwpcgH1FWKfov2PywWrnTbsYWfmo5o",
 );
 
-// Network config
-const NETWORK = "devnet";
 const RPC_URL = "https://api.devnet.solana.com";
 const WALLET_PATH = path.join(
   process.env.HOME || "~",
@@ -80,7 +85,10 @@ async function main() {
   });
 
   // Load program IDL (you may need to generate this first)
-  const idlPath = path.join(__dirname, "multi_raffle_inco_a_light.json");
+  const idlPath = path.join(
+    __dirname,
+    "../../../target/idl/multi_raffle_inco_a_light.json",
+  );
 
   if (!fs.existsSync(idlPath)) {
     console.error("❌ IDL not found. Please run: anchor build");
@@ -103,9 +111,21 @@ async function main() {
   const expiresAt = Math.floor(Date.now() / 1000) + 86400; // 24 hours
 
   try {
+    // Ensure Light client uses v2
+    (featureFlags as any).version = (VERSION as any).V2 ?? VERSION.V2;
+
+    const rpc = createRpc(RPC_URL, RPC_URL, RPC_URL);
+    const stateTreeInfos = await rpc.getStateTreeInfos();
+    const stateTreeInfo = selectStateTreeInfo(stateTreeInfos);
+    const addressTreeInfo = getDefaultAddressTreeInfo();
+
     console.log(`📝 Creating raffle: ${raffleId}`);
     console.log(`📊 Total slots: ${totalSlots.toLocaleString()}`);
     console.log(`🔒 Max per address: ${maxSlotsPerAddress}`);
+    console.log(`🌲 Address tree: ${addressTreeInfo.tree.toBase58()}`);
+    console.log(`🧾 Address queue: ${addressTreeInfo.queue.toBase58()}`);
+    console.log(`🌳 State tree: ${stateTreeInfo.tree.toBase58()}`);
+    console.log(`📥 State queue: ${stateTreeInfo.queue.toBase58()}`);
 
     // Derive PDAs
     const [configPda] = deriveConfigPda();
@@ -116,6 +136,20 @@ async function main() {
     console.log(`🎫 Raffle PDA: ${rafflePda.toString()}`);
     console.log(`💎 Slots PDA: ${slotsPda.toString()}`);
     console.log(`🏦 Treasury PDA: ${treasuryPda.toString()}`);
+
+    // Initialize config if missing
+    const configInfo = await connection.getAccountInfo(configPda);
+    if (!configInfo) {
+      console.log("⚙️  Initializing config...");
+      await program.methods
+        .initializeConfig(100) // 1% refund fee
+        .accounts({
+          admin: wallet.publicKey,
+          config: configPda,
+          systemProgram: SystemProgram.programId,
+        })
+        .rpc();
+    }
 
     // Call unsafe_host_raffle
     const tx = await program.methods
@@ -134,9 +168,14 @@ async function main() {
         expiresAt,
       )
       .accounts({
-        authority: wallet.publicKey,
+        payer: wallet.publicKey,
+        config: configPda,
         raffle: rafflePda,
         slots: slotsPda,
+        addressTree: addressTreeInfo.tree,
+        addressQueue: addressTreeInfo.queue,
+        stateTree: stateTreeInfo.tree,
+        stateQueue: stateTreeInfo.queue,
         treasury: treasuryPda,
         systemProgram: SystemProgram.programId,
       })
@@ -157,6 +196,10 @@ async function main() {
       rafflePda: rafflePda.toString(),
       slotsPda: slotsPda.toString(),
       treasuryPda: treasuryPda.toString(),
+      addressTree: addressTreeInfo.tree.toBase58(),
+      addressQueue: addressTreeInfo.queue.toBase58(),
+      stateTree: stateTreeInfo.tree.toBase58(),
+      stateQueue: stateTreeInfo.queue.toBase58(),
       totalSlots,
       maxSlotsPerAddress,
       expiresAt,

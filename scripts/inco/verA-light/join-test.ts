@@ -16,6 +16,7 @@ import {
   ComputeBudgetProgram,
 } from "@solana/web3.js";
 import * as anchor from "@coral-xyz/anchor";
+import { createHash, randomBytes } from "crypto";
 import fs from "fs";
 import path from "path";
 
@@ -37,6 +38,7 @@ const RAFFLE_SEED = Buffer.from("raffle");
 const SLOTS_SEED = Buffer.from("slots");
 const USER_SEED = Buffer.from("user");
 const TREASURY_SEED = Buffer.from("treasury");
+const COMMITMENT_DOMAIN = "raffle-slot-commitment-v1";
 
 // Derive PDAs
 function deriveConfigPda(): [PublicKey, number] {
@@ -133,9 +135,12 @@ async function main() {
   const proof = proofData.proof as any;
   const addressTreeInfo = proofData.addressTreeInfo as any;
   const outputStateTreeIndex = proofData.outputStateTreeIndex as number;
-
-  const lightStateTree = new PublicKey(proofData.lightStateTree);
-  const lightSystemProgram = new PublicKey(proofData.lightSystemProgram);
+  const systemAccountsOffset = proofData.systemAccountsOffset as number;
+  if (typeof systemAccountsOffset !== "number") {
+    throw new Error(
+      "systemAccountsOffset missing in light-proof.json. Re-run generate-ligh-proof.ts.",
+    );
+  }
 
   const remainingAccountsMeta =
     (proofData.remainingAccounts as {
@@ -153,6 +158,33 @@ async function main() {
   // Join parameters
   const amount = 0.1 * LAMPORTS_PER_SOL; // 0.1 SOL
   const slotIds = [1, 2, 3, 4, 5]; // Explicit slot selection
+
+  if (Array.isArray(proofData.slotIds)) {
+    const mismatch = JSON.stringify(proofData.slotIds) !== JSON.stringify(slotIds);
+    if (mismatch) {
+      throw new Error(
+        `slotIds mismatch between join-test.ts and light-proof.json. Update slotIds and re-run generate-ligh-proof.ts.`,
+      );
+    }
+  }
+
+  const salts: string[] = [];
+  const commitments: number[][] = [];
+  for (const slotId of slotIds) {
+    const salt = randomBytes(32);
+    salts.push(salt.toString("hex"));
+
+    const hash = createHash("sha256");
+    hash.update(Buffer.from(COMMITMENT_DOMAIN));
+    hash.update(new PublicKey(raffleTest.rafflePda).toBuffer());
+    const slotBuf = Buffer.alloc(4);
+    slotBuf.writeUInt32LE(slotId, 0);
+    hash.update(slotBuf);
+    hash.update(walletKeypair.publicKey.toBuffer());
+    hash.update(salt);
+
+    commitments.push(Array.from(hash.digest()));
+  }
 
   try {
     console.log(`🎟️  Joining raffle with explicit slots`);
@@ -183,10 +215,12 @@ async function main() {
     const signature = await program.methods
       .unsafeJoinRaffle(
         slotIds,
+        commitments,
         amount,
         proof,
         addressTreeInfo,
         outputStateTreeIndex,
+        systemAccountsOffset,
       )
       .accounts({
         payer: walletKeypair.publicKey,
@@ -194,13 +228,8 @@ async function main() {
         raffle: rafflePda,
         slots: slotsPda,
         userRaffle: userRafflePda,
-        lightStateTree,
-        lightSystemProgram,
         treasury: treasuryPda,
         systemProgram: SystemProgram.programId,
-        incoLightningProgram: new PublicKey(
-          "5sjEbPiqgZrYwR31ahR6Uk9wf5awoX61YGg7jExQSwaj",
-        ),
       })
       .preInstructions([computeBudgetIx])
       .remainingAccounts(remainingAccounts)
@@ -220,6 +249,7 @@ async function main() {
       raffleId: raffleTest.raffleId,
       userRafflePda: userRafflePda.toString(),
       slotIds,
+      salts,
       amount,
       signature,
       timestamp: Date.now(),

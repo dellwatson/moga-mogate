@@ -11,74 +11,87 @@ import {
   PackedAccounts,
   SystemAccountMetaConfig,
   selectStateTreeInfo,
+  getStateTreeInfoByPubkey,
+  getDefaultAddressTreeInfo,
   deriveAddressSeedV2,
   deriveAddressV2,
-  lightSystemProgram,
 } from "@lightprotocol/stateless.js";
 
 const RPC_URL =
   process.env.SOLANA_RPC_URL ||
   process.env.HELIUS_RPC_URL ||
-  "https://api.devnet.solana.com"; // fallback to devnet RPC
+  "https://api.devnet.solana.com";
 
-// This must match the program id used on-chain for LIGHT compressed tickets
 const PROGRAM_ID = new PublicKey(
   "86okKaT6umcjVHcwpcgH1FWKfov2PywWrnTbsYWfmo5o",
 );
 
-// Example: load raffle + user from raffle-info.json or env
 const RAFFLE_INFO_PATH = path.join(__dirname, "raffle-info.json");
+const JOIN_CONFIG_PATH = path.join(__dirname, "join-config.json");
 
 async function main() {
   if (!RPC_URL) {
     throw new Error("RPC_URL is not set");
   }
 
-  // Load raffle + user info (host wallet joins its own raffle by default)
   const raffleInfo = JSON.parse(fs.readFileSync(RAFFLE_INFO_PATH, "utf8"));
   const rafflePubkey = new PublicKey(raffleInfo.rafflePda);
-  const userPubkey = new PublicKey(
-    raffleInfo.hostWallet ?? raffleInfo.authority ?? raffleInfo.payer,
-  );
 
-  // 1) Construct the seeds for the compressed ticket address
-  //    Must exactly match the Rust derive_address seeds:
-  //    &[b"ticket", raffle.key().as_ref(), payer.key().as_ref()]
-  const encoder = new TextEncoder();
-  const ticketPrefix = encoder.encode("ticket");
-  const seed = deriveAddressSeedV2([
-    ticketPrefix,
-    rafflePubkey.toBytes(),
-    userPubkey.toBytes(),
-  ]);
+  let slotIds = [1, 2, 3, 4, 5];
+  if (fs.existsSync(JOIN_CONFIG_PATH)) {
+    const cfg = JSON.parse(fs.readFileSync(JOIN_CONFIG_PATH, "utf8"));
+    if (Array.isArray(cfg.slotIds)) {
+      slotIds = cfg.slotIds;
+    }
+  }
 
-  // 2) Initialize Light / Photon client (Helius endpoint used for all three)
+  (featureFlags as any).version = (VERSION as any).V2 ?? VERSION.V2;
   const rpc = createRpc(RPC_URL, RPC_URL, RPC_URL);
 
-  // Force V2 behavior (same as Light program-examples)
-  (featureFlags as any).version = (VERSION as any).V2 ?? VERSION.V2;
+  const addressTreeInfo = getDefaultAddressTreeInfo();
+  if (raffleInfo.addressTree && raffleInfo.addressTree !== addressTreeInfo.tree.toBase58()) {
+    throw new Error(
+      `Address tree mismatch. Raffle uses ${raffleInfo.addressTree} but default is ${addressTreeInfo.tree.toBase58()}`,
+    );
+  }
 
-  // 3) Fetch state & address tree infos and derive the compressed ticket address
   const stateTreeInfos = await rpc.getStateTreeInfos();
-  const stateTreeInfo = selectStateTreeInfo(stateTreeInfos);
+  let stateTreeInfo = selectStateTreeInfo(stateTreeInfos);
+  if (raffleInfo.stateTree) {
+    stateTreeInfo = getStateTreeInfoByPubkey(
+      stateTreeInfos,
+      new PublicKey(raffleInfo.stateTree),
+    );
+  } else if (raffleInfo.stateQueue) {
+    stateTreeInfo = getStateTreeInfoByPubkey(
+      stateTreeInfos,
+      new PublicKey(raffleInfo.stateQueue),
+    );
+  }
 
-  const addressTreeInfo = await rpc.getAddressTreeInfoV2();
+  // Build compressed slot addresses
+  const encoder = new TextEncoder();
+  const slotPrefix = encoder.encode("slot");
+  const slotAddresses = slotIds.map((slotId) => {
+    const slotIdBuf = Buffer.alloc(4);
+    slotIdBuf.writeUInt32LE(slotId, 0);
+    const seed = deriveAddressSeedV2([
+      slotPrefix,
+      rafflePubkey.toBytes(),
+      slotIdBuf,
+    ]);
+    return deriveAddressV2(seed, addressTreeInfo.tree, PROGRAM_ID);
+  });
 
-  const ticketAddress = deriveAddressV2(seed, addressTreeInfo.tree, PROGRAM_ID);
-
-  // 4) Ask Light/Photon for a validity proof that this ticket address is fresh
   const proofResult = await rpc.getValidityProofV0(
     [],
-    [
-      {
-        tree: addressTreeInfo.tree,
-        queue: addressTreeInfo.queue,
-        address: bn(ticketAddress.toBytes()),
-      },
-    ],
+    slotAddresses.map((address) => ({
+      tree: addressTreeInfo.tree,
+      queue: addressTreeInfo.queue,
+      address: bn(address.toBytes()),
+    })),
   );
 
-  // 5) Build PackedAddressTreeInfo + output_state_tree_index using PackedAccounts
   const config = SystemAccountMetaConfig.new(PROGRAM_ID);
   const packedAccounts = PackedAccounts.newWithSystemAccountsV2(config);
 
@@ -92,35 +105,28 @@ async function main() {
     addressQueuePubkeyIndex: addressQueueIndex,
   };
 
-  // ValidityProof is represented in Anchor TS as an object with index 0
   const proof = {
     0: proofResult.compressedProof,
   };
 
-  // Remaining accounts and system accounts offset are required by LIGHT CPI
   const { remainingAccounts, systemStart } = packedAccounts.toAccountMetas();
 
-  // 6) Write structured light-proof.json consumed by join.ts / join-test.ts
   const lightProof = {
-    // LIGHT proof and tree info (passed directly into Anchor program methods)
+    slotIds,
     proof,
     addressTreeInfo: packedAddressTreeInfo,
     outputStateTreeIndex,
-
-    // Where system accounts start inside remainingAccounts
     systemAccountsOffset: systemStart,
-
-    // Remaining account metas required by LIGHT system program CPI
     remainingAccounts: remainingAccounts.map((meta: any) => ({
       pubkey: meta.pubkey.toBase58(),
       isSigner: meta.isSigner,
       isWritable: meta.isWritable,
     })),
-
-    // Convenience fields for scripts
-    lightStateTree: stateTreeInfo.queue.toBase58(),
-    lightSystemProgram,
-    ticketAddress: ticketAddress.toBase58(),
+    addressTree: addressTreeInfo.tree.toBase58(),
+    addressQueue: addressTreeInfo.queue.toBase58(),
+    stateTree: stateTreeInfo.tree.toBase58(),
+    stateQueue: stateTreeInfo.queue.toBase58(),
+    slotAddresses: slotAddresses.map((a) => a.toBase58()),
   };
 
   fs.writeFileSync(
