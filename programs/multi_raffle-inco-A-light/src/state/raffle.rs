@@ -22,7 +22,7 @@ pub struct Raffle {
     pub winner_slot: u32,
     pub winner: Pubkey,
     pub claimed: bool,
-    pub winning_slot_handle: u128, // FHE: encrypted winning slot
+    pub winning_slot_handle: u128, // FHE: encrypted winning slot (Inco Lightning)
     pub bump: u8,
 }
 
@@ -48,8 +48,10 @@ pub fn status_to_string(status: u8) -> String {
     match status {
         0 => "OPEN".to_string(),
         1 => "FILLED".to_string(),
-        2 => "DRAWN".to_string(),
-        3 => "CANCELLED".to_string(),
+        2 => "WINNER_SLOT_PICKED".to_string(),
+        3 => "WINNER_IDENTIFIED".to_string(),
+        4 => "CLAIMED".to_string(),
+        5 => "CANCELLED".to_string(),
         _ => "UNKNOWN".to_string(),
     }
 }

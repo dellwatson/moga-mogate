@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::state::Config;
-
-pub const CONFIG_SEED: &[u8] = b"config";
+use crate::constants::CONFIG_SEED;
 
 #[derive(Accounts)]
 pub struct InitializeConfig<'info> {

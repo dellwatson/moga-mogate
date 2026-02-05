@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use light_sdk::{
     cpi::CpiSigner,
     derive_light_cpi_signer,
-    instruction::{PackedAddressTreeInfo, ValidityProof},
+    instruction::{PackedAddressTreeInfo, PackedStateTreeInfo, ValidityProof},
 };
 
 pub mod constants;
@@ -62,35 +62,61 @@ pub mod multi_raffle_inco_a_light {
         )
     }
 
-    /// Unsafe join: pay SOL and take explicit slots with FHE privacy (Inco) and LIGHT compression
+    /// Unsafe join: pay SOL and take explicit slots with commit-reveal + LIGHT compression
     pub fn unsafe_join_raffle<'info>(
         ctx: Context<'_, '_, '_, 'info, UnsafeJoinRaffle<'info>>,
         slot_ids: Vec<u32>,
+        commitments: Vec<[u8; 32]>,
         amount: u64,
         proof: ValidityProof,
         address_tree_info: PackedAddressTreeInfo,
         output_state_tree_index: u8,
+        system_accounts_offset: u16,
     ) -> Result<()> {
-        instructions::unsafe_join_raffle::handler(ctx, slot_ids, amount, proof, address_tree_info, output_state_tree_index)
+        instructions::unsafe_join_raffle::handler(
+            ctx,
+            slot_ids,
+            commitments,
+            amount,
+            proof,
+            address_tree_info,
+            output_state_tree_index,
+            system_accounts_offset,
+        )
     }
 
-    /// Draw winner with FHE-encrypted slot index
-    pub fn unsafe_draw_winner(ctx: Context<UnsafeDrawWinner>) -> Result<()> {
-        instructions::unsafe_draw_winner::handler(ctx)
+    /// Draw winner slot and store encrypted handle (Inco Lightning)
+    pub fn draw_raffle(ctx: Context<DrawRaffle>) -> Result<()> {
+        instructions::draw_raffle::handler(ctx)
     }
 
-    /// Check winner with FHE comparison (delayed transparency)
-    pub fn unsafe_check_winner(ctx: Context<UnsafeCheckWinner>) -> Result<()> {
-        instructions::unsafe_check_winner::handler(ctx)
-    }
-
-    /// Withdraw prize with FHE proof (handle + plaintext)
-    pub fn unsafe_withdraw_prize(
-        ctx: Context<UnsafeWithdrawPrize>,
-        handle: Vec<u8>,
-        plaintext: Vec<u8>,
+    /// Finalize winner with commit-reveal + LIGHT proof
+    pub fn finalize_winner<'info>(
+        ctx: Context<'_, '_, '_, 'info, FinalizeWinner<'info>>,
+        slot_id: u32,
+        salt: [u8; 32],
+        proof: ValidityProof,
+        state_tree_info: PackedStateTreeInfo,
+        system_accounts_offset: u16,
     ) -> Result<()> {
-        instructions::unsafe_withdraw_prize::handler(ctx, handle, plaintext)
+        instructions::finalize_winner::handler(
+            ctx,
+            slot_id,
+            salt,
+            proof,
+            state_tree_info,
+            system_accounts_offset,
+        )
+    }
+
+    /// Claim prize after winner is finalized
+    pub fn claim(ctx: Context<Claim>) -> Result<()> {
+        instructions::claim::handler(ctx)
+    }
+
+    /// Check winner with FHE comparison (optional, delayed transparency)
+    pub fn unsafe_check_winner(ctx: Context<UnsafeCheckWinner>, slot_id: u32) -> Result<()> {
+        instructions::unsafe_check_winner::handler(ctx, slot_id)
     }
 
     /// Admin withdraws proceeds (from LIGHT implementation)

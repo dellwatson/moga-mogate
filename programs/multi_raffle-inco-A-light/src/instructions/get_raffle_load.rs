@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::state::Raffle;
-
-pub const RAFFLE_SEED: &[u8] = b"raffle";
+use crate::constants::RAFFLE_SEED;
 
 #[derive(Accounts)]
 pub struct GetRaffleLoad<'info> {

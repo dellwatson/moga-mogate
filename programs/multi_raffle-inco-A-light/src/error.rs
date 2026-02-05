@@ -42,6 +42,12 @@ pub enum RaffleError {
     NotImplemented,
     #[msg("InvalidProof")] 
     InvalidProof,
+    #[msg("InvalidSystemAccountsOffset")]
+    InvalidSystemAccountsOffset,
+    #[msg("InvalidTreeConfig")]
+    InvalidTreeConfig,
+    #[msg("InvalidCommitment")]
+    InvalidCommitment,
     #[msg("RaffleNotOpen")] 
     RaffleNotOpen,
     #[msg("NoSlotsProvided")] 

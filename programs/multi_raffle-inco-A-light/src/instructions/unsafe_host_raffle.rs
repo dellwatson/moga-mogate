@@ -10,6 +10,7 @@ pub struct UnsafeHostRaffle<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     
+    #[account(seeds = [CONFIG_SEED], bump)]
     pub config: Account<'info, Config>,
     
     #[account(
@@ -29,6 +30,18 @@ pub struct UnsafeHostRaffle<'info> {
         bump,
     )]
     pub slots: Account<'info, RaffleSlots>,
+
+    /// CHECK: Light address tree for compressed slot addresses
+    pub address_tree: UncheckedAccount<'info>,
+
+    /// CHECK: Light address queue
+    pub address_queue: UncheckedAccount<'info>,
+
+    /// CHECK: Light state tree for compressed slots
+    pub state_tree: UncheckedAccount<'info>,
+
+    /// CHECK: Light state queue
+    pub state_queue: UncheckedAccount<'info>,
     
     /// CHECK: Treasury PDA for raffle proceeds
     #[account(mut, seeds = [TREASURY_SEED, raffle.key().as_ref()], bump)]
@@ -96,6 +109,10 @@ pub fn handler(
     slots.raffle = raffle.key();
     slots.total_slots = total_slots;
     slots.sold_slots = 0;
+    slots.address_tree = ctx.accounts.address_tree.key();
+    slots.address_queue = ctx.accounts.address_queue.key();
+    slots.state_tree = ctx.accounts.state_tree.key();
+    slots.state_queue = ctx.accounts.state_queue.key();
     
     msg!("✅ Raffle {} created with ZK-compression support", raffle_id);
     msg!("   Total slots: {}", total_slots);
