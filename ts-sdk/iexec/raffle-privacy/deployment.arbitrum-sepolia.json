@@ -1,0 +1,8 @@
+{
+  "network": "arbitrumSepolia",
+  "chainId": 421614,
+  "raffleTeeAddress": "0x5b6288be71623E408D61D0417A51572d7CBC10e2",
+  "deployTxHash": "0x718110754b65324133b0dd4f6ad048123baae5d1035639171f61ac297abb8265",
+  "iexecHub": "0xB2157BF2fAb286b2A4170E3491Ac39770111Da3E",
+  "deployer": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A"
+}

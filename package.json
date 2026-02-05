@@ -6,16 +6,23 @@
   "private": true,
   "scripts": {
     "evm:compile": "hardhat compile",
-    "evm:deploy:collection": "bun run scripts/1-deploy-collection.ts",
-    "evm:deploy:authority-mint": "bun run scripts/2-deploy-authority-mint.ts",
-    "evm:deploy:authority-mint-permit": "bun run scripts/3-deploy-authority-mint-permit.ts",
-    "evm:deploy:raffle": "bun run scripts/4-deploy-raffle.ts",
-    "evm:burn-nft": "bun run scripts/5-burn-nft.ts",
-    "evm:verify-burn": "bun run scripts/6-verify-burn-from-tx.ts",
-    "evm:mint:collection": "bun run scripts/7-mint-from-collection.ts",
-    "evm:mint:authority": "bun run scripts/8-mint-from-authority.ts",
-    "evm:raffle:host": "bun run scripts/evm-raffle-host.ts",
-    "evm:raffle:join": "bun run scripts/evm-raffle-join.ts"
+    "evm:deploy:collection": "bun run scripts/evm/1-deploy-collection.ts",
+    "evm:deploy:authority-mint": "bun run scripts/evm/2-deploy-authority-mint.ts",
+    "evm:deploy:authority-mint-permit": "bun run scripts/evm/3-deploy-authority-mint-permit.ts",
+    "evm:deploy:raffle": "bun run scripts/evm/4-deploy-raffle.ts",
+    "evm:burn-nft": "bun run scripts/evm/5-burn-nft.ts",
+    "evm:verify-burn": "bun run scripts/evm/6-verify-burn-from-tx.ts",
+    "evm:mint:collection": "bun run scripts/evm/7-mint-from-collection.ts",
+    "evm:mint:authority": "bun run scripts/evm/8-mint-from-authority.ts",
+    "evm:raffle:host": "bun run scripts/evm/evm-raffle-host.ts",
+    "evm:raffle:join": "bun run scripts/evm/evm-raffle-join.ts",
+    "evm:tee:deploy": "bun run scripts/tee/evm-deploy-raffle-tee.ts",
+    "evm:tee:host": "bun run scripts/tee/evm-tee-raffle-host.ts",
+    "evm:tee:join": "bun run scripts/tee/evm-tee-raffle-join-slots.ts",
+    "evm:tee:prepare-config": "bun run scripts/tee/prepare-public-config.ts",
+    "evm:tee:commit-root": "bun run scripts/tee/evm-tee-raffle-commit-root.ts",
+    "evm:tee:register-draw": "bun run scripts/tee/evm-tee-raffle-register-draw-call.ts",
+    "tee:iapp:run": "bash scripts/tee/iapp-run-task.sh"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
@@ -23,12 +30,12 @@
     "viem": "^2.0.0"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "6.1.0",
     "@types/node": "^20.10.0",
-    "typescript": "^5.3.2",
-    "hardhat": "^3.1.2",
-    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "3.1.2",
     "ts-node": "^10.9.2",
-    "dotenv": "^16.4.5"
+    "typescript": "^5.3.2"
   },
   "engines": {
     "node": ">=18.0.0",

@@ -88,6 +88,7 @@ contract RaffleTEE is Ownable {
     mapping(bytes32 => mapping(bytes32 => bool)) private _commitmentUsed;
     mapping(bytes32 => mapping(address => uint256)) private _userTicketCount;
     mapping(bytes32 => mapping(address => uint256)) private _userPaid;
+    mapping(bytes32 => mapping(uint256 => bool)) private _slotTaken;
 
     // iExec call mapping: callId <-> raffleIdHash.
     mapping(bytes32 => bytes32) public drawCallByRaffle;
@@ -110,6 +111,7 @@ contract RaffleTEE is Ownable {
         uint256 ticketCount,
         uint256 paidAmount
     );
+    event SlotTaken(bytes32 indexed id, uint256 slotId, address indexed buyer);
     event TicketsRootCommitted(
         bytes32 indexed id,
         bytes32 ticketsRoot,
@@ -228,6 +230,99 @@ contract RaffleTEE is Ownable {
             r.status = RaffleStatus.DRAWING;
             emit RaffleReadyForDraw(id);
         }
+    }
+
+    /// @notice Join a raffle in SLOTS_ONLY mode while reserving explicit slotIds.
+    /// @dev Slot IDs become public to prevent duplicates. Each slotId must be unique.
+    function joinSlotsOnlyWithSlots(
+        string calldata raffleId,
+        uint256[] calldata slotIds,
+        bytes32[] calldata commitments
+    ) external payable {
+        bytes32 id = keccak256(bytes(raffleId));
+        Raffle storage r = _raffles[id];
+        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+        require(r.privacy == PrivacyMode.SLOTS_ONLY, "WrongPrivacyMode");
+        require(r.status == RaffleStatus.OPEN, "NotOpen");
+        if (r.expiresAt != 0) {
+            require(block.timestamp <= r.expiresAt, "RaffleExpired");
+        }
+
+        uint256 count = commitments.length;
+        require(count > 0, "NoCommitments");
+        require(slotIds.length == count, "SlotCommitmentMismatch");
+        require(r.soldTickets + count <= r.totalSlots, "OverCapacity");
+
+        uint256 current = _userTicketCount[id][msg.sender];
+        require(current + count <= r.maxTicketsPerAddress, "MaxTicketsPerAddress");
+
+        uint256 expected = r.ticketPriceWei * count;
+        require(msg.value == expected, "BadPayment");
+
+        for (uint256 i = 0; i < count; i++) {
+            uint256 slotId = slotIds[i];
+            require(slotId > 0 && slotId <= r.totalSlots, "BadSlotId");
+            require(!_slotTaken[id][slotId], "SlotTaken");
+
+            bytes32 c = commitments[i];
+            require(c != bytes32(0), "BadCommitment");
+            require(!_commitmentUsed[id][c], "CommitmentUsed");
+
+            _slotTaken[id][slotId] = true;
+            _commitmentUsed[id][c] = true;
+            _ticketCommitments[id].push(c);
+
+            emit SlotTaken(id, slotId, msg.sender);
+        }
+
+        _userTicketCount[id][msg.sender] = current + count;
+        _userPaid[id][msg.sender] += msg.value;
+        r.soldTickets += count;
+
+        emit TicketsPurchased(id, msg.sender, count, msg.value);
+
+        if (r.soldTickets == r.totalSlots) {
+            r.status = RaffleStatus.DRAWING;
+            emit RaffleReadyForDraw(id);
+        }
+    }
+
+    /// @notice Check if a slotId is taken for a slots-only raffle.
+    function isSlotTaken(
+        string calldata raffleId,
+        uint256 slotId
+    ) external view returns (bool) {
+        bytes32 id = keccak256(bytes(raffleId));
+        return _slotTaken[id][slotId];
+    }
+
+    /// @notice Batch slot availability checks (true means taken).
+    function getSlotStatusBatch(
+        string calldata raffleId,
+        uint256[] calldata slotIds
+    ) external view returns (bool[] memory) {
+        bytes32 id = keccak256(bytes(raffleId));
+        bool[] memory out = new bool[](slotIds.length);
+        for (uint256 i = 0; i < slotIds.length; i++) {
+            out[i] = _slotTaken[id][slotIds[i]];
+        }
+        return out;
+    }
+
+    /// @notice Return all commitments for a raffle (public).
+    function getCommitments(
+        string calldata raffleId
+    ) external view returns (bytes32[] memory) {
+        bytes32 id = keccak256(bytes(raffleId));
+        return _ticketCommitments[id];
+    }
+
+    /// @notice Return count of commitments for a raffle.
+    function getCommitmentsCount(
+        string calldata raffleId
+    ) external view returns (uint256) {
+        bytes32 id = keccak256(bytes(raffleId));
+        return _ticketCommitments[id].length;
     }
 
     // =============================================================

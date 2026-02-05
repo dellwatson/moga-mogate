@@ -17,7 +17,7 @@ async function main() {
       "https://polygon-amoy-bor-rpc.publicnode.com",
     arbitrumSepolia:
       process.env.ARBITRUM_SEPOLIA_RPC_URL ||
-      "https://sepolia-rollup.arbitrum.io/rpc",
+      "https://arbitrum-sepolia.infura.io/v3/68bcf4c486904a37957fb7baa53ab4e0",
     sepolia: process.env.SEPOLIA_RPC_URL || "",
   };
 
@@ -120,6 +120,31 @@ async function main() {
     ),
   );
 
+  const overrides: Record<string, bigint> = {};
+  const nonceEnv = process.env.RAFFLE_TX_NONCE || process.env.TX_NONCE;
+  if (!nonceEnv) {
+    throw new Error(
+      "RAFFLE_TX_NONCE (or TX_NONCE) is required to avoid eth_getTransactionCount on limited RPCs.",
+    );
+  }
+  overrides.nonce = BigInt(nonceEnv);
+  const gasLimitEnv = process.env.RAFFLE_GAS_LIMIT;
+  if (gasLimitEnv) {
+    overrides.gasLimit = BigInt(gasLimitEnv);
+  }
+  const gasPriceGwei = process.env.RAFFLE_GAS_PRICE_GWEI;
+  if (gasPriceGwei) {
+    overrides.gasPrice = ethers.parseUnits(gasPriceGwei, "gwei");
+  }
+  const maxFeeGwei = process.env.RAFFLE_MAX_FEE_GWEI;
+  if (maxFeeGwei) {
+    overrides.maxFeePerGas = ethers.parseUnits(maxFeeGwei, "gwei");
+  }
+  const priorityFeeGwei = process.env.RAFFLE_PRIORITY_FEE_GWEI;
+  if (priorityFeeGwei) {
+    overrides.maxPriorityFeePerGas = ethers.parseUnits(priorityFeeGwei, "gwei");
+  }
+
   const tx = await client.raffle.createRaffle(
     raffleId,
     totalSlots,
@@ -134,6 +159,7 @@ async function main() {
     autoClaim,
     expiresAt,
     privacy,
+    overrides,
   );
 
   const receipt = await tx.wait();
