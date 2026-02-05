@@ -11,7 +11,7 @@ It supports **two modes**:
 ## Quick Start
 
 ```bash
-cd ts-sdk/iexec-test/raffle-privacy
+cd ts-sdk/iexec/raffle-privacy
 npm install
 iapp test --verbose
 ```
@@ -75,9 +75,7 @@ You can also send a batch in one dataset:
 The iApp writes:
 
 - `${IEXEC_OUT}/result.json` (summary)
-- `${IEXEC_OUT}/computed.json` with:
-  - `deterministic-output-path`
-  - `callback-data`
+- `${IEXEC_OUT}/computed.json` containing `deterministic-output-path` and `callback-data`
 
 `callback-data` is ABI-encoded as:
 
@@ -95,8 +93,8 @@ Saved in `deployment.arbitrum-sepolia.json`:
 {
   "network": "arbitrumSepolia",
   "chainId": 421614,
-  "raffleTeeAddress": "0xE39C0AAA925337a5499A2cCe0D906cc38B5CEA54",
-  "deployTxHash": "0xd746b2c493729522aeb7fa9d37ccee0e4c8827e5e562559a757325ec3f4044aa",
+  "raffleTeeAddress": "0x5b6288be71623E408D61D0417A51572d7CBC10e2",
+  "deployTxHash": "0x718110754b65324133b0dd4f6ad048123baae5d1035639171f61ac297abb8265",
   "iexecHub": "0xB2157BF2fAb286b2A4170E3491Ac39770111Da3E",
   "deployer": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A"
 }
@@ -105,39 +103,63 @@ Saved in `deployment.arbitrum-sepolia.json`:
 ## Slots-Only Flow (Complete)
 
 1. **On-chain joins**  
-   Users call `joinSlotsOnly(...)` with commitments (public on-chain).
+Users call `joinSlotsOnlyWithSlots(...)` (or `joinSlotsOnly(...)`) with commitments and ETH.
 
-2. **Protected data tickets**  
-   Each participant sends a protected dataset to the organizer containing:
-   `raffleId`, `buyer`, `slotId`, `salt`.
+2. **Slot availability (optional)**  
+Frontend can query `isSlotTaken(raffleId, slotId)` or `getSlotStatusBatch(...)`.
 
-3. **Organizer runs iApp**  
-   The organizer runs the iApp with:
-   - public config JSON including commitments
-   - protected data inputs for tickets
+3. **Protected data tickets**  
+Each participant sends protected data containing `raffleId`, `buyer`, `slotId`, `salt`.
 
-4. **TEE picks winner**  
-   The iApp:
-   - validates commitments
-   - builds a deterministic tickets root
-   - selects a winner using `IEXEC_TASK_ID` as entropy
+4. **Prepare public config JSON**  
+Example:
 
-5. **iExec callback**  
-   iExec calls `receiveResult` on the `RaffleTEE` contract with callback-data.
+```bash
+RAFFLE_ID=raffle-123 \
+RAFFLE_MODE=slots-only \
+bun run evm:tee:prepare-config
+```
+
+5. **Organizer runs iApp**  
+Run the iApp with the public config and protected data inputs.
+
+6. **TEE picks winner + callback**  
+The iApp validates commitments, builds tickets root, selects winner, and iExec calls `receiveResult`.
 
 ## Full Privacy Flow (Complete)
 
 1. **Off-chain tickets + payments**  
-   Participants submit encrypted tickets and payments off-chain.
+Participants submit encrypted tickets and payments off-chain.
 
-2. **Organizer runs iApp**  
-   The organizer runs the iApp with protected data inputs (no commitments needed).
+2. **Commit tickets root (optional)**  
+Organizer can call `commitTicketsRoot(raffleId, ticketsRoot, soldTickets)`.
 
-3. **TEE picks winner + ticketsRoot**  
-   The iApp computes a tickets root and winner, then returns callback-data.
+3. **Organizer runs iApp**  
+Run the iApp with protected data inputs only (no commitments required).
 
-4. **On-chain finalize**  
-   `receiveResult` stores the winner and ticketsRoot in `RaffleTEE`.
+4. **TEE picks winner + callback**  
+The iApp computes a tickets root and winner, and iExec calls `receiveResult`.
+
+## Deploy + Run Scripts
+
+Deploy iApp (fills `iapp.config.json` from env when provided):
+
+```bash
+DOCKERHUB_USERNAME=yourname \
+DOCKERHUB_ACCESS_TOKEN=your_pat \
+IAPP_WALLET_PRIVATE_KEY=$PRIVATE_KEY_ETH \
+bun run tee:iapp:deploy
+```
+
+Run a task (returns a `taskId`):
+
+```bash
+IAPP_ADDRESS=0xYourIAppAddress \
+IAPP_CHAIN=arbitrum-sepolia-testnet \
+PUBLIC_CONFIG_URL=https://your-host/public-config.json \
+PROTECTED_DATA_ADDRESSES=0xProtected1,0xProtected2 \
+bun run tee:iapp:run
+```
 
 ## Notes
 
