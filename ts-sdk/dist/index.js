@@ -97,14 +97,15 @@ var AleoNFTClient = class {
   async execute(programName, functionName, inputs, fee = 0) {
     try {
       console.log("DEBUG: Executing with inputs:", inputs);
-      const result = await this.programManager.execute({
+      const transaction = await this.programManager.buildExecutionTransaction({
         programName,
         functionName,
         fee,
         privateFee: false,
         inputs
       });
-      return result;
+      console.log("DEBUG: Transaction built successfully:", transaction);
+      return transaction.toString();
     } catch (error) {
       console.error(`Error executing ${programName}/${functionName}:`, error);
       throw error;

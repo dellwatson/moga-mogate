@@ -5,6 +5,7 @@ import { ALEO_CONFIG, getPrivateKey } from "./config.js";
 const {
   Account,
   ProgramManager,
+  ProgramManagerBase,
   AleoNetworkClient,
   NetworkRecordProvider,
   AleoKeyProvider,
@@ -70,16 +71,80 @@ export class AleoNFTClient {
   ): Promise<string> {
     try {
       console.log("DEBUG: Executing with inputs:", inputs);
-      const result = await this.programManager.execute({
+
+      // Try building transaction first to see if it works better
+      const transaction = await this.programManager.buildExecutionTransaction({
         programName,
         functionName,
         fee,
         privateFee: false,
         inputs,
       });
-      return result;
+
+      console.log("DEBUG: Transaction built successfully:", transaction);
+      return transaction.toString();
     } catch (error) {
       console.error(`Error executing ${programName}/${functionName}:`, error);
+      throw error;
+    }
+  }
+
+  // Execute and broadcast a transition
+  async executeBroadcast(
+    programName: string,
+    functionName: string,
+    inputs: string[],
+    priorityFee: number = 0,
+    privateFee: boolean = false,
+  ): Promise<string> {
+    try {
+      const txId = await this.programManager.execute({
+        programName,
+        functionName,
+        inputs,
+        priorityFee,
+        privateFee,
+      });
+      return txId;
+    } catch (error) {
+      console.error(`Error broadcasting ${programName}/${functionName}:`, error);
+      throw error;
+    }
+  }
+
+  // Execute a transition offline and return its outputs (no broadcast)
+  async executeOffline(
+    programName: string,
+    functionName: string,
+    inputs: string[],
+  ): Promise<string[]> {
+    try {
+      const programSource = await this.networkClient.getProgram(programName);
+      let imports = {};
+      try {
+        imports = await this.networkClient.getProgramImports(programName);
+      } catch {
+        imports = {};
+      }
+      const privateKey = this.account.privateKey();
+      const executionResponse = await ProgramManagerBase.executeFunctionOffline(
+        privateKey,
+        programSource,
+        functionName,
+        inputs,
+        false,
+        false,
+        imports,
+      );
+      const outputs = executionResponse.getOutputs();
+      return outputs.map((output: any) =>
+        typeof output?.toString === "function" ? output.toString() : String(output),
+      );
+    } catch (error) {
+      console.error(
+        `Error executing offline ${programName}/${functionName}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -99,13 +164,38 @@ export class AleoNFTClient {
     }
   }
 
+  async getProgramMappingValue(
+    programName: string,
+    mappingName: string,
+    key: string,
+  ): Promise<string> {
+    const encodedKey = encodeURIComponent(key);
+    return this.networkClient.getProgramMappingValue(
+      programName,
+      mappingName,
+      encodedKey,
+    );
+  }
+
+  async getProgramSource(programName: string): Promise<string> {
+    return this.networkClient.getProgram(programName);
+  }
+
+  async getProgramImports(programName: string): Promise<any> {
+    return this.networkClient.getProgramImports(programName);
+  }
+
+  async findCreditsRecord(microcredits: number): Promise<any> {
+    return this.recordProvider.findCreditsRecord(microcredits, true, []);
+  }
+
   // Mint NFT through authority gateway (owner only)
   async mintAuthority(
     toAddress: string,
     uriHash: string,
     tokenId: string,
   ): Promise<string> {
-    const programName = ALEO_CONFIG.programs.gateway.v2;
+    const programName = ALEO_CONFIG.programs.gatewayLegacy.v2;
     // Format inputs with type annotations for SDK 0.9.9
     const inputs = [`${toAddress}`, `${uriHash}field`, `${tokenId}u64`];
     return this.execute(programName, "mint", inputs);
@@ -113,7 +203,7 @@ export class AleoNFTClient {
 
   // Mint NFT through faucet (public)
   async mintFaucet(toAddress: string, uriHash: string): Promise<string> {
-    const programName = ALEO_CONFIG.programs.gateway.v2;
+    const programName = ALEO_CONFIG.programs.gatewayLegacy.v2;
     return this.execute(programName, "mint_nft", [toAddress, uriHash]);
   }
 
@@ -125,7 +215,7 @@ export class AleoNFTClient {
 
   // Initialize gateway with owner
   async initializeGateway(ownerAddress: string): Promise<string> {
-    const programName = ALEO_CONFIG.programs.gateway.v2;
+    const programName = ALEO_CONFIG.programs.gatewayLegacy.v2;
     return this.execute(programName, "initialize", [ownerAddress]);
   }
 
@@ -136,6 +226,32 @@ export class AleoNFTClient {
     } catch (error) {
       console.error("Error fetching transaction:", error);
       return null;
+    }
+  }
+
+  // Find records for a given program + record name (owned by this account)
+  async findRecords(
+    programName: string,
+    recordName: string,
+    maxRecords: number = 20,
+    startHeight: number = 0,
+    endHeight?: number,
+  ): Promise<any[]> {
+    const params: any = {
+      programName,
+      recordName,
+      maxRecords,
+      startHeight,
+    };
+    if (typeof endHeight === "number") {
+      params.endHeight = endHeight;
+    }
+
+    try {
+      return await this.recordProvider.findRecords(true, [], params);
+    } catch (error) {
+      console.error("Error fetching records:", error);
+      return [];
     }
   }
 }

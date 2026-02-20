@@ -14,11 +14,15 @@ export const ALEO_CONFIG = {
 
   // Program names
   programs: {
+    arc721Private: "mogate_arc721_private.aleo",
+    rafflePrivate: "mogate_darkpool_raffle_private.aleo",
+    gateway: "mogate_authority_mint_v2.aleo",
+    // Legacy (kept for reference)
     collection: {
       v1: "mogate_nft_collection_rwa.aleo",
       v2: "mogate_nft_collection_rwa_v2.aleo",
     },
-    gateway: {
+    gatewayLegacy: {
       v1: "mogate_authority_mint_gateway.aleo",
       v2: "mogate_authority_mint_v2.aleo",
     },
@@ -55,9 +59,16 @@ export function getPrivateKey(): string {
 }
 
 // Get program paths
-export function getProgramPath(program: "collection" | "gateway"): string {
+export function getProgramPath(program: "collection" | "gateway" | "arc721Private" | "rafflePrivate"): string {
   const base = process.cwd();
-  return program === "collection"
-    ? `${base}/programs/collection`
-    : `${base}/programs/authority_mint_gateway`;
+  if (program === "collection") {
+    return `${base}/programs/collection`;
+  }
+  if (program === "arc721Private") {
+    return `${base}/programs/arc721_collection_private`;
+  }
+  if (program === "rafflePrivate") {
+    return `${base}/programs/dark_pool_raffle_private`;
+  }
+  return `${base}/programs/authority_mint_gateway`;
 }

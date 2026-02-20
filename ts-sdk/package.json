@@ -17,7 +17,7 @@
     "deploy:gateway": "bun run src/scripts/deploy-gateway.ts"
   },
   "dependencies": {
-    "@provablehq/sdk": "^0.9.9",
+    "@provablehq/sdk": "^0.10.0-rc",
     "dotenv": "^17.2.3"
   },
   "devDependencies": {
