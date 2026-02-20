@@ -16,7 +16,7 @@ export const ALEO_CONFIG = {
   programs: {
     arc721Private: "mogate_arc721_private.aleo",
     rafflePrivate: "mogate_darkpool_raffle_private.aleo",
-    gateway: "mogate_authority_mint_v2.aleo",
+    gateway: "mogate_authority_mint_v3.aleo",
     // Legacy (kept for reference)
     collection: {
       v1: "mogate_nft_collection_rwa.aleo",
@@ -25,6 +25,7 @@ export const ALEO_CONFIG = {
     gatewayLegacy: {
       v1: "mogate_authority_mint_gateway.aleo",
       v2: "mogate_authority_mint_v2.aleo",
+      v3: "mogate_authority_mint_v3.aleo",
     },
   },
 

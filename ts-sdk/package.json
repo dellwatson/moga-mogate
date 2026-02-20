@@ -9,12 +9,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "bun test",
-    "mint:authority": "bun run src/scripts/mint-authority.ts",
-    "mint:faucet": "bun run src/scripts/mint-faucet.ts",
-    "mint:direct": "bun run src/scripts/mint-direct.ts",
-    "deploy:collection": "bun run src/scripts/deploy-collection.ts",
-    "deploy:gateway": "bun run src/scripts/deploy-gateway.ts"
+    "test": "bun test"
   },
   "dependencies": {
     "@provablehq/sdk": "^0.10.0-rc",
