@@ -1,0 +1,18 @@
+{
+  "program": "mogate_darkpool_raffle_private.aleo",
+  "version": "1.0.0",
+  "description": "Darkpool raffle with fully private tickets (record-based)",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "mogate_arc721_private.aleo",
+      "location": "network",
+      "network": "testnet"
+    },
+    {
+      "name": "credits.aleo",
+      "location": "network",
+      "network": "testnet"
+    }
+  ]
+}

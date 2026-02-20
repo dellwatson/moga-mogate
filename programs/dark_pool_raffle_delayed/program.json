@@ -1,0 +1,6 @@
+{
+  "program": "mogate_darkpool_raffle_delayed.aleo",
+  "version": "1.0.0",
+  "description": "Darkpool raffle with delayed transparency (commit-reveal slots)",
+  "license": "MIT"
+}
