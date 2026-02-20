@@ -101,80 +101,84 @@ export function getSetupConfig(): SetupConfig {
   return {
     labels: {
       arc721CollectionPrivate: choose(
-        STATIC_CONFIG.labels.arc721CollectionPrivate,
         env("SETUP_ARC721_LABEL"),
+        STATIC_CONFIG.labels.arc721CollectionPrivate,
       ),
       authorityMintGateway: choose(
-        STATIC_CONFIG.labels.authorityMintGateway,
         env("SETUP_AUTHORITY_LABEL"),
+        STATIC_CONFIG.labels.authorityMintGateway,
       ),
       darkPoolRafflePrivate: choose(
-        STATIC_CONFIG.labels.darkPoolRafflePrivate,
         env("SETUP_RAFFLE_LABEL"),
+        STATIC_CONFIG.labels.darkPoolRafflePrivate,
       ),
     },
     programs: {
       arc721ProgramDir: choose(
-        STATIC_CONFIG.programs.arc721ProgramDir,
         env("ARC721_PROGRAM_DIR"),
+        STATIC_CONFIG.programs.arc721ProgramDir,
       ),
       authorityProgramId: choose(
-        STATIC_CONFIG.programs.authorityProgramId,
         env("AUTHORITY_PROGRAM"),
         env("GATEWAY_PROGRAM"),
+        STATIC_CONFIG.programs.authorityProgramId,
+      ),
+      authorityProgramDir: choose(
+        env("AUTHORITY_PROGRAM_DIR"),
+        STATIC_CONFIG.programs.authorityProgramDir,
       ),
       raffleProgramDir: choose(
-        STATIC_CONFIG.programs.raffleProgramDir,
         env("RAFFLE_PROGRAM_DIR"),
+        STATIC_CONFIG.programs.raffleProgramDir,
       ),
     },
     accounts: {
       adminAddress: choose(
-        STATIC_CONFIG.accounts.adminAddress,
         env("ADMIN_ADDRESS"),
+        STATIC_CONFIG.accounts.adminAddress,
       ),
       backendAddress: choose(
-        STATIC_CONFIG.accounts.backendAddress,
         env("BACKEND_ADDRESS"),
+        STATIC_CONFIG.accounts.backendAddress,
       ),
       treasuryAddress: choose(
-        STATIC_CONFIG.accounts.treasuryAddress,
         env("TREASURY_ADDRESS"),
+        STATIC_CONFIG.accounts.treasuryAddress,
       ),
     },
     network: {
-      name: choose(STATIC_CONFIG.network.name, env("NETWORK")),
-      endpoint: choose(STATIC_CONFIG.network.endpoint, env("ENDPOINT")),
+      name: choose(env("NETWORK"), STATIC_CONFIG.network.name),
+      endpoint: choose(env("ENDPOINT"), STATIC_CONFIG.network.endpoint),
       privateKey: choose(
-        STATIC_CONFIG.network.privateKey,
         env("PRIVATE_KEY"),
         env("ALEO_PVT_KEY"),
+        STATIC_CONFIG.network.privateKey,
       ),
     },
     collectionDefaults: {
       maxMintable: choose(
-        STATIC_CONFIG.collectionDefaults.maxMintable,
         env("SETUP_MAX_MINTABLE"),
+        STATIC_CONFIG.collectionDefaults.maxMintable,
       ),
       maxFirstEdition: choose(
-        STATIC_CONFIG.collectionDefaults.maxFirstEdition,
         env("SETUP_MAX_FIRST_EDITION"),
+        STATIC_CONFIG.collectionDefaults.maxFirstEdition,
       ),
       symbol: choose(
-        STATIC_CONFIG.collectionDefaults.symbol,
         env("SETUP_SYMBOL"),
+        STATIC_CONFIG.collectionDefaults.symbol,
       ),
     },
     gatewayDefaults: {
       allowed: choose(
-        STATIC_CONFIG.gatewayDefaults.allowed,
         env("SETUP_ALLOWED"),
+        STATIC_CONFIG.gatewayDefaults.allowed,
       ),
       minterProgramId: choose(
-        STATIC_CONFIG.gatewayDefaults.minterProgramId,
         env("SETUP_MINTER_PROGRAM"),
         env("AUTHORITY_PROGRAM"),
         env("GATEWAY_PROGRAM"),
+        STATIC_CONFIG.gatewayDefaults.minterProgramId,
       ),
     },
   };

@@ -16,7 +16,7 @@ It controls:
 
 ## 1) ARC721 Private Collection
 
-### `arc721_collection_private.01_initialize.ts|sh`
+### `arc721_collection_private.01_initialize.ts`
 Initializes collection admin + caps + symbol.
 
 Required inputs:
@@ -29,7 +29,7 @@ Required inputs:
 
 Example:
 ```bash
-bash scripts/setup/arc721_collection_private.01_initialize.sh \
+node scripts/setup/arc721_collection_private.01_initialize.ts \
   --admin aleo1... \
   --max-mintable 0 \
   --max-first-edition 0 \
@@ -37,7 +37,7 @@ bash scripts/setup/arc721_collection_private.01_initialize.sh \
   --private-key "$ALEO_PVT_KEY"
 ```
 
-### `arc721_collection_private.02_set_minter.ts|sh`
+### `arc721_collection_private.02_set_minter.ts`
 Whitelists the gateway (or any minter) in the collection.
 
 Required inputs:
@@ -48,14 +48,14 @@ Required inputs:
 
 Example:
 ```bash
-bash scripts/setup/arc721_collection_private.02_set_minter.sh \
+node scripts/setup/arc721_collection_private.02_set_minter.ts \
   --minter mogate_authority_mint_v3.aleo \
   --allowed true
 ```
 
 ## 2) Authority Mint Gateway
 
-### `authority_mint_gateway.01_initialize.ts|sh`
+### `authority_mint_gateway.01_initialize.ts`
 Gateway currently has no `initialize` transition. This script validates the program exists on network and prints setup status.
 
 Optional input:
@@ -63,12 +63,12 @@ Optional input:
 
 Example:
 ```bash
-bash scripts/setup/authority_mint_gateway.01_initialize.sh
+node scripts/setup/authority_mint_gateway.01_initialize.ts
 ```
 
 ## 3) Dark Pool Raffle Private
 
-### `dark_pool_raffle_private._initialize.ts|sh`
+### `dark_pool_raffle_private._initialize.ts`
 Initializes raffle admin/backend/treasury.
 
 Required inputs:
@@ -80,7 +80,7 @@ Required inputs:
 
 Example:
 ```bash
-bash scripts/setup/dark_pool_raffle_private._initialize.sh \
+node scripts/setup/dark_pool_raffle_private._initialize.ts \
   --admin aleo1... \
   --backend aleo1... \
   --treasury aleo1... \
