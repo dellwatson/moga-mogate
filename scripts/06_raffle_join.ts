@@ -4,14 +4,14 @@
 import {
   createClientFromArgs,
   ensureFieldSuffix,
-  formatU64Array,
   getArg,
   parseCsvU64,
-  programNames,
+  isMain,
 } from "./aleo-utils.ts";
+import { joinRaffleUnsafe } from "../ts-sdk/src/modules/index.ts";
 
 async function main() {
-  const client = createClientFromArgs();
+  const client = await createClientFromArgs();
 
   const raffleIdRaw = getArg("id");
   if (!raffleIdRaw) {
@@ -37,40 +37,26 @@ async function main() {
     : Math.round(price * 1_000_000);
 
   const amount = microPerSlot * slots.length;
-  const paymentRecord = await client.findCreditsRecord(amount);
-  const paymentString =
-    typeof paymentRecord?.toString === "function"
-      ? paymentRecord.toString()
-      : String(paymentRecord);
 
   console.log("🎟️  Joining raffle (unsafe)");
   console.log("===========================");
-  console.log(`Program:    ${programNames().rafflePrivate}`);
+  console.log("Program:    from ts-sdk config");
   console.log(`Raffle ID:  ${raffleId}`);
   console.log(`Slots:      ${slots.join(", ")}`);
   console.log(`Count:      ${slots.length}`);
   console.log(`Amount:     ${amount} (microcredits)`);
   console.log("");
-
-  const inputs = [
+  const result = await joinRaffleUnsafe(client, {
     raffleId,
-    formatU64Array(slots, 8),
-    `${slots.length}u8`,
-    paymentString,
-    `${amount}u64`,
-  ];
-
-  const txId = await client.executeBroadcast(
-    programNames().rafflePrivate,
-    "unsafe_join_raffle",
-    inputs,
-  );
+    slots,
+    amountMicro: amount,
+  });
 
   console.log("✅ Join broadcasted");
-  console.log(`Transaction: ${txId}`);
+  console.log(`Transaction: ${result.txId}`);
 }
 
-if ((import.meta as any).main) {
+if (isMain(import.meta.url)) {
   main().catch((error) => {
     console.error("❌ Error:", error);
     process.exit(1);

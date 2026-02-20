@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * Mint NFT through Authority Gateway V2 (PUBLIC)
- *
- * Wrapper script that calls the TS SDK mint function using tsx
+ * Legacy wrapper kept for compatibility.
+ * It now forwards to the root faucet script.
  */
 
 import { spawn } from "child_process";
@@ -13,25 +12,28 @@ import { spawn } from "child_process";
 
 const TO_ADDRESS =
   "aleo1yv0wuzhwr68dkstlcl4tcw7rs6wynw86xnm7w9ume49t6gtnx5zqalxdf2";
-const URI_HASH = "123456789field";
-const TOKEN_ID = `${Date.now()}u64`;
+const DATA_FILE = "scripts/mint_private.sample_data.leo";
+const EDITION = "1";
 
-console.log("🎨 Minting NFT through Authority Gateway V2");
-console.log("============================================");
+console.log("🎨 Minting NFT through Authority Gateway");
+console.log("========================================");
 console.log(`📍 To: ${TO_ADDRESS}`);
-console.log(`📍 URI Hash: ${URI_HASH}`);
-console.log(`📍 Token ID: ${TOKEN_ID}`);
+console.log(`📍 Data file: ${DATA_FILE}`);
+console.log(`📍 Edition: ${EDITION}`);
 console.log("");
 
-// Call the TS SDK mint function using tsx
+// Forward to root script (which uses ts-sdk module).
 const tsScript = spawn(
-  "npx",
+  "bun",
   [
-    "tsx",
-    "ts-sdk/src/scripts/mint-authority.ts",
+    "run",
+    "scripts/01_mint_private_gateway.ts",
+    "--to",
     TO_ADDRESS,
-    URI_HASH,
-    TOKEN_ID,
+    "--data-file",
+    DATA_FILE,
+    "--edition",
+    EDITION,
   ],
   {
     stdio: "inherit",

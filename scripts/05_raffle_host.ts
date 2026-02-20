@@ -7,9 +7,10 @@ import {
   ensureScalarSuffix,
   getArg,
   hasFlag,
-  programNames,
   readFileText,
+  isMain,
 } from "./aleo-utils.ts";
+import { hostRaffleUnsafe } from "../ts-sdk/src/modules/index.ts";
 
 function requireNftData(): string {
   const dataArg = getArg("data");
@@ -21,7 +22,7 @@ function requireNftData(): string {
 }
 
 async function main() {
-  const client = createClientFromArgs();
+  const client = await createClientFromArgs();
 
   const raffleIdRaw = getArg("id");
   if (!raffleIdRaw) {
@@ -40,54 +41,37 @@ async function main() {
   const nftEdition = ensureScalarSuffix(getArg("edition") || "1");
   const nftData = requireNftData();
 
-  const [seedCommit] = await client.executeOffline(
-    programNames().rafflePrivate,
-    "compute_seed_commit",
-    [raffleId, `${seed}u64`],
-  );
-
-  const [prizeCommit] = await client.executeOffline(
-    programNames().arc721Private,
-    "compute_nft_commit",
-    [nftData, nftEdition],
-  );
+  const result = await hostRaffleUnsafe(client, {
+    raffleId,
+    totalSlots,
+    maxSlotsPerAddress: maxSlots,
+    metadataHash,
+    seed,
+    nftData,
+    nftEdition,
+    autoDraw,
+    autoClaim,
+  });
 
   console.log("🎟️  Hosting raffle (unsafe)");
   console.log("============================");
-  console.log(`Program:      ${programNames().rafflePrivate}`);
+  console.log("Program:      from ts-sdk config");
   console.log(`Raffle ID:    ${raffleId}`);
   console.log(`Total slots:  ${totalSlots}`);
   console.log(`Max per user: ${maxSlots}`);
   console.log(`Metadata:     ${metadataHash}`);
   console.log(`Seed:         ${seed}u64`);
-  console.log(`Seed commit:  ${seedCommit}`);
-  console.log(`Prize commit: ${prizeCommit}`);
+  console.log(`Seed commit:  ${result.seedCommit}`);
+  console.log(`Prize commit: ${result.prizeCommit}`);
   console.log(`Auto draw:    ${autoDraw}`);
   console.log(`Auto claim:   ${autoClaim}`);
   console.log("");
 
-  const inputs = [
-    raffleId,
-    `${totalSlots}u64`,
-    `${maxSlots}u64`,
-    metadataHash,
-    prizeCommit,
-    seedCommit,
-    autoDraw ? "true" : "false",
-    autoClaim ? "true" : "false",
-  ];
-
-  const txId = await client.executeBroadcast(
-    programNames().rafflePrivate,
-    "unsafe_host_raffle",
-    inputs,
-  );
-
   console.log("✅ Host broadcasted");
-  console.log(`Transaction: ${txId}`);
+  console.log(`Transaction: ${result.txId}`);
 }
 
-if ((import.meta as any).main) {
+if (isMain(import.meta.url)) {
   main().catch((error) => {
     console.error("❌ Error:", error);
     process.exit(1);

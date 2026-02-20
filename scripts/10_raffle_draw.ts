@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 // Draw raffle winner
 
-import { createClientFromArgs, ensureFieldSuffix, getArg, programNames } from "./aleo-utils.ts";
+import { createClientFromArgs, ensureFieldSuffix, getArg, isMain } from "./aleo-utils.ts";
+import { drawRaffle } from "../ts-sdk/src/modules/index.ts";
 
 async function main() {
   const raffleIdRaw = getArg("id");
@@ -14,18 +15,14 @@ async function main() {
   const raffleId = ensureFieldSuffix(raffleIdRaw);
   const seed = Number(seedRaw);
 
-  const client = createClientFromArgs();
-  const txId = await client.executeBroadcast(
-    programNames().rafflePrivate,
-    "draw_raffle",
-    [raffleId, `${seed}u64`],
-  );
+  const client = await createClientFromArgs();
+  const txId = await drawRaffle(client, { raffleId, seed });
 
   console.log("✅ Draw broadcasted");
   console.log(`Transaction: ${txId}`);
 }
 
-if ((import.meta as any).main) {
+if (isMain(import.meta.url)) {
   main().catch((error) => {
     console.error("❌ Error:", error);
     process.exit(1);

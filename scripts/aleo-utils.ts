@@ -1,6 +1,7 @@
 // Aleo script helpers (root scripts)
 import fs from "fs";
-import { createClient } from "../ts-sdk/src/client.ts";
+import { fileURLToPath } from "url";
+import path from "path";
 import { ALEO_CONFIG } from "../ts-sdk/src/config.ts";
 
 export function getArg(name: string): string | undefined {
@@ -13,6 +14,13 @@ export function getArg(name: string): string | undefined {
 
 export function hasFlag(name: string): boolean {
   return process.argv.includes(`--${name}`);
+}
+
+export function isMain(importMetaUrl: string): boolean {
+  const scriptPath = process.argv[1];
+  if (!scriptPath) return false;
+  const currentFile = fileURLToPath(importMetaUrl);
+  return path.resolve(scriptPath) === path.resolve(currentFile);
 }
 
 export function ensureFieldSuffix(value: string): string {
@@ -72,8 +80,9 @@ export function resolvePrivateKey(): string {
   );
 }
 
-export function createClientFromArgs() {
+export async function createClientFromArgs() {
   const key = resolvePrivateKey();
+  const { createClient } = await import("../ts-sdk/src/client.ts");
   return createClient(key);
 }
 

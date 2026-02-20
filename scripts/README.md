@@ -1,71 +1,50 @@
-# Minting Scripts
+# Scripts + SDK Layout
 
-## For Backend/Node.js (Current Working Version)
+`ts-sdk` is now module-only (no `ts-sdk/src/scripts`).
 
-Use `mint-authority.js` with tsx:
+- Reusable frontend/offchain module: `ts-sdk/src/modules/index.ts`
+- Domain split:
+  - `ts-sdk/src/modules/mint.ts`
+  - `ts-sdk/src/modules/raffle.actions.ts`
+  - `ts-sdk/src/modules/raffle.views.ts`
+  - `ts-sdk/src/modules/shared.ts`
+- CLI/task runners: `scripts/*.ts`
 
-```bash
-npx tsx scripts/mint-authority.js
-```
+## Core Module Functions
 
-This script directly imports the TS SDK and calls `client.mintAuthority()`.
+From `ts-sdk/src/modules/index.ts`:
 
-## For Frontend (React/Vue/etc)
+- `mintPrivateViaGateway`
+- `mintFaucet`
+- `initializeRafflePrivate`
+- `hostRaffleUnsafe`
+- `joinRaffleUnsafe`
+- `drawRaffle`
+- `claimRafflePrize`
+- `getRaffleDetail`
+- `getRaffleSlots`
+- `getUserTickets`
 
-### Option 1: Use Aleo SDK Directly
+`getRaffleSlots` reads slot status via RPC mapping queries (`slot_taken`) and hash helpers, not via an on-chain view function.
 
-```javascript
-import { Account, ProgramManager, AleoNetworkClient } from "@provablehq/sdk";
+## Example Root Scripts
 
-async function mintNFT(privateKey, toAddress, uriHash) {
-  const account = new Account({ privateKey });
-  const networkClient = new AleoNetworkClient("https://api.provable.com/v2");
-  const programManager = new ProgramManager(
-    "https://api.provable.com/v2",
-    new AleoKeyProvider(),
-    new NetworkRecordProvider(account, networkClient),
-  );
+- Mint via gateway: `scripts/01_mint_private_gateway.ts`
+- Mint faucet flow: `scripts/01b_mint_faucet.ts`
+- Raffle host/join/draw/claim:
+  - `scripts/05_raffle_host.ts`
+  - `scripts/06_raffle_join.ts`
+  - `scripts/10_raffle_draw.ts`
+  - `scripts/11_raffle_claim.ts`
+- Raffle views:
+  - `scripts/07_raffle_status.ts`
+  - `scripts/08_raffle_slots.ts`
+  - `scripts/09_raffle_user_tickets.ts`
 
-  programManager.setAccount(account);
+## Data Input (NFT Struct)
 
-  const tokenId = `${Date.now()}u64`;
-  const result = await programManager.execute(
-    "mogate_authority_mint_v2.aleo",
-    "mint",
-    0, // fee
-    false, // not offline
-    [toAddress, uriHash, tokenId],
-  );
+Use:
+- `scripts/mint_private.sample_data.leo`
 
-  return result;
-}
-```
-
-### Option 2: Build TS SDK to JS Bundle
-
-```bash
-cd ts-sdk
-bun build ./src/index.ts --outdir ./dist --target browser
-```
-
-Then import in your frontend:
-
-```javascript
-import { createClient } from "@moga/aleo-nft-sdk";
-
-const client = createClient(privateKey);
-await client.mintAuthority(toAddress, uriHash, tokenId);
-```
-
-## Deployed Contracts
-
-- **Gateway V2**: `mogate_authority_mint_v2.aleo`
-- **Collection V1**: `mogate_nft_collection_rwa.aleo`
-- **Network**: Aleo Testnet
-- **Endpoint**: `https://api.provable.com/v2`
-
-## Parameters
-
-- `toAddress`: Aleo address (e.g., `aleo1...`)
-- `uriHash`: Metadata URI hash as field (e.g., `123456789field`)
-- `tokenId`: Unix timestamp as u64 (e.g., `${Date.now()}u64`)
+And pass with:
+- `--data-file scripts/mint_private.sample_data.leo`

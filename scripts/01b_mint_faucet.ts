@@ -1,11 +1,10 @@
 #!/usr/bin/env bun
-// Mint private NFT via authority mint gateway
+// Mint private NFT through gateway faucet flow (public mint_private)
 
 import {
   createClientFromArgs,
   ensureScalarSuffix,
   getArg,
-  hasFlag,
   readFileText,
   isMain,
 } from "./aleo-utils.ts";
@@ -35,26 +34,16 @@ function requireNftData(): string {
 }
 
 async function main() {
-  const dryRun = hasFlag("dry-run");
   const edition = ensureScalarSuffix(getArg("edition") || "1");
   const nftData = requireNftData();
-  const client = dryRun ? null : await createClientFromArgs();
-  const to =
-    getArg("to") || (client ? client.getAddress() : "<recipient-address>");
+  const client = await createClientFromArgs();
+  const to = getArg("to") || client.getAddress();
 
-  console.log("🧪 Minting private NFT via gateway");
-  console.log("================================");
-  console.log("Gateway: from ts-sdk config");
+  console.log("🎁 Minting NFT through faucet flow");
+  console.log("=================================");
   console.log(`To:      ${to}`);
   console.log(`Edition: ${edition}`);
   console.log("");
-
-  const inputs = [to, nftData, edition];
-  if (dryRun) {
-    console.log("Dry run only. No transaction sent.");
-    console.log(`Inputs: ${JSON.stringify(inputs)}`);
-    return;
-  }
 
   const txId = await mintFaucet(client, {
     to,
@@ -62,7 +51,7 @@ async function main() {
     nftEdition: edition,
   });
 
-  console.log("✅ Mint broadcasted");
+  console.log("✅ Faucet mint broadcasted");
   console.log(`Transaction: ${txId}`);
 }
 

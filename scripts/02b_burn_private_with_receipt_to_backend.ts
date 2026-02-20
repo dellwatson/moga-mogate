@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 // Burn private NFT and create receipt for a backend address
 
-import { createClientFromArgs, getArg, programNames } from "./aleo-utils.ts";
+import { createClientFromArgs, getArg, isMain, programNames } from "./aleo-utils.ts";
 
 async function main() {
   const nftRecord = process.argv[2];
@@ -16,7 +16,7 @@ async function main() {
     process.exit(1);
   }
 
-  const client = createClientFromArgs();
+  const client = await createClientFromArgs();
   console.log("🔥 Burning private NFT (receipt to backend)");
   console.log("==========================================");
   console.log(`Account:  ${client.getAddress()}`);
@@ -33,7 +33,7 @@ async function main() {
   console.log(`Transaction: ${txId}`);
 }
 
-if ((import.meta as any).main) {
+if (isMain(import.meta.url)) {
   main().catch((error) => {
     console.error("❌ Error:", error);
     process.exit(1);

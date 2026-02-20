@@ -1,52 +1,36 @@
 #!/usr/bin/env bun
 // List raffle tickets (TicketBatch records) for current account
 
-import { createClientFromArgs, getArg, programNames } from "./aleo-utils.ts";
-
-function extractField(raw: string, key: string): string | undefined {
-  const regex = new RegExp(`${key}\\s*:\\s*([^,}]+)`);
-  const match = raw.match(regex);
-  return match ? match[1].trim() : undefined;
-}
-
-function extractSlots(raw: string): string | undefined {
-  const match = raw.match(/slots\s*:\s*\[([^\]]+)\]/);
-  return match ? match[1].trim() : undefined;
-}
+import { createClientFromArgs, getArg, isMain } from "./aleo-utils.ts";
+import { getUserTickets } from "../ts-sdk/src/modules/index.ts";
 
 async function main() {
-  const client = createClientFromArgs();
-  const programName = programNames().rafflePrivate;
-  const recordName = "TicketBatch";
+  const client = await createClientFromArgs();
   const filterRaffle = getArg("raffle");
 
-  const records = await client.findRecords(programName, recordName, 50, 0);
-  if (!records.length) {
+  const result = await getUserTickets(client, {
+    raffleId: filterRaffle,
+    maxRecords: 50,
+    startHeight: 0,
+  });
+
+  if (!result.tickets.length) {
     console.log("No TicketBatch records found.");
     return;
   }
 
-  const raffleIds = new Set<string>();
-
-  records.forEach((record: any, idx: number) => {
-    const text = typeof record?.toString === "function" ? record.toString() : String(record);
-    const raffleId = extractField(text, "raffle_id");
-    if (raffleId) raffleIds.add(raffleId);
-
-    if (!filterRaffle || filterRaffle === raffleId) {
-      const slots = extractSlots(text);
-      console.log(`[#${idx + 1}] ${text}`);
-      if (raffleId) console.log(`  raffle_id: ${raffleId}`);
-      if (slots) console.log(`  slots:     [${slots}]`);
-    }
+  result.tickets.forEach((ticket, idx) => {
+    console.log(`[#${idx + 1}] ${ticket.raw}`);
+    if (ticket.raffleId) console.log(`  raffle_id: ${ticket.raffleId}`);
+    if (ticket.slots.length) console.log(`  slots:     [${ticket.slots.join(", ")}]`);
   });
 
   console.log("");
   console.log("Raffle IDs:");
-  console.log([...raffleIds].join(", ") || "(none)");
+  console.log(result.raffleIds.join(", ") || "(none)");
 }
 
-if ((import.meta as any).main) {
+if (isMain(import.meta.url)) {
   main().catch((error) => {
     console.error("❌ Error:", error);
     process.exit(1);

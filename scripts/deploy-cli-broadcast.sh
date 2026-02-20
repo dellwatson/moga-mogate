@@ -7,7 +7,11 @@ echo "🚀 Deploying aleo program using Leo CLI..."
 echo ""
 
 # Check if .env exists
-if [ ! -f .env ]; then
+if [ -f .env ]; then
+    source .env
+elif [ -f ../../.env ]; then
+    source ../../.env
+else
     echo "❌ Error: .env file not found"
     exit 1
 fi

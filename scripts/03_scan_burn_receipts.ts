@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 // Scan BurnReceipt records owned by this account (backend)
 
-import { createClientFromArgs, getArg, programNames } from "./aleo-utils.ts";
+import { createClientFromArgs, getArg, isMain, programNames } from "./aleo-utils.ts";
 
 function extractField(raw: string, key: string): string | undefined {
   const regex = new RegExp(`${key}\\s*:\\s*([^,}]+)`);
@@ -17,7 +17,7 @@ async function main() {
   const endHeightRaw = getArg("end");
   const endHeight = endHeightRaw ? parseInt(endHeightRaw, 10) : undefined;
 
-  const client = createClientFromArgs();
+  const client = await createClientFromArgs();
   console.log("🔎 Scanning burn receipts");
   console.log("================================");
   console.log(`Account:      ${client.getAddress()}`);
@@ -68,7 +68,7 @@ async function main() {
   }
 }
 
-if ((import.meta as any).main) {
+if (isMain(import.meta.url)) {
   main().catch((error) => {
     console.error("❌ Error:", error);
     process.exit(1);

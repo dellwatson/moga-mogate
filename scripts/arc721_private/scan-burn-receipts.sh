@@ -21,7 +21,16 @@ echo "🔎 Scanning burn receipts..."
 echo ""
 
 if [ -n "$END_HEIGHT" ]; then
-    bun ts-sdk/src/scripts/burn-receipts.ts "$PROGRAM_NAME" "$RECORD_NAME" "$MAX_RECORDS" "$START_HEIGHT" "$END_HEIGHT"
+    bun scripts/03_scan_burn_receipts.ts \
+      --program "$PROGRAM_NAME" \
+      --record "$RECORD_NAME" \
+      --max "$MAX_RECORDS" \
+      --start "$START_HEIGHT" \
+      --end "$END_HEIGHT"
 else
-    bun ts-sdk/src/scripts/burn-receipts.ts "$PROGRAM_NAME" "$RECORD_NAME" "$MAX_RECORDS" "$START_HEIGHT"
+    bun scripts/03_scan_burn_receipts.ts \
+      --program "$PROGRAM_NAME" \
+      --record "$RECORD_NAME" \
+      --max "$MAX_RECORDS" \
+      --start "$START_HEIGHT"
 fi
