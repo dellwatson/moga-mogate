@@ -1,0 +1,6 @@
+{
+  "program": "mogate_arc721_marketplace_escrow_private.aleo",
+  "version": "1.0.0",
+  "description": "Escrow-based marketplace scaffold for ARC-721 private NFTs",
+  "license": "MIT"
+}

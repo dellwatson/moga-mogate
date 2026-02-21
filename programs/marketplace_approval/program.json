@@ -1,0 +1,6 @@
+{
+  "program": "mogate_arc721_marketplace_approval.aleo",
+  "version": "1.0.0",
+  "description": "Approval-based marketplace scaffold for ARC-721 public NFTs",
+  "license": "MIT"
+}
