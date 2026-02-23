@@ -15,10 +15,24 @@ import { hostRaffleUnsafe } from "../ts-sdk/src/modules/index.ts";
 function requireNftData(): string {
   const dataArg = getArg("data");
   if (dataArg) return dataArg;
-  const dataFile = getArg("data-file");
-  const fileText = readFileText(dataFile);
-  if (fileText) return fileText;
-  throw new Error("Missing --data or --data-file for nft_data.");
+
+  const dataFileArg = getArg("data-file");
+  if (dataFileArg) {
+    const fileText = readFileText(dataFileArg);
+    if (fileText) return fileText;
+  }
+
+  // Fallback: default sample data file in the scripts directory.
+  const defaultFile = "mint_private.sample_data.leo";
+  const defaultText = readFileText(defaultFile);
+  if (defaultText) {
+    console.log(`Using default NFT data file: ${defaultFile}`);
+    return defaultText;
+  }
+
+  throw new Error(
+    "Missing --data or --data-file for nft_data, and default file not found.",
+  );
 }
 
 async function main() {

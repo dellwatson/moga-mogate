@@ -1,0 +1,13 @@
+{
+  "program": "mogate_auth_mint_permit.aleo",
+  "version": "1.0.0",
+  "description": "Authority mint gateway with signed permit data verification and nonce replay protection",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "mogate_arc721_private.aleo",
+      "location": "network",
+      "network": "testnet"
+    }
+  ]
+}

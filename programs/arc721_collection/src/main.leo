@@ -64,6 +64,14 @@ program mogate_arc721_collection.aleo {
     // Collection admin (explicit address for convenience)
     mapping collection_admin: u8 => address;
 
+    // Supply caps and counters (u64; 0 means infinite)
+    mapping supply_caps: u8 => u64;
+    // 0u8 - max mintable NFTs (all editions)
+    // 1u8 - max number of first-edition NFTs
+    mapping minted_counts: u8 => u64;
+    // 0u8 - total minted count
+    // 1u8 - first-edition minted count
+
     // --- Internal helpers ---
 
     inline function commit_nft(nft_data: data, nft_edition: scalar) -> field {
@@ -82,23 +90,36 @@ program mogate_arc721_collection.aleo {
 
     async transition initialize(
         public admin: address,
-        public max_mintable: field,
+        public max_mintable: u64,
+        public max_first_edition: u64,
         public symbol: field
     ) -> Future {
-        return finalize_initialize(admin, max_mintable, symbol);
+        return finalize_initialize(admin, max_mintable, max_first_edition, symbol);
     }
 
     async function finalize_initialize(
         admin: address,
-        max_mintable: field,
+        max_mintable: u64,
+        max_first_edition: u64,
         symbol: field
     ) {
+        // One-time initialization guard
+        let already_initialized: bool = collection_admin.contains(0u8);
+        assert(!already_initialized);
+
         // Set admin
         collection_admin.set(0u8, admin);
 
         // Configure basic settings
-        general_settings.set(0u8, max_mintable);
+        let max_mintable_field: field = max_mintable as field;
+        let max_first_edition_field: field = max_first_edition as field;
+        general_settings.set(0u8, max_mintable_field);
+        general_settings.set(1u8, max_first_edition_field);
         general_settings.set(2u8, symbol);
+
+        // Store caps for enforcement (0 means infinite)
+        supply_caps.set(0u8, max_mintable);
+        supply_caps.set(1u8, max_first_edition);
 
         // Store admin hash as recommended in index 7u8
         let admin_hash: field = BHP256::hash_to_field(admin);
@@ -140,6 +161,22 @@ program mogate_arc721_collection.aleo {
         let admin: address = collection_admin.get(0u8);
         assert_eq(caller, admin);
 
+        // Enforce supply caps (0 means infinite)
+        let max_mintable: u64 = supply_caps.get_or_use(0u8, 0u64);
+        if max_mintable != 0u64 {
+            let minted_total: u64 = minted_counts.get_or_use(0u8, 0u64);
+            assert(minted_total < max_mintable);
+        }
+
+        let is_first_edition: bool = nft_edition == 1scalar;
+        if is_first_edition {
+            let max_first_edition: u64 = supply_caps.get_or_use(1u8, 0u64);
+            if max_first_edition != 0u64 {
+                let minted_first: u64 = minted_counts.get_or_use(1u8, 0u64);
+                assert(minted_first < max_first_edition);
+            }
+        }
+
         let nft_commit: field = commit_nft(nft_data, nft_edition);
         let exists: bool = nft_commits.get_or_use(nft_commit, false);
         assert(!exists);
@@ -147,6 +184,14 @@ program mogate_arc721_collection.aleo {
         // Track existence and public ownership
         nft_commits.set(nft_commit, true);
         nft_owners.set(nft_commit, recipient);
+
+        // Update mint counters
+        let minted_total: u64 = minted_counts.get_or_use(0u8, 0u64);
+        minted_counts.set(0u8, minted_total + 1u64);
+        if is_first_edition {
+            let minted_first: u64 = minted_counts.get_or_use(1u8, 0u64);
+            minted_counts.set(1u8, minted_first + 1u64);
+        }
     }
 
     // Publish NFT content (data becomes public)
@@ -161,9 +206,15 @@ program mogate_arc721_collection.aleo {
         nft_data: data,
         nft_edition: scalar
     ) {
+        let caller: address = self.caller;
         let nft_commit: field = commit_nft(nft_data, nft_edition);
         let exists: bool = nft_commits.get_or_use(nft_commit, false);
         assert(exists);
+
+        // Only owner or admin can publish content
+        let owner: address = nft_owners.get(nft_commit);
+        let admin: address = collection_admin.get(0u8);
+        assert(caller == owner || caller == admin);
 
         let content: nft_content = nft_content {
             data: nft_data,
@@ -273,6 +324,39 @@ program mogate_arc721_collection.aleo {
         // Clear per-NFT approval on transfer
         if nft_approvals.contains(nft_commit) {
             nft_approvals.remove(nft_commit);
+        }
+    }
+
+    // --- Burn ---
+
+    // Burn NFT (owner only)
+    async transition burn_public(
+        private nft_data: data,
+        private nft_edition: scalar
+    ) -> Future {
+        let caller: address = self.caller;
+        let nft_commit: field = commit_nft(nft_data, nft_edition);
+        return finalize_burn_public(caller, nft_commit);
+    }
+
+    async function finalize_burn_public(
+        caller: address,
+        nft_commit: field
+    ) {
+        let exists: bool = nft_commits.get_or_use(nft_commit, false);
+        assert(exists);
+
+        let owner: address = nft_owners.get(nft_commit);
+        assert_eq(caller, owner);
+
+        // Clear all associated state
+        nft_commits.remove(nft_commit);
+        nft_owners.remove(nft_commit);
+        if nft_approvals.contains(nft_commit) {
+            nft_approvals.remove(nft_commit);
+        }
+        if nft_contents.contains(nft_commit) {
+            nft_contents.remove(nft_commit);
         }
     }
 

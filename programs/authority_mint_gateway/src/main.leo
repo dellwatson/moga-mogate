@@ -1,69 +1,51 @@
-// Authority Mint Gateway Program for Aleo - V2
+// Authority Mint Gateway Program for Aleo - V2 (private ARC-721)
 // Public minting with signature verification (coming soon)
+// FOR FAUCET PURPOSE - TESTNET ONLY
+// v3: replace with private
 
-import mogate_nft_collection_rwa.aleo;
+import mogate_arc721_private.aleo;
 
-program mogate_authority_mint_v2.aleo {
+program mogate_authority_mint_v3.aleo {
     @noupgrade
     async constructor() {}
 
-    // Public mint - anyone can mint with specific token ID
-    // Cross-calls collection contract
-    async transition mint(
+    // Public mint of private NFT (record-based)
+    // Cross-calls the private ARC-721 collection
+    async transition mint_private(
         public to: address,
-        public uri_hash: field,
-        public token_id: u64
-    ) -> Future {
-        // Call the collection contract to mint
-        let (nft, mint_future): (mogate_nft_collection_rwa.aleo/NFT, Future) = 
-            mogate_nft_collection_rwa.aleo/mint_with_token_id(to, token_id, uri_hash);
-        
-        return finalize_mint(mint_future);
+        private nft_data: data,
+        private nft_edition: scalar
+    ) -> (mogate_arc721_private.aleo/PrivateNFT, Future) {
+        let (nft, mint_future): (mogate_arc721_private.aleo/PrivateNFT, Future) =
+            mogate_arc721_private.aleo/mint_private(to, nft_data, nft_edition);
+
+        let future: Future = finalize_mint_private(mint_future);
+        return (nft, future);
     }
 
-    async function finalize_mint(mint_future: Future) {
-        // No permission checks - public access
-        mint_future.await();
-    }
-
-    // Public mint with auto-incrementing token ID
-    // Cross-calls collection contract
-    async transition mint_nft(
-        public to: address,
-        public uri_hash: field
-    ) -> Future {
-        // Call the collection contract to mint with auto-increment
-        let (nft, mint_future): (mogate_nft_collection_rwa.aleo/NFT, Future) = 
-            mogate_nft_collection_rwa.aleo/mint_to(to, uri_hash);
-        
-        return finalize_mint_nft(mint_future);
-    }
-
-    async function finalize_mint_nft(mint_future: Future) {
+    async function finalize_mint_private(mint_future: Future) {
         // No permission checks - public access
         mint_future.await();
     }
 
     // Signature-based mint (PLACEHOLDER - to be implemented)
     // Will verify signature before minting
-    async transition mint_with_signature(
+    async transition mint_private_with_signature(
         public to: address,
-        public uri_hash: field,
-        public token_id: u64,
+        private nft_data: data,
+        private nft_edition: scalar,
         public signature: signature
-    ) -> Future {
+    ) -> (mogate_arc721_private.aleo/PrivateNFT, Future) {
         // TODO: Implement signature verification
-        // For now, just call mint
-        let (nft, mint_future): (mogate_nft_collection_rwa.aleo/NFT, Future) = 
-            mogate_nft_collection_rwa.aleo/mint_with_token_id(to, token_id, uri_hash);
-        
-        return finalize_mint_with_signature(mint_future);
+        let (nft, mint_future): (mogate_arc721_private.aleo/PrivateNFT, Future) =
+            mogate_arc721_private.aleo/mint_private(to, nft_data, nft_edition);
+
+        let future: Future = finalize_mint_sig(mint_future);
+        return (nft, future);
     }
 
-    async function finalize_mint_with_signature(mint_future: Future) {
+    async function finalize_mint_sig(mint_future: Future) {
         // TODO: Add signature verification logic here
-        // For now, just await the mint
         mint_future.await();
     }
 }
-

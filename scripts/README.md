@@ -48,3 +48,20 @@ Use:
 
 And pass with:
 - `--data-file scripts/mint_private.sample_data.leo`
+
+## Permit + Encryption Scripts
+
+For `programs/authority_mint_gateway_permit`:
+
+- Encrypt backend signer key:
+  - `bun run scripts/12_encrypt_signer_key.ts --secret "<secret>" --out signer-key.ciphertext`
+- Decrypt backend signer key:
+  - `bun run scripts/13_decrypt_signer_key.ts --ciphertext-file signer-key.ciphertext --secret "<secret>" --print-private-key`
+- Sign permit data:
+  - `bun run scripts/14_sign_mint_permit.ts --recipient <aleo_address> --nft-commit <field> --nonce <u64> --ciphertext-file signer-key.ciphertext --secret "<secret>" --json`
+- Execute permit mint:
+  - `bun run scripts/15_mint_private_with_permit.ts --to <aleo_address> --data-file scripts/mint_private.sample_data.leo --edition 1 --nonce <u64> --signer <aleo_signer_address> --signature <sign1...>`
+
+The permit script signs typed Leo data:
+`{recipient: address, nft_commit: field, nonce: u64}`
+which is the exact message verified in `mint_private_with_permit`.

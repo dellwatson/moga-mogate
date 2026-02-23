@@ -1,6 +1,18 @@
 {
-  "program": "mogate_arc721_marketplace_approval.aleo",
+  "program": "mogate_mkt_approval.aleo",
   "version": "1.0.0",
-  "description": "Approval-based marketplace scaffold for ARC-721 public NFTs",
-  "license": "MIT"
+  "description": "Approval-based marketplace for ARC-721 public NFTs with credits settlement",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "mogate_arc721_collection.aleo",
+      "location": "network",
+      "network": "testnet"
+    },
+    {
+      "name": "credits.aleo",
+      "location": "network",
+      "network": "testnet"
+    }
+  ]
 }
