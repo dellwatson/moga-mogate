@@ -1,0 +1,13 @@
+{
+  "program": "mogate_bridge_gateway.aleo",
+  "version": "1.0.0",
+  "description": "Bridge gateway for minting bridged NFTs into mogate_arc721_multiprivate.aleo",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "mogate_arc721_multiprivate.aleo",
+      "location": "network",
+      "network": "testnet"
+    }
+  ]
+}
