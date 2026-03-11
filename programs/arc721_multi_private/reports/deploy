@@ -1,0 +1,37 @@
+aleo'...
+
+
+📊 Deployment Summary for mogate_arc721_multiprivate.aleo
+──────────────────────────────────────────────
+  Total Variables:      609,309
+  Total Constraints:    478,231
+  Max Variables:        2,097,152
+  Max Constraints:      2,097,152
+
+💰 Cost Breakdown (credits)
+  Transaction Storage:  15.725000
+  Program Synthesis:    1.087540
+  Namespace:            1.000000
+  Constructor:          0.002000
+  Priority Fee:         0.000000
+  Total Fee:            17.814540
+──────────────────────────────────────────────
+
+📡 Broadcasting deployment for mogate_arc721_multiprivate.aleo...
+💰Your current public balance is 47.136536 credits.
+
+✔ This transaction will cost you 17.81454 credits. Do you want to proceed? · yes
+
+✉️ Broadcasted transaction with:
+  - transaction ID: 'at1e25xamsqma5rvrqlx2r67zuelgm5hmuddc0kj7dnywnz4rnrwugqrmatt0'
+  - fee ID: 'au1tamde0hxxxjzrp6xg9xly7ugufkjjcnwahay3fxrpkze4fs9lqgswru7eh'
+  - fee transaction ID: 'at1jud4m0nlg6gxylpzepa48jd5xx8cmqkjrqklu3x60z9ua0d5qcqsdh00fv'
+    (use this to check for rejected transactions)
+
+🔄 Searching up to 12 blocks to confirm transaction (this may take several seconds)...
+Explored 3 blocks.
+Transaction accepted.
+✅ Deployment confirmed!
+
+✅ Deployment command executed
+dellwatson@Dales-MacBook-Pro-2 arc721_multi_private % 
