@@ -3,11 +3,13 @@
 
 import {
   createClientFromArgs,
+  ensureFieldSuffix,
   ensureScalarSuffix,
   getArg,
   isMain,
   readFileText,
 } from "./aleo-utils.ts";
+import { buildNftDataFromMetadataUrl } from "../ts-sdk/src/modules/index.ts";
 
 function ensureU64Suffix(value: string): string {
   return value.endsWith("u64") ? value : `${value}u64`;
@@ -38,26 +40,44 @@ function requireNftData(): string {
   throw new Error("Missing --data or --data-file, and fallback data file not found.");
 }
 
+function resolveNftData(): string {
+  const metadataUrl = getArg("metadata-url");
+  if (metadataUrl) {
+    return buildNftDataFromMetadataUrl(metadataUrl);
+  }
+  return requireNftData();
+}
+
+function requireCollectionId(): string {
+  const raw = getArg("collection") || getArg("collection-id") || getArg("collectionId");
+  if (!raw) {
+    throw new Error("Missing --collection <field> (collection_id).");
+  }
+  return ensureFieldSuffix(raw);
+}
+
 async function main() {
   const client = await createClientFromArgs();
+  const collectionId = requireCollectionId();
   const to = getArg("to") || client.getAddress();
-  const nftData = requireNftData();
+  const nftData = resolveNftData();
   const edition = ensureScalarSuffix(getArg("edition") || "1");
   const nonce = ensureU64Suffix(requireArg("nonce"));
   const signer = requireArg("signer");
   const signature = requireArg("signature");
   const program =
-    getArg("program") || "mogate_auth_mint_permit.aleo";
+    getArg("program") || "mogate_auth_mint_permit_v2.aleo";
 
   const txId = await client.executeBroadcast(
     program,
     "mint_private_with_permit",
-    [to, nftData, edition, nonce, signer, signature],
+    [collectionId, to, nftData, edition, nonce, signer, signature],
     0,
     false,
   );
 
   console.log(`Program: ${program}`);
+  console.log(`Collection: ${collectionId}`);
   console.log(`To: ${to}`);
   console.log(`Nonce: ${nonce}`);
   console.log(`Signer: ${signer}`);

@@ -8,7 +8,7 @@ import {
   readFileText,
   isMain,
 } from "./aleo-utils.ts";
-import { claimRafflePrize } from "../ts-sdk/src/modules/index.ts";
+import { buildNftDataFromMetadataUrl, claimRafflePrize } from "../ts-sdk/src/modules/index.ts";
 
 function requireNftData(): string {
   const dataArg = getArg("data");
@@ -17,6 +17,14 @@ function requireNftData(): string {
   const fileText = readFileText(dataFile);
   if (fileText) return fileText;
   throw new Error("Missing --data or --data-file for nft_data.");
+}
+
+function resolveNftData(): string {
+  const metadataUrl = getArg("metadata-url");
+  if (metadataUrl) {
+    return buildNftDataFromMetadataUrl(metadataUrl);
+  }
+  return requireNftData();
 }
 
 async function main() {
@@ -33,13 +41,20 @@ async function main() {
   }
   const slotId = Number(slotRaw);
 
-  const nftData = requireNftData();
+  const collectionRaw = getArg("collection") || getArg("collection-id");
+  if (!collectionRaw) {
+    console.error("Missing --collection <field> for prize collection_id.");
+    process.exit(1);
+  }
+
+  const nftData = resolveNftData();
   const nftEdition = ensureScalarSuffix(getArg("edition") || "1");
 
   const client = await createClientFromArgs();
   const txId = await claimRafflePrize(client, {
     ticketRecord,
     slotId,
+    collectionId: collectionRaw,
     nftData,
     nftEdition,
   });

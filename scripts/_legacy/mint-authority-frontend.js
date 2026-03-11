@@ -21,7 +21,7 @@
  */
 export async function mintNFT(privateKey, toAddress, uriHash) {
   // Dynamic import to avoid issues with SSR/build
-  const { createClient } = await import("../ts-sdk/src/index.js");
+  const { createClient } = await import("../../ts-sdk/src/index.js");
 
   // Create client with user's private key
   const client = createClient(privateKey);

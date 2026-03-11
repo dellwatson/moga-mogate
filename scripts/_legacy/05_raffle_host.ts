@@ -10,7 +10,7 @@ import {
   readFileText,
   isMain,
 } from "./aleo-utils.ts";
-import { hostRaffleUnsafe } from "../ts-sdk/src/modules/index.ts";
+import { buildNftDataFromMetadataUrl, hostRaffleUnsafe } from "../ts-sdk/src/modules/index.ts";
 
 function requireNftData(): string {
   const dataArg = getArg("data");
@@ -35,6 +35,14 @@ function requireNftData(): string {
   );
 }
 
+function resolveNftData(): string {
+  const metadataUrl = getArg("metadata-url");
+  if (metadataUrl) {
+    return buildNftDataFromMetadataUrl(metadataUrl);
+  }
+  return requireNftData();
+}
+
 async function main() {
   const client = await createClientFromArgs();
 
@@ -45,6 +53,12 @@ async function main() {
   }
 
   const raffleId = ensureFieldSuffix(raffleIdRaw);
+  const collectionRaw = getArg("collection") || getArg("collection-id");
+  if (!collectionRaw) {
+    console.error("Missing --collection <field> for raffle prize collection_id.");
+    process.exit(1);
+  }
+  const collectionId = ensureFieldSuffix(collectionRaw);
   const totalSlots = Number(getArg("total") || "200");
   const maxSlots = Number(getArg("max-per") || "0");
   const metadataHash = ensureFieldSuffix(getArg("metadata") || "0field");
@@ -53,10 +67,11 @@ async function main() {
   const autoClaim = hasFlag("auto-claim");
 
   const nftEdition = ensureScalarSuffix(getArg("edition") || "1");
-  const nftData = requireNftData();
+  const nftData = resolveNftData();
 
   const result = await hostRaffleUnsafe(client, {
     raffleId,
+    collectionId,
     totalSlots,
     maxSlotsPerAddress: maxSlots,
     metadataHash,
@@ -71,9 +86,12 @@ async function main() {
   console.log("============================");
   console.log("Program:      from ts-sdk config");
   console.log(`Raffle ID:    ${raffleId}`);
+  console.log(`Collection:   ${collectionId}`);
   console.log(`Total slots:  ${totalSlots}`);
   console.log(`Max per user: ${maxSlots}`);
   console.log(`Metadata:     ${metadataHash}`);
+  const metadataUrl = getArg("metadata-url");
+  if (metadataUrl) console.log(`Metadata URL: ${metadataUrl}`);
   console.log(`Seed:         ${seed}u64`);
   console.log(`Seed commit:  ${result.seedCommit}`);
   console.log(`Prize commit: ${result.prizeCommit}`);

@@ -45,6 +45,7 @@ function resolveSignerKey(): PrivateKey {
 }
 
 async function main() {
+  const collectionId = ensureFieldSuffix(requireArg("collection"));
   const recipient = requireArg("recipient");
   const nftCommit = ensureFieldSuffix(requireArg("nft-commit"));
   const nonce = ensureU64Suffix(requireArg("nonce"));
@@ -54,12 +55,13 @@ async function main() {
   const signerKey = resolveSignerKey();
   const signerAddress = signerKey.to_address().to_string();
 
-  const permitLiteral = `{recipient: ${recipient}, nft_commit: ${nftCommit}, nonce: ${nonce}}`;
+  const permitLiteral = `{collection_id: ${collectionId}, recipient: ${recipient}, nft_commit: ${nftCommit}, nonce: ${nonce}}`;
   const permitBytes = Plaintext.fromString(permitLiteral).toBytesLe();
   const signature = signerKey.sign(permitBytes).to_string();
 
   const output = {
     signer: signerAddress,
+    collection_id: collectionId,
     recipient,
     nft_commit: nftCommit,
     nonce,
@@ -78,6 +80,7 @@ async function main() {
   }
 
   console.log(`Signer:        ${output.signer}`);
+  console.log(`Collection:    ${output.collection_id}`);
   console.log(`Recipient:     ${output.recipient}`);
   console.log(`NFT Commit:    ${output.nft_commit}`);
   console.log(`Nonce:         ${output.nonce}`);

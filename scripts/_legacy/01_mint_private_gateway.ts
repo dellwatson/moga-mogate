@@ -3,13 +3,14 @@
 
 import {
   createClientFromArgs,
+  ensureFieldSuffix,
   ensureScalarSuffix,
   getArg,
   hasFlag,
   readFileText,
   isMain,
 } from "./aleo-utils.ts";
-import { mintFaucet } from "../ts-sdk/src/modules/index.ts";
+import { buildNftDataFromMetadataUrl, mintFaucet } from "../ts-sdk/src/modules/index.ts";
 
 function requireNftData(): string {
   const dataArg = getArg("data");
@@ -34,10 +35,27 @@ function requireNftData(): string {
   );
 }
 
+function resolveNftData(): string {
+  const metadataUrl = getArg("metadata-url");
+  if (metadataUrl) {
+    return buildNftDataFromMetadataUrl(metadataUrl);
+  }
+  return requireNftData();
+}
+
+function requireCollectionId(): string {
+  const raw = getArg("collection") || getArg("collection-id") || getArg("collectionId");
+  if (!raw) {
+    throw new Error("Missing --collection <field> (collection_id).");
+  }
+  return ensureFieldSuffix(raw);
+}
+
 async function main() {
   const dryRun = hasFlag("dry-run");
+  const collectionId = requireCollectionId();
   const edition = ensureScalarSuffix(getArg("edition") || "1");
-  const nftData = requireNftData();
+  const nftData = resolveNftData();
   const client = dryRun ? null : await createClientFromArgs();
   const to =
     getArg("to") || (client ? client.getAddress() : "<recipient-address>");
@@ -45,11 +63,14 @@ async function main() {
   console.log("🧪 Minting private NFT via gateway");
   console.log("================================");
   console.log("Gateway: from ts-sdk config");
+  console.log(`Collection: ${collectionId}`);
   console.log(`To:      ${to}`);
   console.log(`Edition: ${edition}`);
+  const metadataUrl = getArg("metadata-url");
+  if (metadataUrl) console.log(`Metadata: ${metadataUrl}`);
   console.log("");
 
-  const inputs = [to, nftData, edition];
+  const inputs = [collectionId, to, nftData, edition];
   if (dryRun) {
     console.log("Dry run only. No transaction sent.");
     console.log(`Inputs: ${JSON.stringify(inputs)}`);
@@ -57,6 +78,7 @@ async function main() {
   }
 
   const txId = await mintFaucet(client, {
+    collectionId,
     to,
     nftData,
     nftEdition: edition,

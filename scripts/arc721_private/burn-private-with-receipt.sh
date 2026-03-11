@@ -23,7 +23,7 @@ if [ -z "$1" ]; then
     echo "  ./scripts/arc721_private/burn-private-with-receipt.sh '<NFT_RECORD>'"
     echo ""
     echo "Example (format must be exact Leo record syntax):"
-    echo "  ./scripts/arc721_private/burn-private-with-receipt.sh '{owner: aleo1..., data: {metadata: [0field,0field,0field,0field], name: [0field,0field,0field,0field], image: [0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field], attributes: [{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]},{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]},{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]},{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]}]}, edition: 1scalar}'"
+    echo "  ./scripts/arc721_private/burn-private-with-receipt.sh '{owner: aleo1..., data: {metadata: [0field,0field,0field,0field]}, edition: 1scalar}'"
     echo ""
     echo "Note: The BurnReceipt record will be encrypted to the NFT owner's address."
     exit 1

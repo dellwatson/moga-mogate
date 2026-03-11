@@ -23,7 +23,7 @@ if [ -z "$1" ] || [ -z "$2" ]; then
     echo "  ./scripts/arc721_private/burn-private-with-receipt-to.sh '<NFT_RECORD>' <RECEIPT_RECIPIENT>"
     echo ""
     echo "Example (format must be exact Leo record syntax):"
-    echo "  ./scripts/arc721_private/burn-private-with-receipt-to.sh '{owner: aleo1..., data: {metadata: [0field,0field,0field,0field], name: [0field,0field,0field,0field], image: [0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field,0field], attributes: [{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]},{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]},{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]},{trait_type: [0field,0field,0field,0field], _value: [0field,0field,0field,0field]}]}, edition: 1scalar}' aleo1backend..."
+    echo "  ./scripts/arc721_private/burn-private-with-receipt-to.sh '{owner: aleo1..., data: {metadata: [0field,0field,0field,0field]}, edition: 1scalar}' aleo1backend..."
     echo ""
     exit 1
 fi

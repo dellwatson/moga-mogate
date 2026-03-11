@@ -9,6 +9,12 @@ function extractField(raw: string, key: string): string | undefined {
   return match ? match[1].trim() : undefined;
 }
 
+function extractArray(raw: string, key: string): string | undefined {
+  const regex = new RegExp(`${key}\\s*:\\s*\\[([^\\]]+)\\]`);
+  const match = raw.match(regex);
+  return match ? `[${match[1].trim()}]` : undefined;
+}
+
 async function main() {
   const programName = getArg("program") || programNames().arc721Private;
   const recordName = getArg("record") || "BurnReceipt";
@@ -48,9 +54,13 @@ async function main() {
     const text = typeof record?.toString === "function" ? record.toString() : String(record);
     const nftOwner = extractField(text, "nft_owner");
     const nftCommit = extractField(text, "nft_commit");
+    const collectionId = extractField(text, "collection_id");
+    const metadata = extractArray(text, "metadata");
+    const edition = extractField(text, "edition");
 
     console.log(`[#${i + 1}] ${text}`);
     if (nftOwner) console.log(`  nft_owner:  ${nftOwner}`);
+    if (collectionId) console.log(`  collection: ${collectionId}`);
     if (nftCommit) {
       console.log(`  nft_commit: ${nftCommit}`);
       try {
@@ -64,6 +74,8 @@ async function main() {
         console.log("  content:    (not published or not found)");
       }
     }
+    if (metadata) console.log(`  metadata:   ${metadata}`);
+    if (edition) console.log(`  edition:    ${edition}`);
     console.log("");
   }
 }

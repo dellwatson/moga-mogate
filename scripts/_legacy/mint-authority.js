@@ -5,7 +5,7 @@
  * Example implementation using TS SDK - Frontend compatible
  */
 
-import { createClient } from "../ts-sdk/dist/index.js";
+import { createClient } from "../../ts-sdk/dist/index.js";
 
 // ============================================
 // CONFIGURATION

@@ -107,5 +107,6 @@ export function programNames() {
     arc721Private: ALEO_CONFIG.programs.arc721Private,
     rafflePrivate: ALEO_CONFIG.programs.rafflePrivate,
     gateway: ALEO_CONFIG.programs.gateway,
+    bridge: ALEO_CONFIG.programs.bridge,
   } as const;
 }
