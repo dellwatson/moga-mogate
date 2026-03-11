@@ -16,14 +16,18 @@ loadDotenv({ path: resolve(ROOT_DIR, ".env.setup"), override: true });
 type SetupConfig = {
   labels: {
     arc721CollectionPrivate: string;
+    arc721MultiPrivate: string;
     authorityMintGateway: string;
     darkPoolRafflePrivate: string;
+    bridgeGateway: string;
   };
   programs: {
     arc721ProgramDir: string;
+    arc721MultiProgramDir: string;
     authorityProgramId: string;
     authorityProgramDir: string;
     raffleProgramDir: string;
+    bridgeProgramDir: string;
   };
   accounts: {
     adminAddress: string;
@@ -36,9 +40,16 @@ type SetupConfig = {
     privateKey: string;
   };
   collectionDefaults: {
+    collectionId: string;
+    name: string;
     maxMintable: string;
     maxFirstEdition: string;
-    symbol: string;
+    symbol: string; // legacy field symbol for single-collection ARC721
+    symbolText: string;
+    metadataUrl: string;
+    isBridged: string;
+    originChainId: string;
+    originCollection: string;
   };
   gatewayDefaults: {
     minterProgramId: string;
@@ -50,15 +61,19 @@ const STATIC_CONFIG: SetupConfig = {
   labels: {
     // Example for versioning: "arc721_collection_privateV2"
     arc721CollectionPrivate: "arc721_collection_private",
+    arc721MultiPrivate: "arc721_multi_private",
     authorityMintGateway: "authority_mint_gateway",
     darkPoolRafflePrivate: "dark_pool_raffle_private",
+    bridgeGateway: "bridge_gateway",
   },
   programs: {
     arc721ProgramDir: "programs/arc721_collection_private",
+    arc721MultiProgramDir: "programs/arc721_multi_private",
     //set_minter needs the minter program ID, not a folder path.
-    authorityProgramId: "mogate_authority_mint_v3.aleo",
+    authorityProgramId: "mogate_authority_mint_v4.aleo",
     authorityProgramDir: "programs/authority_mint_gateway",
     raffleProgramDir: "programs/dark_pool_raffle_private",
+    bridgeProgramDir: "programs/bridge_gateway",
   },
   accounts: {
     // Set these once here if you do not want to pass --admin/--backend/--treasury
@@ -75,13 +90,20 @@ const STATIC_CONFIG: SetupConfig = {
     privateKey: "",
   },
   collectionDefaults: {
-    maxMintable: "0u64",
+    collectionId: "1field",
+    name: "Lezgo-Dev Collection",
+    maxMintable: "0u64", // how many is this ?
     maxFirstEdition: "0u64",
     symbol: "0field",
+    symbolText: "LEZGO",
+    metadataUrl: "https://example.com/collection.json",
+    isBridged: "false",
+    originChainId: "0u32",
+    originCollection: "native",
   },
   gatewayDefaults: {
     allowed: "true",
-    minterProgramId: "mogate_authority_mint_v3.aleo",
+    minterProgramId: "mogate_authority_mint_v4.aleo",
   },
 };
 
@@ -104,6 +126,10 @@ export function getSetupConfig(): SetupConfig {
         env("SETUP_ARC721_LABEL"),
         STATIC_CONFIG.labels.arc721CollectionPrivate,
       ),
+      arc721MultiPrivate: choose(
+        env("SETUP_ARC721_MULTI_LABEL"),
+        STATIC_CONFIG.labels.arc721MultiPrivate,
+      ),
       authorityMintGateway: choose(
         env("SETUP_AUTHORITY_LABEL"),
         STATIC_CONFIG.labels.authorityMintGateway,
@@ -112,11 +138,19 @@ export function getSetupConfig(): SetupConfig {
         env("SETUP_RAFFLE_LABEL"),
         STATIC_CONFIG.labels.darkPoolRafflePrivate,
       ),
+      bridgeGateway: choose(
+        env("SETUP_BRIDGE_LABEL"),
+        STATIC_CONFIG.labels.bridgeGateway,
+      ),
     },
     programs: {
       arc721ProgramDir: choose(
         env("ARC721_PROGRAM_DIR"),
         STATIC_CONFIG.programs.arc721ProgramDir,
+      ),
+      arc721MultiProgramDir: choose(
+        env("ARC721_MULTI_PROGRAM_DIR"),
+        STATIC_CONFIG.programs.arc721MultiProgramDir,
       ),
       authorityProgramId: choose(
         env("AUTHORITY_PROGRAM"),
@@ -130,6 +164,10 @@ export function getSetupConfig(): SetupConfig {
       raffleProgramDir: choose(
         env("RAFFLE_PROGRAM_DIR"),
         STATIC_CONFIG.programs.raffleProgramDir,
+      ),
+      bridgeProgramDir: choose(
+        env("BRIDGE_PROGRAM_DIR"),
+        STATIC_CONFIG.programs.bridgeProgramDir,
       ),
     },
     accounts: {
@@ -156,6 +194,14 @@ export function getSetupConfig(): SetupConfig {
       ),
     },
     collectionDefaults: {
+      collectionId: choose(
+        env("SETUP_COLLECTION_ID"),
+        STATIC_CONFIG.collectionDefaults.collectionId,
+      ),
+      name: choose(
+        env("SETUP_COLLECTION_NAME"),
+        STATIC_CONFIG.collectionDefaults.name,
+      ),
       maxMintable: choose(
         env("SETUP_MAX_MINTABLE"),
         STATIC_CONFIG.collectionDefaults.maxMintable,
@@ -167,6 +213,26 @@ export function getSetupConfig(): SetupConfig {
       symbol: choose(
         env("SETUP_SYMBOL"),
         STATIC_CONFIG.collectionDefaults.symbol,
+      ),
+      symbolText: choose(
+        env("SETUP_SYMBOL_TEXT"),
+        STATIC_CONFIG.collectionDefaults.symbolText,
+      ),
+      metadataUrl: choose(
+        env("SETUP_COLLECTION_METADATA_URL"),
+        STATIC_CONFIG.collectionDefaults.metadataUrl,
+      ),
+      isBridged: choose(
+        env("SETUP_COLLECTION_BRIDGED"),
+        STATIC_CONFIG.collectionDefaults.isBridged,
+      ),
+      originChainId: choose(
+        env("SETUP_COLLECTION_ORIGIN_CHAIN"),
+        STATIC_CONFIG.collectionDefaults.originChainId,
+      ),
+      originCollection: choose(
+        env("SETUP_COLLECTION_ORIGIN"),
+        STATIC_CONFIG.collectionDefaults.originCollection,
       ),
     },
     gatewayDefaults: {
@@ -187,8 +253,10 @@ export function getSetupConfig(): SetupConfig {
 export function getStepLabel(
   program:
     | "arc721CollectionPrivate"
+    | "arc721MultiPrivate"
     | "authorityMintGateway"
-    | "darkPoolRafflePrivate",
+    | "darkPoolRafflePrivate"
+    | "bridgeGateway",
   stepName: string,
 ): string {
   const cfg = getSetupConfig();
