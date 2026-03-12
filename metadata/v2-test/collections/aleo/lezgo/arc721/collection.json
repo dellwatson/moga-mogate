@@ -1,0 +1,13 @@
+{
+  "name": "Lezgo Flights ARC-721",
+  "company": "lezgo",
+  "network": "aleo",
+  "standard": "arc721",
+  "description": "Lezgo flight credit collection on Aleo (ARC-721).",
+  "image": "",
+  "banner": "",
+  "external_url": "",
+  "royalties_bps": 0,
+  "creator": "",
+  "tags": ["travel", "flight", "credit"]
+}

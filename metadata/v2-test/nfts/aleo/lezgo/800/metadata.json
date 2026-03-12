@@ -1,0 +1,37 @@
+{
+  "name": "Lezgo $800 Economy Credit",
+  "symbol": "LEZ",
+  "description": "$800 Lezgo flight credit (economy class only). Any airline. Worldwide.",
+  "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
+  "external_url": "",
+  "attributes": [
+    { "trait_type": "Type", "value": "Credit Voucher" },
+    { "trait_type": "Credit Amount", "value": 800 },
+    { "trait_type": "Credit Currency", "value": "USD" },
+    { "trait_type": "Category", "value": "Flight" },
+    { "trait_type": "Class", "value": "Economy" },
+    { "trait_type": "Airline", "value": "Any" },
+    { "trait_type": "Region", "value": "Worldwide" },
+    { "trait_type": "Expiration", "value": "Never" },
+    { "trait_type": "Company", "value": "Lezgo" },
+    { "trait_type": "Network", "value": "aleo" },
+    { "trait_type": "Environment", "value": "testnet" },
+    { "trait_type": "Token Standard", "value": "ARC-721" },
+    { "trait_type": "Creator", "value": "lezgo" }
+  ],
+  "properties": {
+    "category": "travel",
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/v2-test/images/flights/flight-credit-800-eco.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "lezgo",
+        "share": 100
+      }
+    ]
+  }
+}
