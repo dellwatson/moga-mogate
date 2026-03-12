@@ -1,11 +1,11 @@
 {
-  "program": "mogate_authority_mint_v4.aleo",
-  "version": "0.0.0",
-  "description": "Authority Mint Gateway  - Public minting with signature support",
+  "program": "mogate_authority_mint_v5.aleo",
+  "version": "0.0.1",
+  "description": "Authority Mint Gateway - Public minting (recipient private) with signature support (placeholder)",
   "license": "MIT",
   "dependencies": [
     {
-      "name": "mogate_arc721_multiprivate.aleo",
+      "name": "mogate_arc721_multiprivate_v2.aleo",
       "location": "network",
       "network": "testnet"
     }

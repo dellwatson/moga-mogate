@@ -1,6 +1,6 @@
 {
-  "program": "mogate_arc721_multiprivate.aleo",
-  "version": "1.0.0",
-  "description": "ARC-721 multi-collection private (record-based) NFT collection for Mogate RWA",
+  "program": "mogate_arc721_multiprivate_v2.aleo",
+  "version": "2.0.0",
+  "description": "ARC-721 multi-collection private (record-based) NFT collection for Mogate RWA (metadata public, ownership private, optional public token_id mode)",
   "license": "MIT"
 }
