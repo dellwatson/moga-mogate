@@ -8,6 +8,7 @@ import { getSetupConfig, getStepLabel } from "./setup.config.ts";
 import {
   encodeStringToFieldArray,
   formatFieldArray,
+  joinBaseUrl,
 } from "../../ts-sdk/src/modules/index.ts";
 
 function getArg(name: string): string | undefined {
@@ -74,7 +75,15 @@ function main() {
   const admin = getArg("admin") || cfg.accounts.adminAddress;
   const nameText = getArg("name") || cfg.collectionDefaults.name;
   const symbolText = getArg("symbol") || cfg.collectionDefaults.symbolText;
-  const metadataUrl = getArg("metadata-url") || cfg.collectionDefaults.metadataUrl;
+  const metadataBaseUrl = getArg("metadata-base") || cfg.collectionDefaults.metadataBaseUrl;
+  const metadataUrl = joinBaseUrl(
+    metadataBaseUrl,
+    getArg("metadata-url") || cfg.collectionDefaults.metadataUrl,
+  );
+  const publicTokenId = parseBool(
+    getArg("public-token-id") || getArg("token-id-public") || cfg.collectionDefaults.publicTokenId,
+    "public-token-id",
+  );
   const isBridged = parseBool(
     getArg("bridged") || cfg.collectionDefaults.isBridged,
     "bridged",
@@ -118,6 +127,7 @@ function main() {
     name,
     symbol,
     metadata,
+    publicTokenId,
     isBridged,
     originChainId,
     originCollection,
@@ -139,6 +149,7 @@ function main() {
   console.log(`Name:        ${nameText}`);
   console.log(`Symbol:      ${symbolText}`);
   console.log(`Metadata:    ${metadataUrl}`);
+  console.log(`PublicTokenId: ${publicTokenId}`);
   console.log(`Bridged:     ${isBridged}`);
   console.log(`OriginChain: ${originChainId}`);
   console.log(`OriginColl:  ${getArg("origin-collection") || cfg.collectionDefaults.originCollection}`);

@@ -4,12 +4,51 @@ import { fileURLToPath } from "url";
 import path from "path";
 import { ALEO_CONFIG } from "../ts-sdk/src/config.ts";
 
+function normalizeEndpoint(raw: string): string {
+  return String(raw || "")
+    .trim()
+    .replace(/\/+$/, "")
+    .replace(/\/(testnet|mainnet|canary)(\/(testnet|mainnet|canary))*$/i, "");
+}
+
 export function getArg(name: string): string | undefined {
   const idx = process.argv.indexOf(`--${name}`);
   if (idx >= 0 && process.argv[idx + 1]) {
     return process.argv[idx + 1];
   }
   return undefined;
+}
+
+export function applyEndpointOverrideFromArgs(): void {
+  const endpointArg = getArg("endpoint");
+  if (endpointArg && endpointArg.trim().length) {
+    const normalized = normalizeEndpoint(endpointArg);
+    process.env.ALEO_ENDPOINT = normalized;
+    // Keep backwards-compat for older scripts that read ENDPOINT.
+    process.env.ENDPOINT = normalized;
+  }
+}
+
+export function applyRecordSearchOverridesFromArgs(): void {
+  const windowArg = getArg("scan-window") || getArg("window");
+  if (windowArg && windowArg.trim().length) {
+    process.env.ALEO_RECORD_SCAN_WINDOW = windowArg.trim();
+  }
+
+  const skipRecentArg = getArg("skip-recent");
+  if (skipRecentArg && skipRecentArg.trim().length) {
+    process.env.ALEO_RECORD_SKIP_RECENT_BLOCKS = skipRecentArg.trim();
+  }
+
+  const startHeightArg = getArg("start-height");
+  if (startHeightArg && startHeightArg.trim().length) {
+    process.env.ALEO_RECORD_START_HEIGHT = startHeightArg.trim();
+  }
+
+  const endHeightArg = getArg("end-height");
+  if (endHeightArg && endHeightArg.trim().length) {
+    process.env.ALEO_RECORD_END_HEIGHT = endHeightArg.trim();
+  }
 }
 
 export function hasFlag(name: string): boolean {
@@ -24,7 +63,20 @@ export function isMain(importMetaUrl: string): boolean {
 }
 
 export function ensureFieldSuffix(value: string): string {
-  return value.endsWith("field") ? value : `${value}field`;
+  const trimmed = String(value ?? "").trim();
+  if (!trimmed) {
+    throw new Error("Expected a field literal, got empty string. Example: 1field");
+  }
+
+  const raw = trimmed.endsWith("field") ? trimmed.slice(0, -5) : trimmed;
+  if (!/^\d+$/.test(raw)) {
+    throw new Error(
+      `Expected a numeric field literal (e.g. 1field). Got: "${value}"`,
+    );
+  }
+
+  // Normalize (strip leading zeros) by round-tripping through BigInt.
+  return `${BigInt(raw)}field`;
 }
 
 export function ensureScalarSuffix(value: string): string {
@@ -81,6 +133,9 @@ export function resolvePrivateKey(): string {
 }
 
 export async function createClientFromArgs() {
+  // Must run before importing the ts-sdk, since config reads env on module load.
+  applyEndpointOverrideFromArgs();
+  applyRecordSearchOverridesFromArgs();
   const key = resolvePrivateKey();
   const { createClient } = await import("../ts-sdk/src/client.ts");
   return createClient(key);

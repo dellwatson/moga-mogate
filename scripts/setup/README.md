@@ -78,7 +78,9 @@ Required inputs:
 - `--admin <aleo-address>` (collection admin; default from `setup.config.ts`)
 - `--name <string>` (default from `setup.config.ts`)
 - `--symbol <string>` (default from `setup.config.ts`)
+- `--metadata-base <string>` (optional; prefix used when `--metadata-url` is a relative path)
 - `--metadata-url <string>` (default from `setup.config.ts`)
+- `--public-token-id true|false` (default from `setup.config.ts`)
 - `--bridged true|false` (default from `setup.config.ts`)
 - `--origin-chain <u32>` (default from `setup.config.ts`)
 - `--origin-collection <string>` (default from `setup.config.ts`)
@@ -93,7 +95,9 @@ node scripts/setup/arc721_multi_private.02_create_collection.ts \
   --collection 1field \
   --name "Mogate One" \
   --symbol "MOGA" \
-  --metadata-url "https://example.com/collection.json"
+  --metadata-base "https://raw.github.com/dellwatson/moga-mogate/" \
+  --metadata-url "aleo-network/metadata/v2-test/collections/aleo/lezgo/arc721/collection.json" \
+  --public-token-id false
 ```
 
 ### `arc721_multi_private.03_set_minter.ts`
@@ -110,7 +114,7 @@ Example:
 ```bash
 node scripts/setup/arc721_multi_private.03_set_minter.ts \
   --collection 1field \
-  --minter mogate_authority_mint_v4.aleo \
+  --minter mogate_authority_mint_v5.aleo \
   --allowed true
 ```
 
@@ -127,10 +131,14 @@ Example:
 node scripts/setup/authority_mint_gateway.01_initialize.ts
 ```
 
-## 4) Dark Pool Raffle Private
+## 4) Dark Pool Raffle (Private)
 
-### `dark_pool_raffle_private._initialize.ts`
+### `dark_pool_raffle_priv_v3._initialize.ts`
 Initializes raffle admin/backend/treasury.
+
+Operational scripts:
+- Basic flow: `scripts/raffle_basic/*`
+- Advanced flow: `scripts/raffle_adv/*`
 
 Required inputs:
 - `--admin <aleo-address>` (or set in `setup.config.ts`)
@@ -141,7 +149,19 @@ Required inputs:
 
 Example:
 ```bash
-node scripts/setup/dark_pool_raffle_private._initialize.ts \
+node scripts/setup/dark_pool_raffle_priv_v3._initialize.ts \
+  --admin aleo1... \
+  --backend aleo1... \
+  --treasury aleo1... \
+  --private-key "$ALEO_PVT_KEY"
+```
+
+### `dark_pool_raffle_privadv._initialize.ts`
+Initializes raffle admin/backend/treasury for the advanced escrow+refund version.
+
+Example:
+```bash
+node scripts/setup/dark_pool_raffle_privadv._initialize.ts \
   --admin aleo1... \
   --backend aleo1... \
   --treasury aleo1... \

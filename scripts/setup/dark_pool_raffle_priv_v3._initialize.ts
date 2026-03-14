@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// Setup: initialize dark pool raffle private via leo CLI
+// Setup: initialize dark pool raffle private (v3) via leo CLI
 
 import { spawnSync } from "node:child_process";
 import { dirname, isAbsolute, resolve } from "node:path";

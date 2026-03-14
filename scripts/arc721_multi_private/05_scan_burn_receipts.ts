@@ -73,7 +73,7 @@ async function main() {
     const nftCommit = extractField(text, "nft_commit");
     const collectionId = extractField(text, "collection_id");
     const metadata = extractArray(text, "metadata");
-    const edition = extractField(text, "edition");
+    const tokenId = extractField(text, "token_id");
 
     console.log(`[#${i + 1}] ${text}`);
     if (nftOwner) console.log(`  nft_owner:  ${nftOwner}`);
@@ -88,7 +88,7 @@ async function main() {
         // ignore decode errors
       }
     }
-    if (edition) console.log(`  edition:    ${edition}`);
+    if (tokenId) console.log(`  token_id:   ${tokenId}`);
     console.log("");
   }
 }

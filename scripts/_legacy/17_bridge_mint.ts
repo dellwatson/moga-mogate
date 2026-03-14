@@ -9,6 +9,7 @@ import {
 import {
   buildBridgeClaimLiteral,
   mintBridged,
+  mintBridgedPublicId,
 } from "../ts-sdk/src/modules/index.ts";
 
 function requireArg(name: string): string {
@@ -30,13 +31,12 @@ async function main() {
 
   const signer = requireArg("signer");
   const signature = requireArg("signature");
+  const usePublicTokenId = getArg("public-token-id") === "true";
 
   const client = await createClientFromArgs();
-  const txId = await mintBridged(client, {
-    claimLiteral,
-    signer,
-    signature,
-  });
+  const txId = usePublicTokenId
+    ? await mintBridgedPublicId(client, { claimLiteral, signer, signature })
+    : await mintBridged(client, { claimLiteral, signer, signature });
 
   console.log("✅ Bridged mint broadcasted");
   console.log(`Transaction: ${txId}`);

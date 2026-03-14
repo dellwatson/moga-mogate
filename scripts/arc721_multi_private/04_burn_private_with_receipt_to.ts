@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 // Burn private NFT and send receipt to a specified address (backend).
 
 import { createClientFromArgs, getArg, isMain } from "../aleo-utils.ts";
@@ -7,8 +7,26 @@ import { getSetupConfig } from "../setup/setup.config.ts";
 
 const cfg = getSetupConfig();
 
+// Optional local override. If set, it wins.
+const INPUT = {
+  program: "",
+  nft: "",
+  receiptOwner: "",
+};
+
+function pickString(value?: string, fallback?: string, defaultValue?: string): string | undefined {
+  const first = value && value.trim().length ? value : undefined;
+  if (first) return first;
+  const second = fallback && fallback.trim().length ? fallback : undefined;
+  if (second) return second;
+  return defaultValue && defaultValue.trim().length ? defaultValue : undefined;
+}
+
 function requireRecord(): string {
-  const direct = getArg("nft") || getArg("record") || process.argv[2];
+  const direct = pickString(
+    INPUT.nft,
+    getArg("nft") || getArg("record") || process.argv[2],
+  );
   if (!direct) {
     throw new Error("Missing NFT record. Use --nft '<record>' or pass as first arg.");
   }
@@ -17,11 +35,13 @@ function requireRecord(): string {
 
 async function main() {
   const client = await createClientFromArgs();
-  const program = getArg("program") || programNames().arc721Private;
+  const program = pickString(INPUT.program, getArg("program"), programNames().arc721Private);
   const nftRecord = requireRecord();
-  const receiptOwner = getArg("receipt-owner")
-    || getArg("backend")
-    || cfg.accounts.backendAddress;
+  const receiptOwner = pickString(
+    INPUT.receiptOwner,
+    getArg("receipt-owner") || getArg("backend"),
+    cfg.accounts.backendAddress,
+  );
 
   if (!receiptOwner) {
     throw new Error("Missing --receipt-owner or setup.config.ts accounts.backendAddress");

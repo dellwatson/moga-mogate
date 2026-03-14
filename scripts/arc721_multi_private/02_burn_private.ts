@@ -1,11 +1,27 @@
-#!/usr/bin/env bun
-// Burn private NFT from mogate_arc721_multiprivate.aleo
+#!/usr/bin/env node
+// Burn private NFT from mogate_arc721_multiprivate_v2.aleo
 
 import { createClientFromArgs, getArg, isMain } from "../aleo-utils.ts";
 import { programNames } from "../aleo-utils.ts";
 
+// Optional local override. If set, it wins.
+const INPUT = {
+  program: "",
+  nft: "",
+};
+
+function pickString(value?: string, fallback?: string): string | undefined {
+  const first = value && value.trim().length ? value : undefined;
+  if (first) return first;
+  const second = fallback && fallback.trim().length ? fallback : undefined;
+  return second;
+}
+
 function requireRecord(): string {
-  const direct = getArg("nft") || getArg("record") || process.argv[2];
+  const direct = pickString(
+    INPUT.nft,
+    getArg("nft") || getArg("record") || process.argv[2],
+  );
   if (!direct) {
     throw new Error("Missing NFT record. Use --nft '<record>' or pass as first arg.");
   }
@@ -14,7 +30,7 @@ function requireRecord(): string {
 
 async function main() {
   const client = await createClientFromArgs();
-  const program = getArg("program") || programNames().arc721Private;
+  const program = pickString(INPUT.program, getArg("program")) || programNames().arc721Private;
   const nftRecord = requireRecord();
 
   const txId = await client.executeBroadcast(

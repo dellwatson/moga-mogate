@@ -19,6 +19,7 @@ type SetupConfig = {
     arc721MultiPrivate: string;
     authorityMintGateway: string;
     darkPoolRafflePrivate: string;
+    darkPoolRafflePrivAdv: string;
     bridgeGateway: string;
   };
   programs: {
@@ -26,7 +27,10 @@ type SetupConfig = {
     arc721MultiProgramDir: string;
     authorityProgramId: string;
     authorityProgramDir: string;
+    raffleProgramId: string;
     raffleProgramDir: string;
+    raffleAdvProgramId: string;
+    raffleAdvProgramDir: string;
     bridgeProgramDir: string;
   };
   accounts: {
@@ -41,9 +45,11 @@ type SetupConfig = {
   };
   collectionDefaults: {
     collectionId: string;
+    metadataBaseUrl: string;
     name: string;
     maxMintable: string;
     maxFirstEdition: string;
+    publicTokenId: string;
     symbol: string; // legacy field symbol for single-collection ARC721
     symbolText: string;
     metadataUrl: string;
@@ -55,7 +61,15 @@ type SetupConfig = {
     minterProgramId: string;
     allowed: string;
   };
+  scanDefaults: {
+    arc721MultiStartHeight: string;
+    arc721MultiRecentBlocks: string;
+  };
 };
+
+// https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/aleo-network/metadata/v2-test/nfts/aleo/lezgo/200/metadata.json
+// https://tinyurl.com/52jwhvxv
+// https://raw.github.com/dellwatson/moga-mogate/aleo-network/metadata/v2-test/collections/aleo/lezgo/arc721/collection.json
 
 const STATIC_CONFIG: SetupConfig = {
   labels: {
@@ -63,22 +77,28 @@ const STATIC_CONFIG: SetupConfig = {
     arc721CollectionPrivate: "arc721_collection_private",
     arc721MultiPrivate: "arc721_multi_private",
     authorityMintGateway: "authority_mint_gateway",
-    darkPoolRafflePrivate: "dark_pool_raffle_private",
+    darkPoolRafflePrivate: "dark_pool_raffle_priv_v3",
+    darkPoolRafflePrivAdv: "dark_pool_raffle_privadv",
     bridgeGateway: "bridge_gateway",
   },
   programs: {
     arc721ProgramDir: "programs/arc721_collection_private",
     arc721MultiProgramDir: "programs/arc721_multi_private",
     //set_minter needs the minter program ID, not a folder path.
-    authorityProgramId: "mogate_authority_mint_v4.aleo",
+    authorityProgramId: "mogate_authority_mint_v5.aleo",
     authorityProgramDir: "programs/authority_mint_gateway",
+    raffleProgramId: "mogate_darkpool_raffle_priv_v3.aleo",
     raffleProgramDir: "programs/dark_pool_raffle_private",
+    raffleAdvProgramId: "mogate_darkpool_raffle_privadv.aleo",
+    raffleAdvProgramDir: "programs/dark_pool_raffle_private_adv",
     bridgeProgramDir: "programs/bridge_gateway",
   },
   accounts: {
     // Set these once here if you do not want to pass --admin/--backend/--treasury
     adminAddress:
       "aleo1yv0wuzhwr68dkstlcl4tcw7rs6wynw86xnm7w9ume49t6gtnx5zqalxdf2",
+    // Backend address is an Aleo address (NOT a private key). Used for burn receipts.
+    // Override via BACKEND_ADDRESS in .env.
     backendAddress:
       "aleo1yv0wuzhwr68dkstlcl4tcw7rs6wynw86xnm7w9ume49t6gtnx5zqalxdf2",
     treasuryAddress:
@@ -86,24 +106,36 @@ const STATIC_CONFIG: SetupConfig = {
   },
   network: {
     name: "testnet",
-    endpoint: "https://api.provable.com/v2",
+    // Base host WITHOUT "/testnet". The Provable SDK appends it automatically.
+    endpoint: "https://api.explorer.provable.com/v2",
     privateKey: "",
   },
   collectionDefaults: {
     collectionId: "1field",
-    name: "Lezgo-Dev Collection",
+    // Used when you pass a relative metadata path (no scheme like https://).
+    metadataBaseUrl: "https://raw.github.com/dellwatson/moga-mogate/",
+    name: "Lezgo-PrivateId",
     maxMintable: "0u64", // how many is this ?
     maxFirstEdition: "0u64",
+    publicTokenId: "false",
     symbol: "0field",
     symbolText: "LEZGO",
-    metadataUrl: "https://example.com/collection.json",
+    metadataUrl:
+      // NOTE: On-chain URL is stored as `[field; 4]` (124 bytes max).
+      // Keep the on-chain string short. Prefer relative paths + metadataBaseUrl.
+      "aleo-network/metadata/v2-test/collections/aleo/lezgo/arc721/collection.json",
     isBridged: "false",
     originChainId: "0u32",
     originCollection: "native",
   },
   gatewayDefaults: {
     allowed: "true",
-    minterProgramId: "mogate_authority_mint_v4.aleo",
+    minterProgramId: "mogate_authority_mint_v5.aleo",
+  },
+  scanDefaults: {
+    // Default scan window for PrivateNFT records. This should be the deployment height.
+    arc721MultiStartHeight: "14987338",
+    arc721MultiRecentBlocks: "5000",
   },
 };
 
@@ -198,6 +230,10 @@ export function getSetupConfig(): SetupConfig {
         env("SETUP_COLLECTION_ID"),
         STATIC_CONFIG.collectionDefaults.collectionId,
       ),
+      metadataBaseUrl: choose(
+        env("SETUP_METADATA_BASE_URL"),
+        STATIC_CONFIG.collectionDefaults.metadataBaseUrl,
+      ),
       name: choose(
         env("SETUP_COLLECTION_NAME"),
         STATIC_CONFIG.collectionDefaults.name,
@@ -209,6 +245,10 @@ export function getSetupConfig(): SetupConfig {
       maxFirstEdition: choose(
         env("SETUP_MAX_FIRST_EDITION"),
         STATIC_CONFIG.collectionDefaults.maxFirstEdition,
+      ),
+      publicTokenId: choose(
+        env("SETUP_PUBLIC_TOKEN_ID"),
+        STATIC_CONFIG.collectionDefaults.publicTokenId,
       ),
       symbol: choose(
         env("SETUP_SYMBOL"),
@@ -247,6 +287,16 @@ export function getSetupConfig(): SetupConfig {
         STATIC_CONFIG.gatewayDefaults.minterProgramId,
       ),
     },
+    scanDefaults: {
+      arc721MultiStartHeight: choose(
+        env("SETUP_ARC721_MULTI_START_HEIGHT"),
+        STATIC_CONFIG.scanDefaults.arc721MultiStartHeight,
+      ),
+      arc721MultiRecentBlocks: choose(
+        env("SETUP_ARC721_MULTI_RECENT_BLOCKS"),
+        STATIC_CONFIG.scanDefaults.arc721MultiRecentBlocks,
+      ),
+    },
   };
 }
 
@@ -256,6 +306,7 @@ export function getStepLabel(
     | "arc721MultiPrivate"
     | "authorityMintGateway"
     | "darkPoolRafflePrivate"
+    | "darkPoolRafflePrivAdv"
     | "bridgeGateway",
   stepName: string,
 ): string {
