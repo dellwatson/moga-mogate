@@ -2,8 +2,20 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import { EIP712 } from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
-import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+
+/// @notice Interface for Polkadot SR25519 signature verification precompile
+interface ISr25519Verifier {
+    /// @notice Verify an SR25519 signature
+    /// @param message The message that was signed (32 bytes)
+    /// @param signature The SR25519 signature (64 bytes)
+    /// @param publicKey The public key (32 bytes)
+    /// @return valid True if the signature is valid
+    function verify_sr25519_signature(
+        bytes32 message,
+        bytes calldata signature,
+        bytes32 publicKey
+    ) external view returns (bool valid);
+}
 
 /// @notice Minimal interface for the external NFT collection used for prizes.
 interface ICollectionMint {
@@ -26,10 +38,9 @@ interface ICollectionMint {
 /// @dev Each raffle is identified by a string `raffleId` (hashed to bytes32
 /// for storage) and uses explicit slot numbers owned by participant addresses.
 
-contract Raffle is Ownable, EIP712 {
+contract Raffle is Ownable {
     constructor()
         Ownable(msg.sender)
-        EIP712("MogateRaffle", "1")
     {}
 
     // =============================================================
@@ -89,20 +100,13 @@ contract Raffle is Ownable, EIP712 {
     /// @notice Refund fee in basis points (out of 10_000). Default is 500 = 5%.
     uint256 public refundFeeBps = 500;
 
-    /// @notice Backend signer that authorizes safe actions.
-    address public backendSigner;
-    /// @notice Tracks which EIP-712 permits have already been consumed.
+    /// @notice Address of the SR25519 signature verification precompile
+    address constant SR25519_PRECOMPILE = address(0x0000000000000000000000000000000000000800);
+    
+    /// @notice Backend signer that authorizes safe actions (stored as SR25519 public key).
+    bytes32 public backendSignerPubkey;
+    /// @notice Tracks which permits have already been consumed.
     mapping(bytes32 => bool) public usedPermits;
-
-    bytes32 private constant HOST_RAFFLE_TYPEHASH = keccak256(
-        "HostRaffle(string raffleId,uint256 totalSlots,uint256 maxSlotsPerAddress,string metadataUri,address collection,bool premintContract,bool premint,uint8 prizeType,uint256 prizeAmount,bool autoDraw,bool autoClaim,uint64 expiresAt,address organizer)"
-    );
-    bytes32 private constant JOIN_RAFFLE_TYPEHASH = keccak256(
-        "JoinRaffle(string raffleId,uint256[] slotIds,uint256 amount,address token,address payer)"
-    );
-    bytes32 private constant HOST_AND_JOIN_RAFFLE_TYPEHASH = keccak256(
-        "HostAndJoinRaffle(string raffleId,uint256 totalSlots,uint256 maxSlotsPerAddress,string metadataUri,address collection,bool premintContract,bool premint,uint8 prizeType,uint256 prizeAmount,bool autoDraw,bool autoClaim,uint64 expiresAt,uint256[] slotIds,uint256 amount,address token,uint256 bonusFreeSlots,address payer)"
-    );
 
     function _statusToString(MultiRaffleStatus s) internal pure returns (string memory) {
         if (s == MultiRaffleStatus.OPEN) return "OPEN";
@@ -150,7 +154,7 @@ contract Raffle is Ownable, EIP712 {
         uint64 expiresAt,
         bytes calldata signature
     ) external returns (bytes32 id) {
-        bytes32 digest = _hashHostRaffle(
+        bytes32 message = _hashHostRaffle(
             raffleId,
             totalSlots,
             maxSlotsPerAddress,
@@ -165,7 +169,7 @@ contract Raffle is Ownable, EIP712 {
             expiresAt,
             msg.sender
         );
-        _consumePermit(digest, signature);
+        _consumePermit(message, signature);
 
         id = _createRaffle(
             raffleId,
@@ -187,38 +191,38 @@ contract Raffle is Ownable, EIP712 {
     // External host/join (unsafe variants - no signature)
     // =============================================================
 
-    /// @notice Create a new raffle with the specified parameters (unsafe, no signature).
-    /// @dev Reverts if a raffle with the same `raffleId` already exists.
-    /// Sets status to OPEN and resets counters.
-    function unsafeHostRaffle(
-        string calldata raffleId,
-        uint256 totalSlots,
-        uint256 maxSlotsPerAddress,
-        string calldata metadataUri,
-        address collection,
-        bool premintContract,
-        bool premint,
-        PrizeTokenType prizeType,
-        uint256 prizeAmount,
-        bool autoDraw,
-        bool autoClaim,
-        uint64 expiresAt
-    ) external returns (bytes32 id) {
-        id = _createRaffle(
-            raffleId,
-            totalSlots,
-            maxSlotsPerAddress,
-            metadataUri,
-            collection,
-            premintContract,
-            premint,
-            prizeType,
-            prizeAmount,
-            autoDraw,
-            autoClaim,
-            expiresAt
-        );
-    }
+    // /// @notice Create a new raffle with the specified parameters (unsafe, no signature).
+    // /// @dev Reverts if a raffle with the same `raffleId` already exists.
+    // /// Sets status to OPEN and resets counters.
+    // function unsafeHostRaffle(
+    //     string calldata raffleId,
+    //     uint256 totalSlots,
+    //     uint256 maxSlotsPerAddress,
+    //     string calldata metadataUri,
+    //     address collection,
+    //     bool premintContract,
+    //     bool premint,
+    //     PrizeTokenType prizeType,
+    //     uint256 prizeAmount,
+    //     bool autoDraw,
+    //     bool autoClaim,
+    //     uint64 expiresAt
+    // ) external returns (bytes32 id) {
+    //     id = _createRaffle(
+    //         raffleId,
+    //         totalSlots,
+    //         maxSlotsPerAddress,
+    //         metadataUri,
+    //         collection,
+    //         premintContract,
+    //         premint,
+    //         prizeType,
+    //         prizeAmount,
+    //         autoDraw,
+    //         autoClaim,
+    //         expiresAt
+    //     );
+    // }
 
     /// @notice Join an existing raffle by purchasing specific slot IDs (safe variant).
     function joinRaffle(
@@ -238,14 +242,14 @@ contract Raffle is Ownable, EIP712 {
             require(block.timestamp <= r.expiresAt, "RaffleExpired");
         }
 
-        bytes32 digest = _hashJoinRaffle(
+        bytes32 message = _hashJoinRaffle(
             raffleId,
             slotIds,
             amount,
             token,
             msg.sender
         );
-        _consumePermit(digest, signature);
+        _consumePermit(message, signature);
 
         if (amount > 0) {
             if (token == address(0)) {
@@ -258,37 +262,37 @@ contract Raffle is Ownable, EIP712 {
         _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
     }
 
-    /// @notice Join an existing raffle by purchasing specific slot IDs (unsafe, no signature).
-    /// @dev Payment amount and token are provided by the off-chain backend.
-    /// Reverts if raffle is not OPEN, expired, or any slot is invalid/taken.
-    function unsafeJoinRaffle(
-        string calldata raffleId,
-        uint256[] calldata slotIds,
-        uint256 amount,
-        address token
-    ) external payable {
-        require(slotIds.length > 0, "NoSlots");
+    // /// @notice Join an existing raffle by purchasing specific slot IDs (unsafe, no signature).
+    // /// @dev Payment amount and token are provided by the off-chain backend.
+    // /// Reverts if raffle is not OPEN, expired, or any slot is invalid/taken.
+    // function unsafeJoinRaffle(
+    //     string calldata raffleId,
+    //     uint256[] calldata slotIds,
+    //     uint256 amount,
+    //     address token
+    // ) external payable {
+    //     require(slotIds.length > 0, "NoSlots");
 
-        bytes32 id = keccak256(bytes(raffleId));
-        MultiRaffle storage r = _multiRaffles[id];
-        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-        require(r.status == MultiRaffleStatus.OPEN, "NotOpen");
-        if (r.expiresAt != 0) {
-            require(block.timestamp <= r.expiresAt, "RaffleExpired");
-        }
+    //     bytes32 id = keccak256(bytes(raffleId));
+    //     MultiRaffle storage r = _multiRaffles[id];
+    //     require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+    //     require(r.status == MultiRaffleStatus.OPEN, "NotOpen");
+    //     if (r.expiresAt != 0) {
+    //         require(block.timestamp <= r.expiresAt, "RaffleExpired");
+    //     }
 
-        if (amount > 0) {
-            if (token == address(0)) {
-                _handleNativePayment(id, msg.sender, amount);
-            } else {
-                // TODO: support ERC20 tokens in the future
-                // IERC20(token).transferFrom(msg.sender, address(this), amount);
-                revert("ERC20Disabled");
-            }
-        }
+    //     if (amount > 0) {
+    //         if (token == address(0)) {
+    //             _handleNativePayment(id, msg.sender, amount);
+    //         } else {
+    //             // TODO: support ERC20 tokens in the future
+    //             // IERC20(token).transferFrom(msg.sender, address(this), amount);
+    //             revert("ERC20Disabled");
+    //         }
+    //     }
 
-        _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
-    }
+    //     _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
+    // }
 
     /// @notice Host and join a raffle in a single call (safe variant).
     function hostAndJoinRaffle(
@@ -310,7 +314,7 @@ contract Raffle is Ownable, EIP712 {
         uint256 bonusFreeSlots,
         bytes calldata signature
     ) external payable returns (bytes32 id) {
-        bytes32 digest = _hashHostAndJoinRaffle(
+        bytes32 message = _hashHostAndJoinRaffle(
             raffleId,
             totalSlots,
             maxSlotsPerAddress,
@@ -329,7 +333,7 @@ contract Raffle is Ownable, EIP712 {
             bonusFreeSlots,
             msg.sender
         );
-        _consumePermit(digest, signature);
+        _consumePermit(message, signature);
 
         id = _createRaffle(
             raffleId,
@@ -359,55 +363,55 @@ contract Raffle is Ownable, EIP712 {
         _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
     }
 
-    /// @notice Convenience helper that both hosts and joins a raffle in one tx (unsafe, no signature).
-    /// @dev The first `min(bonusFreeSlots, slotIds.length)` slots are treated as free off-chain.
-    function unsafeHostAndJoinRaffle(
-        string calldata raffleId,
-        uint256 totalSlots,
-        uint256 maxSlotsPerAddress,
-        string calldata metadataUri,
-        address collection,
-        bool premintContract,
-        bool premint,
-        PrizeTokenType prizeType,
-        uint256 prizeAmount,
-        bool autoDraw,
-        bool autoClaim,
-        uint64 expiresAt,
-        uint256[] calldata slotIds,
-        uint256 amount,
-        address token,
-        uint256 bonusFreeSlots
-    ) external payable returns (bytes32 id) {
-        id = _createRaffle(
-            raffleId,
-            totalSlots,
-            maxSlotsPerAddress,
-            metadataUri,
-            collection,
-            premintContract,
-            premint,
-            prizeType,
-            prizeAmount,
-            autoDraw,
-            autoClaim,
-            expiresAt
-        );
+    // /// @notice Convenience helper that both hosts and joins a raffle in one tx (unsafe, no signature).
+    // /// @dev The first `min(bonusFreeSlots, slotIds.length)` slots are treated as free off-chain.
+    // function unsafeHostAndJoinRaffle(
+    //     string calldata raffleId,
+    //     uint256 totalSlots,
+    //     uint256 maxSlotsPerAddress,
+    //     string calldata metadataUri,
+    //     address collection,
+    //     bool premintContract,
+    //     bool premint,
+    //     PrizeTokenType prizeType,
+    //     uint256 prizeAmount,
+    //     bool autoDraw,
+    //     bool autoClaim,
+    //     uint64 expiresAt,
+    //     uint256[] calldata slotIds,
+    //     uint256 amount,
+    //     address token,
+    //     uint256 bonusFreeSlots
+    // ) external payable returns (bytes32 id) {
+    //     id = _createRaffle(
+    //         raffleId,
+    //         totalSlots,
+    //         maxSlotsPerAddress,
+    //         metadataUri,
+    //         collection,
+    //         premintContract,
+    //         premint,
+    //         prizeType,
+    //         prizeAmount,
+    //         autoDraw,
+    //         autoClaim,
+    //         expiresAt
+    //     );
 
-        MultiRaffle storage r = _multiRaffles[id];
+    //     MultiRaffle storage r = _multiRaffles[id];
 
-        if (amount > 0) {
-            if (token == address(0)) {
-                _handleNativePayment(id, msg.sender, amount);
-            } else {
-                // TODO: support ERC20 tokens in the future
-                // IERC20(token).transferFrom(msg.sender, address(this), amount);
-                revert("ERC20Disabled");
-            }
-        }
+    //     if (amount > 0) {
+    //         if (token == address(0)) {
+    //             _handleNativePayment(id, msg.sender, amount);
+    //         } else {
+    //             // TODO: support ERC20 tokens in the future
+    //             // IERC20(token).transferFrom(msg.sender, address(this), amount);
+    //             revert("ERC20Disabled");
+    //         }
+    //     }
 
-        _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
-    }
+    //     _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
+    // }
 
     // =============================================================
     // External prize + treasury + refund
@@ -877,11 +881,12 @@ contract Raffle is Ownable, EIP712 {
         refundFeeBps = newFeeBps;
     }
 
-    /// @notice Owner can update the backend signer used for EIP-712 permits.
-    function setBackendSigner(address signer) external onlyOwner {
-        require(signer != address(0), "InvalidSigner");
-        backendSigner = signer;
-        emit BackendSignerUpdated(signer);
+    /// @notice Owner can update the backend signer used for SR25519 permits.
+    /// @param pubkey The SR25519 public key of the backend signer (32 bytes).
+    function setBackendSigner(bytes32 pubkey) external onlyOwner {
+        require(pubkey != bytes32(0), "InvalidSigner");
+        backendSignerPubkey = pubkey;
+        emit BackendSignerUpdated(address(uint160(uint256(pubkey)))); // Convert to address for event compatibility
     }
 
     // =============================================================
@@ -936,12 +941,18 @@ contract Raffle is Ownable, EIP712 {
         emit MultiRaffleHosted(id, raffleId, msg.sender);
     }
 
-    function _consumePermit(bytes32 digest, bytes calldata signature) internal {
-        require(backendSigner != address(0), "SignerNotSet");
-        require(!usedPermits[digest], "PermitUsed");
-        address signer = ECDSA.recover(digest, signature);
-        require(signer == backendSigner, "InvalidSignature");
-        usedPermits[digest] = true;
+    function _consumePermit(bytes32 message, bytes calldata signature) internal {
+        require(backendSignerPubkey != bytes32(0), "SignerNotSet");
+        require(!usedPermits[message], "PermitUsed");
+        require(signature.length == 64, "InvalidSignatureLength");
+        
+        bool valid = ISr25519Verifier(SR25519_PRECOMPILE).verify_sr25519_signature(
+            message,
+            signature,
+            backendSignerPubkey
+        );
+        require(valid, "InvalidSignature");
+        usedPermits[message] = true;
     }
 
     function _hashHostRaffle(
@@ -958,18 +969,18 @@ contract Raffle is Ownable, EIP712 {
         bool autoClaim,
         uint64 expiresAt,
         address organizer
-    ) internal view returns (bytes32) {
-        bytes32 structHash = keccak256(
-            abi.encode(
-                HOST_RAFFLE_TYPEHASH,
-                keccak256(bytes(raffleId)),
+    ) internal pure returns (bytes32) {
+        return keccak256(
+            abi.encodePacked(
+                "HostRaffle",
+                raffleId,
                 totalSlots,
                 maxSlotsPerAddress,
-                keccak256(bytes(metadataUri)),
+                metadataUri,
                 collection,
                 premintContract,
                 premint,
-                prizeType,
+                uint8(prizeType),
                 prizeAmount,
                 autoDraw,
                 autoClaim,
@@ -977,7 +988,6 @@ contract Raffle is Ownable, EIP712 {
                 organizer
             )
         );
-        return _hashTypedDataV4(structHash);
     }
 
     function _hashJoinRaffle(
@@ -986,19 +996,17 @@ contract Raffle is Ownable, EIP712 {
         uint256 amount,
         address token,
         address payer
-    ) internal view returns (bytes32) {
-        bytes32 slotIdsHash = keccak256(abi.encodePacked(slotIds));
-        bytes32 structHash = keccak256(
-            abi.encode(
-                JOIN_RAFFLE_TYPEHASH,
-                keccak256(bytes(raffleId)),
-                slotIdsHash,
+    ) internal pure returns (bytes32) {
+        return keccak256(
+            abi.encodePacked(
+                "JoinRaffle",
+                raffleId,
+                keccak256(abi.encodePacked(slotIds)),
                 amount,
                 token,
                 payer
             )
         );
-        return _hashTypedDataV4(structHash);
     }
 
     function _hashHostAndJoinRaffle(
@@ -1019,31 +1027,29 @@ contract Raffle is Ownable, EIP712 {
         address token,
         uint256 bonusFreeSlots,
         address payer
-    ) internal view returns (bytes32) {
-        bytes32 slotIdsHash = keccak256(abi.encodePacked(slotIds));
-        bytes32 structHash = keccak256(
-            abi.encode(
-                HOST_AND_JOIN_RAFFLE_TYPEHASH,
-                keccak256(bytes(raffleId)),
+    ) internal pure returns (bytes32) {
+        return keccak256(
+            abi.encodePacked(
+                "HostAndJoinRaffle",
+                raffleId,
                 totalSlots,
                 maxSlotsPerAddress,
-                keccak256(bytes(metadataUri)),
+                metadataUri,
                 collection,
                 premintContract,
                 premint,
-                prizeType,
+                uint8(prizeType),
                 prizeAmount,
                 autoDraw,
                 autoClaim,
                 expiresAt,
-                slotIdsHash,
+                keccak256(abi.encodePacked(slotIds)),
                 amount,
                 token,
                 bonusFreeSlots,
                 payer
             )
         );
-        return _hashTypedDataV4(structHash);
     }
 
     function _joinRaffle(

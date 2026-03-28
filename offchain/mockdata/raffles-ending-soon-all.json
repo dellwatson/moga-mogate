@@ -1,0 +1,818 @@
+[
+  {
+    "raffle_id": "raffle_000122",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinessroundtripeuropeVariant13MintAddr3ssS01ana1ujml2",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-roundtrip-europe.json",
+      "name": "Business Round Trip - 🇪🇺 Europe Domestic #13",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/europe-business-roundtrip.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "ticket_requirement": null,
+      "tickets_sold": null,
+      "tickets_remaining": null,
+      "total_pot_usd": null
+    },
+    "timeline": {
+      "created_at": "2025-11-13T23:08:22.423Z",
+      "start_time": "2025-11-15T23:08:22.423Z",
+      "end_time": "2025-11-17T23:08:22.423Z",
+      "completed_at": null,
+      "duration_days": 2
+    },
+    "participants": {
+      "total_unique_users": null
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000122",
+      "escrow_account": "EscrowAcctraffle_000122",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 2803,
+      "favorites": 215
+    }
+  },
+  {
+    "raffle_id": "raffle_000124",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit2000southeastasiaVariant21MintAddr3ssS01ana71oime",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-2000-southeast-asia.json",
+      "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit #21",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-2000-sea.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 2000,
+      "ticket_requirement": 2400,
+      "tickets_sold": 1907,
+      "tickets_remaining": 493,
+      "total_pot_usd": 1907
+    },
+    "timeline": {
+      "created_at": "2025-11-13T21:46:04.592Z",
+      "start_time": "2025-11-15T21:46:04.592Z",
+      "end_time": "2025-11-18T21:46:04.592Z",
+      "completed_at": null,
+      "duration_days": 3
+    },
+    "participants": {
+      "total_unique_users": 572
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000124",
+      "escrow_account": "EscrowAcctraffle_000124",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 7664,
+      "favorites": 354
+    }
+  },
+  {
+    "raffle_id": "raffle_000125",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1diamondnecklace5ctVariant16MintAddr3ssS01anafwk6sq",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-diamond-necklace-5ct.json",
+      "name": "5 Carat Diamond Tennis Necklace - VVS1 #16",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/diamond-necklace-5ct.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tiamond_001",
+      "company_name": "Tiamond",
+      "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 125000,
+      "ticket_requirement": 150000,
+      "tickets_sold": 117304,
+      "tickets_remaining": 32696,
+      "total_pot_usd": 117304
+    },
+    "timeline": {
+      "created_at": "2025-11-13T11:23:01.930Z",
+      "start_time": "2025-11-15T11:23:01.930Z",
+      "end_time": "2025-11-19T11:23:01.930Z",
+      "completed_at": null,
+      "duration_days": 4
+    },
+    "participants": {
+      "total_unique_users": 35191
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000125",
+      "escrow_account": "EscrowAcctraffle_000125",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "active"
+      ],
+      "views": 3513,
+      "favorites": 344
+    }
+  },
+  {
+    "raffle_id": "raffle_000128",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyasiaexcludechinaVariant29MintAddr3ssS01anau2vluh",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-asia-exclude-china.json",
+      "name": "Economy 🌏 🌏 Asia - Exclude China #29",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "ticket_requirement": null,
+      "tickets_sold": null,
+      "tickets_remaining": null,
+      "total_pot_usd": null
+    },
+    "timeline": {
+      "created_at": "2025-11-13T13:27:02.717Z",
+      "start_time": "2025-11-15T13:27:02.717Z",
+      "end_time": "2025-11-19T13:27:02.717Z",
+      "completed_at": null,
+      "duration_days": 4
+    },
+    "participants": {
+      "total_unique_users": null
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000128",
+      "escrow_account": "EscrowAcctraffle_000128",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 4731,
+      "favorites": 401
+    }
+  },
+  {
+    "raffle_id": "raffle_000131",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant18MintAddr3ssS01anaznzc15",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #18",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "ticket_requirement": 6000,
+      "tickets_sold": 4925,
+      "tickets_remaining": 1075,
+      "total_pot_usd": 4925
+    },
+    "timeline": {
+      "created_at": "2025-11-13T05:12:07.179Z",
+      "start_time": "2025-11-15T05:12:07.179Z",
+      "end_time": "2025-11-17T05:12:07.179Z",
+      "completed_at": null,
+      "duration_days": 2
+    },
+    "participants": {
+      "total_unique_users": 1477
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000131",
+      "escrow_account": "EscrowAcctraffle_000131",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 2522,
+      "favorites": 342
+    }
+  },
+  {
+    "raffle_id": "raffle_000132",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit5000luxuryVariant19MintAddr3ssS01anau8soud",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-5000-luxury.json",
+      "name": "$5000 Luxury Hotel Credit - 5-Star Properties #19",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-5000-luxury.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "ticket_requirement": 6000,
+      "tickets_sold": 2935,
+      "tickets_remaining": 3065,
+      "total_pot_usd": 2935
+    },
+    "timeline": {
+      "created_at": "2025-11-13T07:38:52.832Z",
+      "start_time": "2025-11-15T07:38:52.832Z",
+      "end_time": "2025-11-18T07:38:52.832Z",
+      "completed_at": null,
+      "duration_days": 3
+    },
+    "participants": {
+      "total_unique_users": 880
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000132",
+      "escrow_account": "EscrowAcctraffle_000132",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "active"
+      ],
+      "views": 5802,
+      "favorites": 91
+    }
+  },
+  {
+    "raffle_id": "raffle_000133",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit3000premiumeconomyVariant1MintAddr3ssS01anan7z9n4",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001 #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "ticket_requirement": 3600,
+      "tickets_sold": 2296,
+      "tickets_remaining": 1304,
+      "total_pot_usd": 2296
+    },
+    "timeline": {
+      "created_at": "2025-11-14T13:26:25.562Z",
+      "start_time": "2025-11-16T13:26:25.562Z",
+      "end_time": "2025-11-19T13:26:25.562Z",
+      "completed_at": null,
+      "duration_days": 3
+    },
+    "participants": {
+      "total_unique_users": 688
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000133",
+      "escrow_account": "EscrowAcctraffle_000133",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 9581,
+      "favorites": 450
+    }
+  },
+  {
+    "raffle_id": "raffle_000137",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit3000premiumeconomyVariant5MintAddr3ssS01anagr3jbr",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001 #5",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "ticket_requirement": 3600,
+      "tickets_sold": 2335,
+      "tickets_remaining": 1265,
+      "total_pot_usd": 2335
+    },
+    "timeline": {
+      "created_at": "2025-11-14T06:03:30.105Z",
+      "start_time": "2025-11-16T06:03:30.105Z",
+      "end_time": "2025-11-18T06:03:30.105Z",
+      "completed_at": null,
+      "duration_days": 2
+    },
+    "participants": {
+      "total_unique_users": 700
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000137",
+      "escrow_account": "EscrowAcctraffle_000137",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 9447,
+      "favorites": 130
+    }
+  },
+  {
+    "raffle_id": "raffle_000139",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant22MintAddr3ssS01ana7d12yo",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #22",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "ticket_requirement": 6000,
+      "tickets_sold": 2728,
+      "tickets_remaining": 3272,
+      "total_pot_usd": 2728
+    },
+    "timeline": {
+      "created_at": "2025-11-14T01:18:40.891Z",
+      "start_time": "2025-11-16T01:18:40.891Z",
+      "end_time": "2025-11-19T01:18:40.891Z",
+      "completed_at": null,
+      "duration_days": 3
+    },
+    "participants": {
+      "total_unique_users": 818
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000139",
+      "escrow_account": "EscrowAcctraffle_000139",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 4091,
+      "favorites": 129
+    }
+  },
+  {
+    "raffle_id": "raffle_000143",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1hermesbirkin35Variant1MintAddr3ssS01anaj85otq",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-hermes-birkin-35.json",
+      "name": "Hermès Birkin 35 - Togo Leather Black with Gold Hardware #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tiamond_001",
+      "company_name": "Tiamond",
+      "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 95000,
+      "ticket_requirement": 114000,
+      "tickets_sold": 59232,
+      "tickets_remaining": 54768,
+      "total_pot_usd": 59232
+    },
+    "timeline": {
+      "created_at": "2025-11-14T03:04:47.541Z",
+      "start_time": "2025-11-16T03:04:47.541Z",
+      "end_time": "2025-11-19T03:04:47.541Z",
+      "completed_at": null,
+      "duration_days": 3
+    },
+    "participants": {
+      "total_unique_users": 17769
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000143",
+      "escrow_account": "EscrowAcctraffle_000143",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "active"
+      ],
+      "views": 5796,
+      "favorites": 338
+    }
+  },
+  {
+    "raffle_id": "raffle_000147",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit2000southeastasiaVariant18MintAddr3ssS01analb12kj",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-2000-southeast-asia.json",
+      "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit #18",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-2000-sea.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 2000,
+      "ticket_requirement": 2400,
+      "tickets_sold": 1709,
+      "tickets_remaining": 691,
+      "total_pot_usd": 1709
+    },
+    "timeline": {
+      "created_at": "2025-11-15T17:10:56.072Z",
+      "start_time": "2025-11-17T17:10:56.072Z",
+      "end_time": "2025-11-18T17:10:56.072Z",
+      "completed_at": null,
+      "duration_days": 1
+    },
+    "participants": {
+      "total_unique_users": 512
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000147",
+      "escrow_account": "EscrowAcctraffle_000147",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 5809,
+      "favorites": 10
+    }
+  },
+  {
+    "raffle_id": "raffle_000154",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftfirstclassmiddleeastVariant11MintAddr3ssS01anasep822",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-middle-east.json",
+      "name": "First Class 🌍 🌍 Middle East Routes #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/middle-east-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "ticket_requirement": null,
+      "tickets_sold": null,
+      "tickets_remaining": null,
+      "total_pot_usd": null
+    },
+    "timeline": {
+      "created_at": "2025-11-15T15:16:30.353Z",
+      "start_time": "2025-11-17T15:16:30.353Z",
+      "end_time": "2025-11-18T15:16:30.353Z",
+      "completed_at": null,
+      "duration_days": 1
+    },
+    "participants": {
+      "total_unique_users": null
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000154",
+      "escrow_account": "EscrowAcctraffle_000154",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 4528,
+      "favorites": 207
+    }
+  },
+  {
+    "raffle_id": "raffle_000159",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit8000businessVariant10MintAddr3ssS01ana6bq4yp",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-8000-business.json",
+      "name": "$8000 Business Class Credit #10",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "ticket_requirement": 9600,
+      "tickets_sold": 3529,
+      "tickets_remaining": 6071,
+      "total_pot_usd": 3529
+    },
+    "timeline": {
+      "created_at": "2025-11-15T13:06:55.144Z",
+      "start_time": "2025-11-17T13:06:55.144Z",
+      "end_time": "2025-11-19T13:06:55.144Z",
+      "completed_at": null,
+      "duration_days": 2
+    },
+    "participants": {
+      "total_unique_users": 1058
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000159",
+      "escrow_account": "EscrowAcctraffle_000159",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 6,
+      "favorites": 145
+    }
+  },
+  {
+    "raffle_id": "raffle_000160",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinesstransatlanticVariant19MintAddr3ssS01ana758flg",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-transatlantic.json",
+      "name": "Business Class 🌊 🌊 Transatlantic #19",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/transatlantic-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "ticket_requirement": null,
+      "tickets_sold": null,
+      "tickets_remaining": null,
+      "total_pot_usd": null
+    },
+    "timeline": {
+      "created_at": "2025-11-15T11:04:13.158Z",
+      "start_time": "2025-11-17T11:04:13.158Z",
+      "end_time": "2025-11-19T11:04:13.158Z",
+      "completed_at": null,
+      "duration_days": 2
+    },
+    "participants": {
+      "total_unique_users": null
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000160",
+      "escrow_account": "EscrowAcctraffle_000160",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 6720,
+      "favorites": 248
+    }
+  },
+  {
+    "raffle_id": "raffle_000162",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant10MintAddr3ssS01anafgvi7v",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #10",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "ticket_requirement": 18000,
+      "tickets_sold": 10985,
+      "tickets_remaining": 7015,
+      "total_pot_usd": 10985
+    },
+    "timeline": {
+      "created_at": "2025-11-15T16:55:21.189Z",
+      "start_time": "2025-11-17T16:55:21.189Z",
+      "end_time": "2025-11-18T16:55:21.189Z",
+      "completed_at": null,
+      "duration_days": 1
+    },
+    "participants": {
+      "total_unique_users": 3295
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000162",
+      "escrow_account": "EscrowAcctraffle_000162",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 6439,
+      "favorites": 447
+    }
+  },
+  {
+    "raffle_id": "raffle_000164",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit2000southeastasiaVariant29MintAddr3ssS01anaw2sms2",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-2000-southeast-asia.json",
+      "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit #29",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-2000-sea.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 2000,
+      "ticket_requirement": 2400,
+      "tickets_sold": 1874,
+      "tickets_remaining": 526,
+      "total_pot_usd": 1874
+    },
+    "timeline": {
+      "created_at": "2025-11-15T09:46:30.412Z",
+      "start_time": "2025-11-17T09:46:30.412Z",
+      "end_time": "2025-11-19T09:46:30.412Z",
+      "completed_at": null,
+      "duration_days": 2
+    },
+    "participants": {
+      "total_unique_users": 562
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAraffle_000164",
+      "escrow_account": "EscrowAcctraffle_000164",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "active"
+      ],
+      "views": 6773,
+      "favorites": 297
+    }
+  }
+]

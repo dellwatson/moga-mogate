@@ -10,6 +10,8 @@ async function main() {
     rpcUrl = process.env.POLYGON_AMOY_RPC_URL;
   } else if (target === "arbitrumSepolia") {
     rpcUrl = process.env.ARBITRUM_SEPOLIA_RPC_URL;
+  } else if (target === "polkadotTestnet") {
+    rpcUrl = process.env.POLKADOT_TESTNET_RPC_URL;
   } else {
     rpcUrl = process.env.SEPOLIA_RPC_URL;
   }

@@ -1,0 +1,5296 @@
+[
+  {
+    "listing_id": "listing_000001",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant15MintAddr3ssS01anak3rmhm",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #15",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 1248,
+      "discount_percentage": 75.02331907462863
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T01:14:01.619Z",
+      "expires_at": "2025-12-11T01:14:01.619Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000001",
+      "escrow_account": "EscrowListing000001",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 320,
+      "favorites": 83
+    },
+    "seller": {
+      "wallet_address": "Winner1Wa11etAddr3ssS01anab952",
+      "username": "User_814k7m",
+      "verified": true,
+      "rating": 4.721060615986151
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000001",
+      "won_at": "2025-11-11T01:14:01.619Z",
+      "winning_ticket_number": 1836,
+      "tickets_owned": 15
+    }
+  },
+  {
+    "listing_id": "listing_000002",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant26MintAddr3ssS01ana40q445",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 1089,
+      "discount_percentage": 78.21649339509938
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T10:24:12.625Z",
+      "expires_at": "2025-12-13T10:24:12.625Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000002",
+      "escrow_account": "EscrowListing000002",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2220,
+      "favorites": 6
+    },
+    "seller": {
+      "wallet_address": "Winner2Wa11etAddr3ssS01anaap9k",
+      "username": "User_9gcpd7",
+      "verified": true,
+      "rating": 4.137820234860156
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000002",
+      "won_at": "2025-11-13T10:24:12.625Z",
+      "winning_ticket_number": 4272,
+      "tickets_owned": 12
+    }
+  },
+  {
+    "listing_id": "listing_000003",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant5MintAddr3ssS01anaue714h",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #5",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 67.62921643358206
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T19:19:17.618Z",
+      "expires_at": "2025-12-10T19:19:17.618Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000003",
+      "escrow_account": "EscrowListing000003",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3868,
+      "favorites": 168
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    }
+  },
+  {
+    "listing_id": "listing_000004",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit1000anyVariant6MintAddr3ssS01ana4xu9wx",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-1000-any.json",
+      "name": "$1000 Hotel Credit - Any Property #6",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 1000,
+      "listing_price_usd": 435,
+      "discount_percentage": 56.4665408148075
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T05:39:54.639Z",
+      "expires_at": "2025-12-14T05:39:54.639Z",
+      "sold_at": "2025-11-18T05:39:54.639Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000004",
+      "escrow_account": "EscrowListing000004",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 2831,
+      "favorites": 136
+    },
+    "seller": {
+      "wallet_address": "Winner5Wa11etAddr3ssS01ana1f78",
+      "username": "User_ceygbo",
+      "verified": true,
+      "rating": 4.514605639562406
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000005",
+      "won_at": "2025-11-14T05:39:54.639Z",
+      "winning_ticket_number": 627,
+      "tickets_owned": 2
+    },
+    "buyer": {
+      "wallet_address": "Buyer4Wa11etAddr3ssS01ana5uzs",
+      "username": "Buyer_2z2bbx"
+    }
+  },
+  {
+    "listing_id": "listing_000005",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sfteconomyasiaexcludechinaVariant26MintAddr3ssS01ana2x3ht8",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-asia-exclude-china.json",
+      "name": "Economy 🌏 🌏 Asia - Exclude China #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 62.54089389661263
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T03:31:06.891Z",
+      "expires_at": "2025-12-13T03:31:06.891Z",
+      "sold_at": "2025-11-19T03:31:06.891Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000005",
+      "escrow_account": "EscrowListing000005",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3653,
+      "favorites": 14
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "buyer": {
+      "wallet_address": "Buyer5Wa11etAddr3ssS01anas2be",
+      "username": "Buyer_cljfms"
+    }
+  },
+  {
+    "listing_id": "listing_000006",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyexcludeusachinaVariant7MintAddr3ssS01analw0w9n",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-exclude-usa-china.json",
+      "name": "Economy 🌍 Worldwide - Exclude 🇺🇸 USA & China #7",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/worldwide-economy-exclude.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 52.405367014538086
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T20:42:06.203Z",
+      "expires_at": "2025-12-10T20:42:06.203Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000006",
+      "escrow_account": "EscrowListing000006",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1221,
+      "favorites": 121
+    },
+    "seller": {
+      "wallet_address": "Winner7Wa11etAddr3ssS01ananjz1",
+      "username": "User_9ko8p5",
+      "verified": true,
+      "rating": 4.568547203472869
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000007",
+      "won_at": "2025-11-10T20:42:06.203Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 16
+    }
+  },
+  {
+    "listing_id": "listing_000007",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant14MintAddr3ssS01anazygfko",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #14",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 528,
+      "discount_percentage": 89.43967830234692
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T16:24:30.295Z",
+      "expires_at": "2025-12-13T16:24:30.295Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000007",
+      "escrow_account": "EscrowListing000007",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2400,
+      "favorites": 161
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    }
+  },
+  {
+    "listing_id": "listing_000008",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sfteconomyasiaexcludechinaVariant12MintAddr3ssS01anaubduoh",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-asia-exclude-china.json",
+      "name": "Economy 🌏 🌏 Asia - Exclude China #12",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 79.99218585241454
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T20:43:32.141Z",
+      "expires_at": "2025-12-14T20:43:32.141Z",
+      "sold_at": "2025-11-17T20:43:32.141Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000008",
+      "escrow_account": "EscrowListing000008",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1660,
+      "favorites": 168
+    },
+    "seller": {
+      "wallet_address": "Winner11Wa11etAddr3ssS01ana52nu",
+      "username": "User_dk47rf",
+      "verified": true,
+      "rating": 4.890521113390955
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000011",
+      "won_at": "2025-11-14T20:43:32.141Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 18
+    },
+    "buyer": {
+      "wallet_address": "Buyer8Wa11etAddr3ssS01ana7i1o",
+      "username": "Buyer_wimyh0"
+    }
+  },
+  {
+    "listing_id": "listing_000009",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit1000anyVariant17MintAddr3ssS01anal8vkri",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-1000-any.json",
+      "name": "$1000 Hotel Credit - Any Property #17",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 1000,
+      "listing_price_usd": 322,
+      "discount_percentage": 67.72912501192224
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T12:43:09.077Z",
+      "expires_at": "2025-12-14T12:43:09.077Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000009",
+      "escrow_account": "EscrowListing000009",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 3164,
+      "favorites": 45
+    },
+    "seller": {
+      "wallet_address": "Winner12Wa11etAddr3ssS01anazsn7",
+      "username": "User_g4ptjc",
+      "verified": true,
+      "rating": 4.676646611061364
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000012",
+      "won_at": "2025-11-14T12:43:09.077Z",
+      "winning_ticket_number": 595,
+      "tickets_owned": 15
+    }
+  },
+  {
+    "listing_id": "listing_000010",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit3000premiumeconomyVariant15MintAddr3ssS01ana9qseov",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001 #15",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "listing_price_usd": 1173,
+      "discount_percentage": 60.88565720177375
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T17:04:26.228Z",
+      "expires_at": "2025-12-12T17:04:26.228Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000010",
+      "escrow_account": "EscrowListing000010",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 683,
+      "favorites": 120
+    },
+    "seller": {
+      "wallet_address": "Winner14Wa11etAddr3ssS01ana2cyy",
+      "username": "User_yqx7ux",
+      "verified": true,
+      "rating": 4.0374441125725085
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000014",
+      "won_at": "2025-11-12T17:04:26.228Z",
+      "winning_ticket_number": 1658,
+      "tickets_owned": 7
+    }
+  },
+  {
+    "listing_id": "listing_000011",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1qatarbusinessroundtripVariant10MintAddr3ssS01anahat364",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-qatar-business-roundtrip.json",
+      "name": "🇶🇦 Qatar Airways Business Round Trip - 🇶🇦 DOH to 🇬🇧 LHR #10",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-doh-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 3732,
+      "discount_percentage": 53.34007618998199
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T07:17:07.141Z",
+      "expires_at": "2025-12-12T07:17:07.141Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000011",
+      "escrow_account": "EscrowListing000011",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 567,
+      "favorites": 103
+    },
+    "seller": {
+      "wallet_address": "Winner15Wa11etAddr3ssS01anapmsb",
+      "username": "User_xnqyak",
+      "verified": true,
+      "rating": 4.904836158564644
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000015",
+      "won_at": "2025-11-12T07:17:07.141Z",
+      "winning_ticket_number": 7055,
+      "tickets_owned": 13
+    }
+  },
+  {
+    "listing_id": "listing_000012",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinessroundtripeuropeVariant25MintAddr3ssS01ana8603wk",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-roundtrip-europe.json",
+      "name": "Business Round Trip - 🇪🇺 Europe Domestic #25",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/europe-business-roundtrip.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 64.50031286459587
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T21:38:12.900Z",
+      "expires_at": "2025-12-11T21:38:12.900Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000012",
+      "escrow_account": "EscrowListing000012",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3264,
+      "favorites": 185
+    },
+    "seller": {
+      "wallet_address": "Winner18Wa11etAddr3ssS01ana7bv1",
+      "username": "User_kzvhbc",
+      "verified": true,
+      "rating": 4.840147537224561
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000018",
+      "won_at": "2025-11-11T21:38:12.900Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 5
+    }
+  },
+  {
+    "listing_id": "listing_000013",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinessroundtripeuropeVariant15MintAddr3ssS01ana1oi1d4",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-roundtrip-europe.json",
+      "name": "Business Round Trip - 🇪🇺 Europe Domestic #15",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/europe-business-roundtrip.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 61.744107631700544
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T23:09:26.135Z",
+      "expires_at": "2025-12-13T23:09:26.135Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000013",
+      "escrow_account": "EscrowListing000013",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1427,
+      "favorites": 65
+    },
+    "seller": {
+      "wallet_address": "Winner19Wa11etAddr3ssS01ana348i",
+      "username": "User_wqpsoz",
+      "verified": true,
+      "rating": 4.471095563537817
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000019",
+      "won_at": "2025-11-13T23:09:26.135Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 5
+    }
+  },
+  {
+    "listing_id": "listing_000014",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant11MintAddr3ssS01anagkv3r3",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 24579,
+      "discount_percentage": 67.22733310931993
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T03:47:19.031Z",
+      "expires_at": "2025-12-13T03:47:19.031Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000014",
+      "escrow_account": "EscrowListing000014",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 400,
+      "favorites": 69
+    },
+    "seller": {
+      "wallet_address": "Winner20Wa11etAddr3ssS01anab2uf",
+      "username": "User_gr692h",
+      "verified": true,
+      "rating": 4.200471321322772
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000020",
+      "won_at": "2025-11-13T03:47:19.031Z",
+      "winning_ticket_number": 55910,
+      "tickets_owned": 3
+    }
+  },
+  {
+    "listing_id": "listing_000015",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftpremiumeconomyusaVariant1MintAddr3ssS01anabcxwie",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-premium-economy-usa.json",
+      "name": "Premium Economy 🇺🇸 USA Domestic #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/usa-premium-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 89.20079764765265
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T09:19:18.547Z",
+      "expires_at": "2025-12-12T09:19:18.547Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000015",
+      "escrow_account": "EscrowListing000015",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3644,
+      "favorites": 146
+    },
+    "seller": {
+      "wallet_address": "Winner24Wa11etAddr3ssS01ana97ih",
+      "username": "User_fq8g33",
+      "verified": true,
+      "rating": 4.211101515448395
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000024",
+      "won_at": "2025-11-12T09:19:18.547Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 16
+    }
+  },
+  {
+    "listing_id": "listing_000016",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit2000southeastasiaVariant2MintAddr3ssS01ana5mkmsc",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-2000-southeast-asia.json",
+      "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit #2",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-2000-sea.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 2000,
+      "listing_price_usd": 719,
+      "discount_percentage": 64.02654110855835
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T06:59:02.153Z",
+      "expires_at": "2025-12-12T06:59:02.153Z",
+      "sold_at": "2025-11-19T06:59:02.153Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000016",
+      "escrow_account": "EscrowListing000016",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2052,
+      "favorites": 177
+    },
+    "seller": {
+      "wallet_address": "Winner26Wa11etAddr3ssS01anasi5r",
+      "username": "User_j6pq1k",
+      "verified": true,
+      "rating": 4.17492817813246
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000026",
+      "won_at": "2025-11-12T06:59:02.153Z",
+      "winning_ticket_number": 1346,
+      "tickets_owned": 2
+    },
+    "buyer": {
+      "wallet_address": "Buyer16Wa11etAddr3ssS01ana6yi8",
+      "username": "Buyer_lso3ap"
+    }
+  },
+  {
+    "listing_id": "listing_000017",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant12MintAddr3ssS01anab7q63l",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #12",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 70.13531385554002
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T06:16:53.871Z",
+      "expires_at": "2025-12-10T06:16:53.871Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000017",
+      "escrow_account": "EscrowListing000017",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3347,
+      "favorites": 0
+    },
+    "seller": {
+      "wallet_address": "Winner27Wa11etAddr3ssS01anazni6",
+      "username": "User_sdevif",
+      "verified": true,
+      "rating": 4.676577952777868
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000027",
+      "won_at": "2025-11-10T06:16:53.871Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 5
+    }
+  },
+  {
+    "listing_id": "listing_000018",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit5000luxuryVariant1MintAddr3ssS01anaetlxeo",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-5000-luxury.json",
+      "name": "$5000 Luxury Hotel Credit - 5-Star Properties #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-5000-luxury.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 1053,
+      "discount_percentage": 78.9289477086713
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T06:44:52.370Z",
+      "expires_at": "2025-12-10T06:44:52.370Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000018",
+      "escrow_account": "EscrowListing000018",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 4692,
+      "favorites": 111
+    },
+    "seller": {
+      "wallet_address": "Winner28Wa11etAddr3ssS01ana6c51",
+      "username": "User_m5tsiv",
+      "verified": true,
+      "rating": 4.695034771117111
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000028",
+      "won_at": "2025-11-10T06:44:52.370Z",
+      "winning_ticket_number": 1612,
+      "tickets_owned": 20
+    }
+  },
+  {
+    "listing_id": "listing_000019",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant9MintAddr3ssS01anaj7unf8",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #9",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 3113,
+      "discount_percentage": 79.24410822608657
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T05:00:25.954Z",
+      "expires_at": "2025-12-10T05:00:25.954Z",
+      "sold_at": "2025-11-16T05:00:25.954Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000019",
+      "escrow_account": "EscrowListing000019",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 471,
+      "favorites": 36
+    },
+    "seller": {
+      "wallet_address": "Winner29Wa11etAddr3ssS01anazhus",
+      "username": "User_az4gky",
+      "verified": true,
+      "rating": 4.516027060939949
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000029",
+      "won_at": "2025-11-10T05:00:25.954Z",
+      "winning_ticket_number": 9330,
+      "tickets_owned": 9
+    },
+    "buyer": {
+      "wallet_address": "Buyer19Wa11etAddr3ssS01anavo63",
+      "username": "Buyer_lc2d0b"
+    }
+  },
+  {
+    "listing_id": "listing_000020",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit3000premiumeconomyVariant29MintAddr3ssS01anaz5en8e",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001 #29",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "listing_price_usd": 478,
+      "discount_percentage": 84.06437969371652
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T01:58:37.294Z",
+      "expires_at": "2025-12-11T01:58:37.294Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000020",
+      "escrow_account": "EscrowListing000020",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 5,
+      "favorites": 31
+    },
+    "seller": {
+      "wallet_address": "Winner30Wa11etAddr3ssS01anaxt6d",
+      "username": "User_hvp090",
+      "verified": true,
+      "rating": 4.6684082423133635
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000030",
+      "won_at": "2025-11-11T01:58:37.294Z",
+      "winning_ticket_number": 959,
+      "tickets_owned": 14
+    }
+  },
+  {
+    "listing_id": "listing_000021",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant14MintAddr3ssS01anarqr6tu",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #14",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 22151,
+      "discount_percentage": 70.4649558066393
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T10:21:54.627Z",
+      "expires_at": "2025-12-12T10:21:54.627Z",
+      "sold_at": "2025-11-13T10:21:54.627Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000021",
+      "escrow_account": "EscrowListing000021",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 1565,
+      "favorites": 107
+    },
+    "seller": {
+      "wallet_address": "Winner32Wa11etAddr3ssS01anadp06",
+      "username": "User_ix9qgb",
+      "verified": true,
+      "rating": 4.580395653206133
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000032",
+      "won_at": "2025-11-12T10:21:54.627Z",
+      "winning_ticket_number": 41071,
+      "tickets_owned": 18
+    },
+    "buyer": {
+      "wallet_address": "Buyer21Wa11etAddr3ssS01anayaq3",
+      "username": "Buyer_r13lmt"
+    }
+  },
+  {
+    "listing_id": "listing_000022",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant13MintAddr3ssS01anat9k7xc",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #13",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 1546,
+      "discount_percentage": 89.68968107625082
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T20:49:47.301Z",
+      "expires_at": "2025-12-10T20:49:47.301Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000022",
+      "escrow_account": "EscrowListing000022",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4863,
+      "favorites": 155
+    },
+    "seller": {
+      "wallet_address": "Winner33Wa11etAddr3ssS01ana3huq",
+      "username": "User_0euk4c",
+      "verified": true,
+      "rating": 4.005523169057535
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000033",
+      "won_at": "2025-11-10T20:49:47.301Z",
+      "winning_ticket_number": 12553,
+      "tickets_owned": 15
+    }
+  },
+  {
+    "listing_id": "listing_000023",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant8MintAddr3ssS01anaywuuz1",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #8",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 56.21923959851878
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T03:05:48.349Z",
+      "expires_at": "2025-12-14T03:05:48.349Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000023",
+      "escrow_account": "EscrowListing000023",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1316,
+      "favorites": 114
+    },
+    "seller": {
+      "wallet_address": "Winner35Wa11etAddr3ssS01anagq38",
+      "username": "User_ttg19m",
+      "verified": true,
+      "rating": 4.793869391536838
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000035",
+      "won_at": "2025-11-14T03:05:48.349Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 1
+    }
+  },
+  {
+    "listing_id": "listing_000024",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftpremiumeconomyusaVariant20MintAddr3ssS01anasxhtjv",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-premium-economy-usa.json",
+      "name": "Premium Economy 🇺🇸 USA Domestic #20",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/usa-premium-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 68.98096096181322
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T08:30:01.199Z",
+      "expires_at": "2025-12-10T08:30:01.199Z",
+      "sold_at": "2025-11-18T08:30:01.199Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000024",
+      "escrow_account": "EscrowListing000024",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4403,
+      "favorites": 73
+    },
+    "seller": {
+      "wallet_address": "Winner36Wa11etAddr3ssS01anaqd4v",
+      "username": "User_rll4be",
+      "verified": true,
+      "rating": 4.035525655069018
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000036",
+      "won_at": "2025-11-10T08:30:01.199Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 7
+    },
+    "buyer": {
+      "wallet_address": "Buyer24Wa11etAddr3ssS01anannv7",
+      "username": "Buyer_e7ccwt"
+    }
+  },
+  {
+    "listing_id": "listing_000025",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1fourseasonsmaldives7nightsVariant28MintAddr3ssS01anangky2g",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-four-seasons-maldives-7nights.json",
+      "name": "Four Seasons 🇲🇻 Maldives - 7 Night Overwater Villa #28",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/four-seasons-maldives.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 35000,
+      "listing_price_usd": 13277,
+      "discount_percentage": 62.06300691335147
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T07:39:23.730Z",
+      "expires_at": "2025-12-10T07:39:23.730Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000025",
+      "escrow_account": "EscrowListing000025",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 3572,
+      "favorites": 21
+    },
+    "seller": {
+      "wallet_address": "Winner37Wa11etAddr3ssS01anag69d",
+      "username": "User_iag3fw",
+      "verified": true,
+      "rating": 4.045938092102437
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000037",
+      "won_at": "2025-11-10T07:39:23.730Z",
+      "winning_ticket_number": 3723,
+      "tickets_owned": 10
+    }
+  },
+  {
+    "listing_id": "listing_000026",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant12MintAddr3ssS01ana0qt527",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #12",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 951,
+      "discount_percentage": 80.9699622486388
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T19:18:14.909Z",
+      "expires_at": "2025-12-14T19:18:14.909Z",
+      "sold_at": "2025-11-15T19:18:14.909Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000026",
+      "escrow_account": "EscrowListing000026",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2017,
+      "favorites": 127
+    },
+    "seller": {
+      "wallet_address": "Winner40Wa11etAddr3ssS01analkf6",
+      "username": "User_m2dmqh",
+      "verified": true,
+      "rating": 4.248072858121486
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000040",
+      "won_at": "2025-11-14T19:18:14.909Z",
+      "winning_ticket_number": 1213,
+      "tickets_owned": 9
+    },
+    "buyer": {
+      "wallet_address": "Buyer26Wa11etAddr3ssS01anaa67n",
+      "username": "Buyer_8ekv2s"
+    }
+  },
+  {
+    "listing_id": "listing_000027",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit5000luxuryVariant3MintAddr3ssS01anam2n4ha",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-5000-luxury.json",
+      "name": "$5000 Luxury Hotel Credit - 5-Star Properties #3",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-5000-luxury.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 672,
+      "discount_percentage": 86.55093536627211
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T18:58:04.664Z",
+      "expires_at": "2025-12-12T18:58:04.664Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000027",
+      "escrow_account": "EscrowListing000027",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 1920,
+      "favorites": 55
+    },
+    "seller": {
+      "wallet_address": "Winner41Wa11etAddr3ssS01ana39s9",
+      "username": "User_djux7o",
+      "verified": true,
+      "rating": 4.539632576916373
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000041",
+      "won_at": "2025-11-12T18:58:04.664Z",
+      "winning_ticket_number": 585,
+      "tickets_owned": 19
+    }
+  },
+  {
+    "listing_id": "listing_000028",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit5000luxuryVariant6MintAddr3ssS01anad505w4",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-5000-luxury.json",
+      "name": "$5000 Luxury Hotel Credit - 5-Star Properties #6",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-5000-luxury.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 2424,
+      "discount_percentage": 51.50043179634274
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T07:30:12.748Z",
+      "expires_at": "2025-12-14T07:30:12.748Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000028",
+      "escrow_account": "EscrowListing000028",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 1476,
+      "favorites": 116
+    },
+    "seller": {
+      "wallet_address": "Winner42Wa11etAddr3ssS01anam5r9",
+      "username": "User_tsewtw",
+      "verified": true,
+      "rating": 4.838526955173097
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000042",
+      "won_at": "2025-11-14T07:30:12.748Z",
+      "winning_ticket_number": 3144,
+      "tickets_owned": 16
+    }
+  },
+  {
+    "listing_id": "listing_000029",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1burjalarabroyalsuiteVariant1MintAddr3ssS01anab39dos",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-burj-al-arab-royal-suite.json",
+      "name": "Burj Al Arab - Royal Suite 3 Nights #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 45000,
+      "listing_price_usd": 9914,
+      "discount_percentage": 77.96683863081284
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T23:12:43.968Z",
+      "expires_at": "2025-12-14T23:12:43.968Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000029",
+      "escrow_account": "EscrowListing000029",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 758,
+      "favorites": 197
+    },
+    "seller": {
+      "wallet_address": "Winner44Wa11etAddr3ssS01anahjwx",
+      "username": "User_ftmk0c",
+      "verified": true,
+      "rating": 4.363338157352976
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000044",
+      "won_at": "2025-11-14T23:12:43.968Z",
+      "winning_ticket_number": 43242,
+      "tickets_owned": 1
+    }
+  },
+  {
+    "listing_id": "listing_000030",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1emiratesfirstdxbjfkVariant21MintAddr3ssS01anar9dxfj",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-emirates-first-dxb-jfk.json",
+      "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK #21",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 5692,
+      "discount_percentage": 62.049207126845175
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T06:46:57.349Z",
+      "expires_at": "2025-12-10T06:46:57.349Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000030",
+      "escrow_account": "EscrowListing000030",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2736,
+      "favorites": 144
+    },
+    "seller": {
+      "wallet_address": "Winner48Wa11etAddr3ssS01anawn60",
+      "username": "User_3rixdj",
+      "verified": true,
+      "rating": 4.5371250498233024
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000048",
+      "won_at": "2025-11-10T06:46:57.349Z",
+      "winning_ticket_number": 17100,
+      "tickets_owned": 12
+    }
+  },
+  {
+    "listing_id": "listing_000031",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1fourseasonsmaldives7nightsVariant9MintAddr3ssS01anar3x1a5",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-four-seasons-maldives-7nights.json",
+      "name": "Four Seasons 🇲🇻 Maldives - 7 Night Overwater Villa #9",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/four-seasons-maldives.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 35000,
+      "listing_price_usd": 11878,
+      "discount_percentage": 66.0622691630561
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T16:45:00.961Z",
+      "expires_at": "2025-12-13T16:45:00.961Z",
+      "sold_at": "2025-11-15T16:45:00.961Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000031",
+      "escrow_account": "EscrowListing000031",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 985,
+      "favorites": 101
+    },
+    "seller": {
+      "wallet_address": "Winner49Wa11etAddr3ssS01anancbq",
+      "username": "User_l9pomx",
+      "verified": true,
+      "rating": 4.513839190704491
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000049",
+      "won_at": "2025-11-13T16:45:00.961Z",
+      "winning_ticket_number": 5795,
+      "tickets_owned": 9
+    },
+    "buyer": {
+      "wallet_address": "Buyer31Wa11etAddr3ssS01anaklcl",
+      "username": "Buyer_0zbkkf"
+    }
+  },
+  {
+    "listing_id": "listing_000032",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1hermesbirkin35Variant1MintAddr3ssS01ana00cr4t",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-hermes-birkin-35.json",
+      "name": "Hermès Birkin 35 - Togo Leather Black with Gold Hardware #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 95000,
+      "listing_price_usd": 26675,
+      "discount_percentage": 71.92087064721755
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T04:30:02.826Z",
+      "expires_at": "2025-12-13T04:30:02.826Z",
+      "sold_at": "2025-11-14T04:30:02.826Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000032",
+      "escrow_account": "EscrowListing000032",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 2226,
+      "favorites": 25
+    },
+    "seller": {
+      "wallet_address": "Winner50Wa11etAddr3ssS01anajbvo",
+      "username": "User_7h74lf",
+      "verified": true,
+      "rating": 4.511406083553547
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000050",
+      "won_at": "2025-11-13T04:30:02.826Z",
+      "winning_ticket_number": 19279,
+      "tickets_owned": 7
+    },
+    "buyer": {
+      "wallet_address": "Buyer32Wa11etAddr3ssS01ana3k38",
+      "username": "Buyer_1fa146"
+    }
+  },
+  {
+    "listing_id": "listing_000033",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit10000firstVariant22MintAddr3ssS01anatlxvl9",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-10000-first.json",
+      "name": "$10000 First Class Credit - Voucher #001 #22",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-10000-first-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 10000,
+      "listing_price_usd": 3879,
+      "discount_percentage": 61.208177141368544
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T16:23:22.332Z",
+      "expires_at": "2025-12-11T16:23:22.332Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000033",
+      "escrow_account": "EscrowListing000033",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 328,
+      "favorites": 188
+    },
+    "seller": {
+      "wallet_address": "Winner51Wa11etAddr3ssS01anacqy9",
+      "username": "User_gz7voq",
+      "verified": true,
+      "rating": 4.34987756480792
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000051",
+      "won_at": "2025-11-11T16:23:22.332Z",
+      "winning_ticket_number": 6101,
+      "tickets_owned": 12
+    }
+  },
+  {
+    "listing_id": "listing_000034",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit8000businessVariant12MintAddr3ssS01anay71zbc",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-8000-business.json",
+      "name": "$8000 Business Class Credit #12",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 3855,
+      "discount_percentage": 51.8110279028219
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T05:33:50.345Z",
+      "expires_at": "2025-12-12T05:33:50.345Z",
+      "sold_at": "2025-11-14T05:33:50.345Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000034",
+      "escrow_account": "EscrowListing000034",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 202,
+      "favorites": 70
+    },
+    "seller": {
+      "wallet_address": "Winner52Wa11etAddr3ssS01anavr59",
+      "username": "User_bj4zux",
+      "verified": true,
+      "rating": 4.206613933008207
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000052",
+      "won_at": "2025-11-12T05:33:50.345Z",
+      "winning_ticket_number": 1508,
+      "tickets_owned": 5
+    },
+    "buyer": {
+      "wallet_address": "Buyer34Wa11etAddr3ssS01anayl0l",
+      "username": "Buyer_phq3o1"
+    }
+  },
+  {
+    "listing_id": "listing_000035",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1credit3000premiumeconomyVariant26MintAddr3ssS01anaxta45e",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001 #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "listing_price_usd": 1492,
+      "discount_percentage": 50.24380885606493
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T17:22:12.822Z",
+      "expires_at": "2025-12-13T17:22:12.822Z",
+      "sold_at": "2025-11-17T17:22:12.822Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000035",
+      "escrow_account": "EscrowListing000035",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1765,
+      "favorites": 94
+    },
+    "seller": {
+      "wallet_address": "Winner53Wa11etAddr3ssS01anapcm3",
+      "username": "User_xrbqrn",
+      "verified": true,
+      "rating": 4.598717062171306
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000053",
+      "won_at": "2025-11-13T17:22:12.822Z",
+      "winning_ticket_number": 2584,
+      "tickets_owned": 4
+    },
+    "buyer": {
+      "wallet_address": "Buyer35Wa11etAddr3ssS01ana70k3",
+      "username": "Buyer_ci3trj"
+    }
+  },
+  {
+    "listing_id": "listing_000036",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1hermesbirkin35Variant5MintAddr3ssS01anab1t44f",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-hermes-birkin-35.json",
+      "name": "Hermès Birkin 35 - Togo Leather Black with Gold Hardware #5",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 95000,
+      "listing_price_usd": 16732,
+      "discount_percentage": 82.38633996724835
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T17:19:13.587Z",
+      "expires_at": "2025-12-13T17:19:13.587Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000036",
+      "escrow_account": "EscrowListing000036",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 4284,
+      "favorites": 25
+    },
+    "seller": {
+      "wallet_address": "Winner55Wa11etAddr3ssS01anauax2",
+      "username": "User_lsc6gm",
+      "verified": true,
+      "rating": 4.452829336122171
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000055",
+      "won_at": "2025-11-13T17:19:13.587Z",
+      "winning_ticket_number": 86963,
+      "tickets_owned": 11
+    }
+  },
+  {
+    "listing_id": "listing_000037",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyexcludeusachinaVariant13MintAddr3ssS01ana259x0y",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-exclude-usa-china.json",
+      "name": "Economy 🌍 Worldwide - Exclude 🇺🇸 USA & China #13",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/worldwide-economy-exclude.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 54.78209160001802
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T12:08:49.536Z",
+      "expires_at": "2025-12-12T12:08:49.536Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000037",
+      "escrow_account": "EscrowListing000037",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3096,
+      "favorites": 126
+    },
+    "seller": {
+      "wallet_address": "Winner56Wa11etAddr3ssS01anaptpn",
+      "username": "User_7pg7zd",
+      "verified": true,
+      "rating": 4.1869964241539686
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000056",
+      "won_at": "2025-11-12T12:08:49.536Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 20
+    }
+  },
+  {
+    "listing_id": "listing_000038",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit1000anyVariant26MintAddr3ssS01ana8pxlbe",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-1000-any.json",
+      "name": "$1000 Hotel Credit - Any Property #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 1000,
+      "listing_price_usd": 434,
+      "discount_percentage": 56.5548808973324
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T20:03:37.836Z",
+      "expires_at": "2025-12-14T20:03:37.836Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000038",
+      "escrow_account": "EscrowListing000038",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 2430,
+      "favorites": 110
+    },
+    "seller": {
+      "wallet_address": "Winner59Wa11etAddr3ssS01ana8k3u",
+      "username": "User_s2m68z",
+      "verified": true,
+      "rating": 4.598942736029977
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000059",
+      "won_at": "2025-11-14T20:03:37.836Z",
+      "winning_ticket_number": 95,
+      "tickets_owned": 14
+    }
+  },
+  {
+    "listing_id": "listing_000039",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftfirstclassmiddleeastVariant3MintAddr3ssS01ana3ergm6",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-middle-east.json",
+      "name": "First Class 🌍 🌍 Middle East Routes #3",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/middle-east-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 83.8945727920729
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T14:57:57.405Z",
+      "expires_at": "2025-12-11T14:57:57.405Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000039",
+      "escrow_account": "EscrowListing000039",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2188,
+      "favorites": 162
+    },
+    "seller": {
+      "wallet_address": "Winner60Wa11etAddr3ssS01anajd7c",
+      "username": "User_qrz08z",
+      "verified": true,
+      "rating": 4.442255410909441
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000060",
+      "won_at": "2025-11-11T14:57:57.405Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 7
+    }
+  },
+  {
+    "listing_id": "listing_000040",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant19MintAddr3ssS01ana0v4ito",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #19",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 27277,
+      "discount_percentage": 63.62974077090015
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T15:46:47.523Z",
+      "expires_at": "2025-12-13T15:46:47.523Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000040",
+      "escrow_account": "EscrowListing000040",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 4746,
+      "favorites": 48
+    },
+    "seller": {
+      "wallet_address": "Winner61Wa11etAddr3ssS01anafhy2",
+      "username": "User_hrzq3u",
+      "verified": true,
+      "rating": 4.306234155068579
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000061",
+      "won_at": "2025-11-13T15:46:47.523Z",
+      "winning_ticket_number": 71104,
+      "tickets_owned": 3
+    }
+  },
+  {
+    "listing_id": "listing_000041",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1burjalarabroyalsuiteVariant1MintAddr3ssS01anacmy02g",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-burj-al-arab-royal-suite.json",
+      "name": "Burj Al Arab - Royal Suite 3 Nights #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 45000,
+      "listing_price_usd": 15798,
+      "discount_percentage": 64.89200012482961
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T20:38:43.218Z",
+      "expires_at": "2025-12-11T20:38:43.218Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000041",
+      "escrow_account": "EscrowListing000041",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 695,
+      "favorites": 167
+    },
+    "seller": {
+      "wallet_address": "Winner62Wa11etAddr3ssS01ana2de1",
+      "username": "User_76ozrz",
+      "verified": true,
+      "rating": 4.483884871639746
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000062",
+      "won_at": "2025-11-11T20:38:43.218Z",
+      "winning_ticket_number": 45834,
+      "tickets_owned": 5
+    }
+  },
+  {
+    "listing_id": "listing_000042",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant26MintAddr3ssS01anazo22wu",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 2401,
+      "discount_percentage": 83.99110842297715
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T20:16:04.055Z",
+      "expires_at": "2025-12-13T20:16:04.055Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000042",
+      "escrow_account": "EscrowListing000042",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2712,
+      "favorites": 127
+    },
+    "seller": {
+      "wallet_address": "Winner63Wa11etAddr3ssS01anaisj5",
+      "username": "User_l5xhpx",
+      "verified": true,
+      "rating": 4.857900315041993
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000063",
+      "won_at": "2025-11-13T20:16:04.055Z",
+      "winning_ticket_number": 16376,
+      "tickets_owned": 8
+    }
+  },
+  {
+    "listing_id": "listing_000043",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant26MintAddr3ssS01anaio53cl",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 20403,
+      "discount_percentage": 72.79560246150785
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T16:59:17.588Z",
+      "expires_at": "2025-12-14T16:59:17.588Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000043",
+      "escrow_account": "EscrowListing000043",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 4434,
+      "favorites": 26
+    },
+    "seller": {
+      "wallet_address": "Winner65Wa11etAddr3ssS01anahwru",
+      "username": "User_4i9ir1",
+      "verified": true,
+      "rating": 4.8464255357459205
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000065",
+      "won_at": "2025-11-14T16:59:17.588Z",
+      "winning_ticket_number": 32949,
+      "tickets_owned": 3
+    }
+  },
+  {
+    "listing_id": "listing_000044",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinesstransatlanticVariant30MintAddr3ssS01anagn4fh1",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-transatlantic.json",
+      "name": "Business Class 🌊 🌊 Transatlantic #30",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/transatlantic-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 63.242998227701705
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T21:54:53.954Z",
+      "expires_at": "2025-12-11T21:54:53.954Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000044",
+      "escrow_account": "EscrowListing000044",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4670,
+      "favorites": 76
+    },
+    "seller": {
+      "wallet_address": "Winner67Wa11etAddr3ssS01anafby9",
+      "username": "User_6iq4vc",
+      "verified": true,
+      "rating": 4.720582992050211
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000067",
+      "won_at": "2025-11-11T21:54:53.954Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 16
+    }
+  },
+  {
+    "listing_id": "listing_000045",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinessroundtripeuropeVariant7MintAddr3ssS01anae4v960",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-roundtrip-europe.json",
+      "name": "Business Round Trip - 🇪🇺 Europe Domestic #7",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/europe-business-roundtrip.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 80.38556954624234
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T19:28:34.553Z",
+      "expires_at": "2025-12-14T19:28:34.553Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000045",
+      "escrow_account": "EscrowListing000045",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2306,
+      "favorites": 95
+    },
+    "seller": {
+      "wallet_address": "Winner68Wa11etAddr3ssS01ana1z99",
+      "username": "User_12kiv3",
+      "verified": true,
+      "rating": 4.578941337916335
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000068",
+      "won_at": "2025-11-14T19:28:34.553Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 6
+    }
+  },
+  {
+    "listing_id": "listing_000046",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1emiratesfirstdxbjfkVariant11MintAddr3ssS01ananhqu1n",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-emirates-first-dxb-jfk.json",
+      "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 4165,
+      "discount_percentage": 72.2278009789716
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T03:14:44.992Z",
+      "expires_at": "2025-12-10T03:14:44.992Z",
+      "sold_at": "2025-11-15T03:14:44.992Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000046",
+      "escrow_account": "EscrowListing000046",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1842,
+      "favorites": 143
+    },
+    "seller": {
+      "wallet_address": "Winner69Wa11etAddr3ssS01anavg7t",
+      "username": "User_v9927e",
+      "verified": true,
+      "rating": 4.559781417212724
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000069",
+      "won_at": "2025-11-10T03:14:44.992Z",
+      "winning_ticket_number": 13503,
+      "tickets_owned": 8
+    },
+    "buyer": {
+      "wallet_address": "Buyer46Wa11etAddr3ssS01anaie7p",
+      "username": "Buyer_2nfxr6"
+    }
+  },
+  {
+    "listing_id": "listing_000047",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant8MintAddr3ssS01anae7y0js",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #8",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 5767,
+      "discount_percentage": 61.55147262066648
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T00:46:08.554Z",
+      "expires_at": "2025-12-13T00:46:08.554Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000047",
+      "escrow_account": "EscrowListing000047",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1402,
+      "favorites": 114
+    },
+    "seller": {
+      "wallet_address": "Winner70Wa11etAddr3ssS01ana14bj",
+      "username": "User_lmqgbz",
+      "verified": true,
+      "rating": 4.975134225692024
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000070",
+      "won_at": "2025-11-13T00:46:08.554Z",
+      "winning_ticket_number": 17845,
+      "tickets_owned": 1
+    }
+  },
+  {
+    "listing_id": "listing_000048",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant11MintAddr3ssS01anab13ao3",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 28260,
+      "discount_percentage": 62.31969143683135
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T18:55:53.486Z",
+      "expires_at": "2025-12-13T18:55:53.486Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000048",
+      "escrow_account": "EscrowListing000048",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 880,
+      "favorites": 63
+    },
+    "seller": {
+      "wallet_address": "Winner72Wa11etAddr3ssS01anaj1no",
+      "username": "User_yxs0b1",
+      "verified": true,
+      "rating": 4.029585339320298
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000072",
+      "won_at": "2025-11-13T18:55:53.486Z",
+      "winning_ticket_number": 58904,
+      "tickets_owned": 17
+    }
+  },
+  {
+    "listing_id": "listing_000049",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant1MintAddr3ssS01anapjfwcv",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 4863,
+      "discount_percentage": 67.57379728690161
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T08:30:54.086Z",
+      "expires_at": "2025-12-14T08:30:54.086Z",
+      "sold_at": "2025-11-24T08:30:54.086Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000049",
+      "escrow_account": "EscrowListing000049",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 483,
+      "favorites": 125
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "buyer": {
+      "wallet_address": "Buyer49Wa11etAddr3ssS01anabj1b",
+      "username": "Buyer_cl7bcg"
+    }
+  },
+  {
+    "listing_id": "listing_000050",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinesstransatlanticVariant30MintAddr3ssS01anayx7lhf",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-transatlantic.json",
+      "name": "Business Class 🌊 🌊 Transatlantic #30",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/transatlantic-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 73.60385571082519
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T02:24:19.096Z",
+      "expires_at": "2025-12-13T02:24:19.096Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000050",
+      "escrow_account": "EscrowListing000050",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4029,
+      "favorites": 129
+    },
+    "seller": {
+      "wallet_address": "Winner74Wa11etAddr3ssS01anaeatk",
+      "username": "User_esjbw2",
+      "verified": true,
+      "rating": 4.53651094239203
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000074",
+      "won_at": "2025-11-13T02:24:19.096Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 2
+    }
+  },
+  {
+    "listing_id": "listing_000051",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1emiratesfirstdxbjfkVariant10MintAddr3ssS01ana9m2mzc",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-emirates-first-dxb-jfk.json",
+      "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK #10",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 3520,
+      "discount_percentage": 76.5293997488609
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T13:44:21.294Z",
+      "expires_at": "2025-12-12T13:44:21.294Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000051",
+      "escrow_account": "EscrowListing000051",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 377,
+      "favorites": 147
+    },
+    "seller": {
+      "wallet_address": "Winner75Wa11etAddr3ssS01anapjpq",
+      "username": "User_rpjass",
+      "verified": true,
+      "rating": 4.373207558983093
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000075",
+      "won_at": "2025-11-12T13:44:21.294Z",
+      "winning_ticket_number": 16912,
+      "tickets_owned": 4
+    }
+  },
+  {
+    "listing_id": "listing_000052",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant5MintAddr3ssS01anatnz0q2",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #5",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 17376,
+      "discount_percentage": 76.83152851818855
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T21:40:59.303Z",
+      "expires_at": "2025-12-11T21:40:59.303Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000052",
+      "escrow_account": "EscrowListing000052",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 4197,
+      "favorites": 197
+    },
+    "seller": {
+      "wallet_address": "Winner79Wa11etAddr3ssS01anap93r",
+      "username": "User_j46n5k",
+      "verified": true,
+      "rating": 4.0883116752786695
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000079",
+      "won_at": "2025-11-11T21:40:59.303Z",
+      "winning_ticket_number": 33744,
+      "tickets_owned": 17
+    }
+  },
+  {
+    "listing_id": "listing_000053",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyasiaexcludechinaVariant17MintAddr3ssS01anajbv0jl",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-asia-exclude-china.json",
+      "name": "Economy 🌏 🌏 Asia - Exclude China #17",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 57.71599234176722
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T01:50:06.879Z",
+      "expires_at": "2025-12-10T01:50:06.879Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000053",
+      "escrow_account": "EscrowListing000053",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3349,
+      "favorites": 106
+    },
+    "seller": {
+      "wallet_address": "Winner80Wa11etAddr3ssS01anatvc7",
+      "username": "User_o8d0lj",
+      "verified": true,
+      "rating": 4.057970219777461
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000080",
+      "won_at": "2025-11-10T01:50:06.879Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 17
+    }
+  },
+  {
+    "listing_id": "listing_000054",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant11MintAddr3ssS01anakaukf5",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 74.16068686816706
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T14:13:41.440Z",
+      "expires_at": "2025-12-14T14:13:41.440Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000054",
+      "escrow_account": "EscrowListing000054",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3842,
+      "favorites": 188
+    },
+    "seller": {
+      "wallet_address": "Winner81Wa11etAddr3ssS01ana68bc",
+      "username": "User_tua91k",
+      "verified": true,
+      "rating": 4.043514792955554
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000081",
+      "won_at": "2025-11-14T14:13:41.440Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 15
+    }
+  },
+  {
+    "listing_id": "listing_000055",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1diamondnecklace5ctVariant2MintAddr3ssS01anaq7y6ct",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-diamond-necklace-5ct.json",
+      "name": "5 Carat Diamond Tennis Necklace - VVS1 #2",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/diamond-necklace-5ct.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 125000,
+      "listing_price_usd": 59887,
+      "discount_percentage": 52.08986681434876
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T08:11:27.944Z",
+      "expires_at": "2025-12-12T08:11:27.944Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000055",
+      "escrow_account": "EscrowListing000055",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 502,
+      "favorites": 61
+    },
+    "seller": {
+      "wallet_address": "Winner82Wa11etAddr3ssS01ana0ikd",
+      "username": "User_k9eer6",
+      "verified": true,
+      "rating": 4.929907378267113
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000082",
+      "won_at": "2025-11-12T08:11:27.944Z",
+      "winning_ticket_number": 11968,
+      "tickets_owned": 14
+    }
+  },
+  {
+    "listing_id": "listing_000056",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant23MintAddr3ssS01anadypdqi",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #23",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 3486,
+      "discount_percentage": 76.75701814867021
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T14:30:39.125Z",
+      "expires_at": "2025-12-10T14:30:39.125Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000056",
+      "escrow_account": "EscrowListing000056",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3117,
+      "favorites": 17
+    },
+    "seller": {
+      "wallet_address": "Winner84Wa11etAddr3ssS01ana7g2k",
+      "username": "User_elxddn",
+      "verified": true,
+      "rating": 4.072041255295872
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000084",
+      "won_at": "2025-11-10T14:30:39.125Z",
+      "winning_ticket_number": 8384,
+      "tickets_owned": 1
+    }
+  },
+  {
+    "listing_id": "listing_000057",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftpremiumeconomyusaVariant3MintAddr3ssS01anamlh9t5",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-premium-economy-usa.json",
+      "name": "Premium Economy 🇺🇸 USA Domestic #3",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/usa-premium-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 67.097819291322
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T09:18:14.673Z",
+      "expires_at": "2025-12-13T09:18:14.673Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000057",
+      "escrow_account": "EscrowListing000057",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2402,
+      "favorites": 180
+    },
+    "seller": {
+      "wallet_address": "Winner85Wa11etAddr3ssS01ana99nq",
+      "username": "User_jwd57y",
+      "verified": true,
+      "rating": 4.260502151803989
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000085",
+      "won_at": "2025-11-13T09:18:14.673Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 11
+    }
+  },
+  {
+    "listing_id": "listing_000058",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftfirstclass15000Variant29MintAddr3ssS01anawnbxa6",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-15000.json",
+      "name": "$15000 First Class Credit - Premium Airlines #29",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-15000-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 2228,
+      "discount_percentage": 85.14350414683209
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T10:44:41.804Z",
+      "expires_at": "2025-12-12T10:44:41.804Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000058",
+      "escrow_account": "EscrowListing000058",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2158,
+      "favorites": 37
+    },
+    "seller": {
+      "wallet_address": "Winner86Wa11etAddr3ssS01anaf4f6",
+      "username": "User_djp8sz",
+      "verified": true,
+      "rating": 4.688854432378647
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000086",
+      "won_at": "2025-11-12T10:44:41.804Z",
+      "winning_ticket_number": 15467,
+      "tickets_owned": 4
+    }
+  },
+  {
+    "listing_id": "listing_000059",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant4MintAddr3ssS01anabbz1uy",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #4",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 1509,
+      "discount_percentage": 89.93439336194017
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T00:59:55.254Z",
+      "expires_at": "2025-12-13T00:59:55.254Z",
+      "sold_at": "2025-11-16T00:59:55.254Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000059",
+      "escrow_account": "EscrowListing000059",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 405,
+      "favorites": 67
+    },
+    "seller": {
+      "wallet_address": "Winner88Wa11etAddr3ssS01ana13by",
+      "username": "User_jaw96y",
+      "verified": true,
+      "rating": 4.033928027378556
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000088",
+      "won_at": "2025-11-13T00:59:55.254Z",
+      "winning_ticket_number": 12648,
+      "tickets_owned": 5
+    },
+    "buyer": {
+      "wallet_address": "Buyer59Wa11etAddr3ssS01anapr5j",
+      "username": "Buyer_y7d5ky"
+    }
+  },
+  {
+    "listing_id": "listing_000060",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant25MintAddr3ssS01anahz7b4z",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #25",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 2044,
+      "discount_percentage": 86.36967789288165
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T10:35:12.596Z",
+      "expires_at": "2025-12-14T10:35:12.596Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000060",
+      "escrow_account": "EscrowListing000060",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4056,
+      "favorites": 177
+    },
+    "seller": {
+      "wallet_address": "Winner89Wa11etAddr3ssS01anag5ys",
+      "username": "User_sl06ch",
+      "verified": true,
+      "rating": 4.833494418963734
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000089",
+      "won_at": "2025-11-14T10:35:12.596Z",
+      "winning_ticket_number": 15259,
+      "tickets_owned": 1
+    }
+  },
+  {
+    "listing_id": "listing_000061",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant24MintAddr3ssS01anauxgykd",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #24",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 1601,
+      "discount_percentage": 67.96483139139649
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T19:30:02.882Z",
+      "expires_at": "2025-12-10T19:30:02.882Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000061",
+      "escrow_account": "EscrowListing000061",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 3345,
+      "favorites": 75
+    },
+    "seller": {
+      "wallet_address": "Winner90Wa11etAddr3ssS01anan2yv",
+      "username": "User_9b0hqp",
+      "verified": true,
+      "rating": 4.3526174247989395
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000090",
+      "won_at": "2025-11-10T19:30:02.882Z",
+      "winning_ticket_number": 1729,
+      "tickets_owned": 8
+    }
+  },
+  {
+    "listing_id": "listing_000062",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sfteconomyexcludeusachinaVariant26MintAddr3ssS01anaox9wgm",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-exclude-usa-china.json",
+      "name": "Economy 🌍 Worldwide - Exclude 🇺🇸 USA & China #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/worldwide-economy-exclude.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 85.0676131748983
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T19:05:26.527Z",
+      "expires_at": "2025-12-10T19:05:26.527Z",
+      "sold_at": "2025-11-12T19:05:26.527Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000062",
+      "escrow_account": "EscrowListing000062",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4368,
+      "favorites": 99
+    },
+    "seller": {
+      "wallet_address": "Winner92Wa11etAddr3ssS01anatdpg",
+      "username": "User_drgqu5",
+      "verified": true,
+      "rating": 4.721365436800886
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000092",
+      "won_at": "2025-11-10T19:05:26.527Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 7
+    },
+    "buyer": {
+      "wallet_address": "Buyer62Wa11etAddr3ssS01anajcvg",
+      "username": "Buyer_ouhxwh"
+    }
+  },
+  {
+    "listing_id": "listing_000063",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinessroundtripeuropeVariant22MintAddr3ssS01ana4zulrq",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-roundtrip-europe.json",
+      "name": "Business Round Trip - 🇪🇺 Europe Domestic #22",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/europe-business-roundtrip.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 65.13473177149655
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T20:29:34.873Z",
+      "expires_at": "2025-12-12T20:29:34.873Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000063",
+      "escrow_account": "EscrowListing000063",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1641,
+      "favorites": 129
+    },
+    "seller": {
+      "wallet_address": "Winner93Wa11etAddr3ssS01ana49hf",
+      "username": "User_u24fh5",
+      "verified": true,
+      "rating": 4.399316885907565
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000093",
+      "won_at": "2025-11-12T20:29:34.873Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 13
+    }
+  },
+  {
+    "listing_id": "listing_000064",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant22MintAddr3ssS01ana0qy3sf",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #22",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 73.47680183422248
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T03:20:10.770Z",
+      "expires_at": "2025-12-13T03:20:10.770Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000064",
+      "escrow_account": "EscrowListing000064",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4501,
+      "favorites": 95
+    },
+    "seller": {
+      "wallet_address": "Winner95Wa11etAddr3ssS01ana3o4p",
+      "username": "User_2gakue",
+      "verified": true,
+      "rating": 4.835436085314866
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000095",
+      "won_at": "2025-11-13T03:20:10.770Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 18
+    }
+  },
+  {
+    "listing_id": "listing_000065",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftfirstclass15000Variant2MintAddr3ssS01analprk8u",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-15000.json",
+      "name": "$15000 First Class Credit - Premium Airlines #2",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-15000-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 7239,
+      "discount_percentage": 51.73713514110022
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T22:05:04.765Z",
+      "expires_at": "2025-12-11T22:05:04.765Z",
+      "sold_at": "2025-11-12T22:05:04.765Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000065",
+      "escrow_account": "EscrowListing000065",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2199,
+      "favorites": 132
+    },
+    "seller": {
+      "wallet_address": "Winner96Wa11etAddr3ssS01anajkwp",
+      "username": "User_x3or0m",
+      "verified": true,
+      "rating": 4.616540486347917
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000096",
+      "won_at": "2025-11-11T22:05:04.765Z",
+      "winning_ticket_number": 2048,
+      "tickets_owned": 16
+    },
+    "buyer": {
+      "wallet_address": "Buyer65Wa11etAddr3ssS01anar77h",
+      "username": "Buyer_yummsj"
+    }
+  },
+  {
+    "listing_id": "listing_000066",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1hermesbirkin35Variant16MintAddr3ssS01analyo44a",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-hermes-birkin-35.json",
+      "name": "Hermès Birkin 35 - Togo Leather Black with Gold Hardware #16",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 95000,
+      "listing_price_usd": 26114,
+      "discount_percentage": 72.51146700365436
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T17:57:36.275Z",
+      "expires_at": "2025-12-13T17:57:36.275Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000066",
+      "escrow_account": "EscrowListing000066",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 399,
+      "favorites": 34
+    },
+    "seller": {
+      "wallet_address": "Winner99Wa11etAddr3ssS01anasoyv",
+      "username": "User_1txzak",
+      "verified": true,
+      "rating": 4.496899680561767
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000099",
+      "won_at": "2025-11-13T17:57:36.275Z",
+      "winning_ticket_number": 69350,
+      "tickets_owned": 17
+    }
+  },
+  {
+    "listing_id": "listing_000067",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftfirstclassmiddleeastVariant28MintAddr3ssS01ana71c4jt",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-middle-east.json",
+      "name": "First Class 🌍 🌍 Middle East Routes #28",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/middle-east-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 58.3281998367792
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T22:08:03.860Z",
+      "expires_at": "2025-12-13T22:08:03.860Z",
+      "sold_at": "2025-11-22T22:08:03.860Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000067",
+      "escrow_account": "EscrowListing000067",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4835,
+      "favorites": 9
+    },
+    "seller": {
+      "wallet_address": "Winner101Wa11etAddr3ssS01anawub7",
+      "username": "User_ivxeto",
+      "verified": true,
+      "rating": 4.412051563951232
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000101",
+      "won_at": "2025-11-13T22:08:03.860Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 16
+    },
+    "buyer": {
+      "wallet_address": "Buyer67Wa11etAddr3ssS01ana5ip4",
+      "username": "Buyer_9q9913"
+    }
+  },
+  {
+    "listing_id": "listing_000068",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1burjalarabroyalsuiteVariant29MintAddr3ssS01anaqwrf05",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-burj-al-arab-royal-suite.json",
+      "name": "Burj Al Arab - Royal Suite 3 Nights #29",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 45000,
+      "listing_price_usd": 21079,
+      "discount_percentage": 53.157096422715
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T06:47:29.357Z",
+      "expires_at": "2025-12-14T06:47:29.357Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000068",
+      "escrow_account": "EscrowListing000068",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 1147,
+      "favorites": 47
+    },
+    "seller": {
+      "wallet_address": "Winner103Wa11etAddr3ssS01anajpxn",
+      "username": "User_oj56la",
+      "verified": true,
+      "rating": 4.396779116599849
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000103",
+      "won_at": "2025-11-14T06:47:29.357Z",
+      "winning_ticket_number": 16711,
+      "tickets_owned": 4
+    }
+  },
+  {
+    "listing_id": "listing_000069",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1qatarbusinessroundtripVariant13MintAddr3ssS01anafjtmtl",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-qatar-business-roundtrip.json",
+      "name": "🇶🇦 Qatar Airways Business Round Trip - 🇶🇦 DOH to 🇬🇧 LHR #13",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-doh-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 3893,
+      "discount_percentage": 51.329589410550696
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T02:06:38.684Z",
+      "expires_at": "2025-12-10T02:06:38.684Z",
+      "sold_at": "2025-11-14T02:06:38.684Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000069",
+      "escrow_account": "EscrowListing000069",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 2555,
+      "favorites": 55
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "buyer": {
+      "wallet_address": "Buyer69Wa11etAddr3ssS01ana2yt6",
+      "username": "Buyer_kyuns5"
+    }
+  },
+  {
+    "listing_id": "listing_000070",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1rolexdaytonaplatinumVariant15MintAddr3ssS01ana2ekdrg",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Cosmograph Daytona - Platinum Ice Blue #15",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "listing_price_usd": 18930,
+      "discount_percentage": 74.75937192245728
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T12:25:59.281Z",
+      "expires_at": "2025-12-14T12:25:59.281Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000070",
+      "escrow_account": "EscrowListing000070",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 3157,
+      "favorites": 102
+    },
+    "seller": {
+      "wallet_address": "Winner105Wa11etAddr3ssS01anau6wq",
+      "username": "User_yazrqt",
+      "verified": true,
+      "rating": 4.555005710619414
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000105",
+      "won_at": "2025-11-14T12:25:59.281Z",
+      "winning_ticket_number": 10063,
+      "tickets_owned": 8
+    }
+  },
+  {
+    "listing_id": "listing_000071",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit2000southeastasiaVariant17MintAddr3ssS01anans4uqw",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-2000-southeast-asia.json",
+      "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit #17",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-2000-sea.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 2000,
+      "listing_price_usd": 998,
+      "discount_percentage": 50.06971194366121
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T19:22:38.233Z",
+      "expires_at": "2025-12-12T19:22:38.233Z",
+      "sold_at": "2025-11-13T19:22:38.233Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000071",
+      "escrow_account": "EscrowListing000071",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 207,
+      "favorites": 126
+    },
+    "seller": {
+      "wallet_address": "Winner106Wa11etAddr3ssS01ana9eoi",
+      "username": "User_vyrsm0",
+      "verified": true,
+      "rating": 4.259040657000657
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000106",
+      "won_at": "2025-11-12T19:22:38.233Z",
+      "winning_ticket_number": 681,
+      "tickets_owned": 10
+    },
+    "buyer": {
+      "wallet_address": "Buyer71Wa11etAddr3ssS01anaot9w",
+      "username": "Buyer_oyib1v"
+    }
+  },
+  {
+    "listing_id": "listing_000072",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1diamondnecklace5ctVariant7MintAddr3ssS01anago9387",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-diamond-necklace-5ct.json",
+      "name": "5 Carat Diamond Tennis Necklace - VVS1 #7",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/diamond-necklace-5ct.png",
+      "collection_address": "CollectionluxuryAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 125000,
+      "listing_price_usd": 39269,
+      "discount_percentage": 68.58425060649503
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T17:16:02.999Z",
+      "expires_at": "2025-12-14T17:16:02.999Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000072",
+      "escrow_account": "EscrowListing000072",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "luxury",
+        "resale"
+      ],
+      "views": 962,
+      "favorites": 129
+    },
+    "seller": {
+      "wallet_address": "Winner108Wa11etAddr3ssS01anara4v",
+      "username": "User_9wjbe5",
+      "verified": true,
+      "rating": 4.052266391131853
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000108",
+      "won_at": "2025-11-14T17:16:02.999Z",
+      "winning_ticket_number": 38410,
+      "tickets_owned": 20
+    }
+  },
+  {
+    "listing_id": "listing_000073",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant1MintAddr3ssS01anan7665z",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 5114,
+      "discount_percentage": 65.90225400103729
+    },
+    "timeline": {
+      "listed_at": "2025-11-15T18:27:36.933Z",
+      "expires_at": "2025-12-14T18:27:36.933Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000073",
+      "escrow_account": "EscrowListing000073",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1235,
+      "favorites": 35
+    },
+    "seller": {
+      "wallet_address": "Winner110Wa11etAddr3ssS01ana8t0m",
+      "username": "User_svfmih",
+      "verified": true,
+      "rating": 4.7985392158269455
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000110",
+      "won_at": "2025-11-14T18:27:36.933Z",
+      "winning_ticket_number": 297,
+      "tickets_owned": 8
+    }
+  },
+  {
+    "listing_id": "listing_000074",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftfirstclassmiddleeastVariant12MintAddr3ssS01ana5bryyw",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-middle-east.json",
+      "name": "First Class 🌍 🌍 Middle East Routes #12",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/middle-east-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 79.540410695978
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T02:07:35.593Z",
+      "expires_at": "2025-12-12T02:07:35.593Z",
+      "sold_at": "2025-11-13T02:07:35.593Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000074",
+      "escrow_account": "EscrowListing000074",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 1388,
+      "favorites": 143
+    },
+    "seller": {
+      "wallet_address": "Winner111Wa11etAddr3ssS01anai8l8",
+      "username": "User_jb534x",
+      "verified": true,
+      "rating": 4.05237787665447
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000111",
+      "won_at": "2025-11-12T02:07:35.593Z",
+      "winning_ticket_number": null,
+      "tickets_owned": 15
+    },
+    "buyer": {
+      "wallet_address": "Buyer74Wa11etAddr3ssS01anaphd3",
+      "username": "Buyer_6fuezi"
+    }
+  },
+  {
+    "listing_id": "listing_000075",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftpremiumeconomyusaVariant24MintAddr3ssS01anag504er",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-premium-economy-usa.json",
+      "name": "Premium Economy 🇺🇸 USA Domestic #24",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/usa-premium-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 74.17751693031371
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T17:27:31.346Z",
+      "expires_at": "2025-12-11T17:27:31.346Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000075",
+      "escrow_account": "EscrowListing000075",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 448,
+      "favorites": 61
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    }
+  },
+  {
+    "listing_id": "listing_000076",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit1000anyVariant24MintAddr3ssS01anaybfi8i",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-1000-any.json",
+      "name": "$1000 Hotel Credit - Any Property #24",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 1000,
+      "listing_price_usd": 426,
+      "discount_percentage": 57.36633121175422
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T03:29:21.718Z",
+      "expires_at": "2025-12-10T03:29:21.718Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000076",
+      "escrow_account": "EscrowListing000076",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "resale"
+      ],
+      "views": 2014,
+      "favorites": 86
+    },
+    "seller": {
+      "wallet_address": "Winner115Wa11etAddr3ssS01anabe9l",
+      "username": "User_ji2nny",
+      "verified": true,
+      "rating": 4.390060524209017
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000115",
+      "won_at": "2025-11-10T03:29:21.718Z",
+      "winning_ticket_number": 1066,
+      "tickets_owned": 2
+    }
+  },
+  {
+    "listing_id": "listing_000077",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit2000southeastasiaVariant13MintAddr3ssS01ana0shgiw",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-2000-southeast-asia.json",
+      "name": "$2000 🌏 Southeast 🌏 🌏 Asia Credit #13",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-2000-sea.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 2000,
+      "listing_price_usd": 782,
+      "discount_percentage": 60.86854767922957
+    },
+    "timeline": {
+      "listed_at": "2025-11-14T02:32:34.903Z",
+      "expires_at": "2025-12-13T02:32:34.903Z",
+      "sold_at": "2025-11-20T02:32:34.903Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000077",
+      "escrow_account": "EscrowListing000077",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 57,
+      "favorites": 155
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "buyer": {
+      "wallet_address": "Buyer77Wa11etAddr3ssS01anaehwn",
+      "username": "Buyer_u5g0kl"
+    }
+  },
+  {
+    "listing_id": "listing_000078",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1emiratesfirstdxbjfkVariant4MintAddr3ssS01anabu5kw4",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-emirates-first-dxb-jfk.json",
+      "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK #4",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 5241,
+      "discount_percentage": 65.05755866334188
+    },
+    "timeline": {
+      "listed_at": "2025-11-13T18:50:21.600Z",
+      "expires_at": "2025-12-12T18:50:21.600Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000078",
+      "escrow_account": "EscrowListing000078",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 4076,
+      "favorites": 49
+    },
+    "seller": {
+      "wallet_address": "Winner119Wa11etAddr3ssS01anabe6t",
+      "username": "User_fvc9h1",
+      "verified": true,
+      "rating": 4.5328417338125355
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000119",
+      "won_at": "2025-11-12T18:50:21.600Z",
+      "winning_ticket_number": 14849,
+      "tickets_owned": 18
+    }
+  },
+  {
+    "listing_id": "listing_000079",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit500anyVariant15MintAddr3ssS01anagon5ce",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-500-any.json",
+      "name": "$500 Flight Credit - Any Airline #15",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-500.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "pricing": {
+      "estimated_value_usd": 500,
+      "listing_price_usd": 228,
+      "discount_percentage": 54.22648063998949
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T18:54:50.911Z",
+      "expires_at": "2025-12-10T18:54:50.911Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDA000079",
+      "escrow_account": "EscrowListing000079",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "resale"
+      ],
+      "views": 493,
+      "favorites": 94
+    },
+    "seller": {
+      "wallet_address": "Winner120Wa11etAddr3ssS01anam8mv",
+      "username": "User_2134ub",
+      "verified": true,
+      "rating": 4.880262829681497
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_000120",
+      "won_at": "2025-11-10T18:54:50.911Z",
+      "winning_ticket_number": 394,
+      "tickets_owned": 14
+    }
+  },
+  {
+    "listing_id": "listing_direct_000001",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit5000luxuryVariant16MintAddr3ssS01anaagjtay",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-5000-luxury.json",
+      "name": "$5000 Luxury Hotel Credit - 5-Star Properties #16",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-5000-luxury.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 4282,
+      "discount_percentage": 14.35374346819857
+    },
+    "timeline": {
+      "listed_at": "2025-11-05T19:25:57.269Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000001",
+      "escrow_account": "EscrowListingDirect000001",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "direct-sale",
+        "company"
+      ],
+      "views": 5773,
+      "favorites": 194
+    }
+  },
+  {
+    "listing_id": "listing_direct_000002",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftfirstclass15000Variant11MintAddr3ssS01anae6917t",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-15000.json",
+      "name": "$15000 First Class Credit - Premium Airlines #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-15000-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 13854,
+      "discount_percentage": 7.636996883794083
+    },
+    "timeline": {
+      "listed_at": "2025-11-01T13:05:42.002Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000002",
+      "escrow_account": "EscrowListingDirect000002",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 6328,
+      "favorites": 50
+    }
+  },
+  {
+    "listing_id": "listing_direct_000003",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1qatarbusinessroundtripVariant27MintAddr3ssS01anaymr4j8",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-qatar-business-roundtrip.json",
+      "name": "🇶🇦 Qatar Airways Business Round Trip - 🇶🇦 DOH to 🇬🇧 LHR #27",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-doh-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 6807,
+      "discount_percentage": 14.903831385434957
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T01:31:51.386Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-12T08:30:07.295Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000003",
+      "escrow_account": "EscrowListingDirect000003",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 7775,
+      "favorites": 51
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect2Wa11etAddr3ssS01ana993r",
+      "username": "Buyer_3wyoej"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000004",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1fourseasonsmaldives7nightsVariant4MintAddr3ssS01anawp7i8c",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-four-seasons-maldives-7nights.json",
+      "name": "Four Seasons 🇲🇻 Maldives - 7 Night Overwater Villa #4",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/four-seasons-maldives.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 35000,
+      "listing_price_usd": 31567,
+      "discount_percentage": 9.806589989122408
+    },
+    "timeline": {
+      "listed_at": "2025-11-04T09:51:14.691Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000004",
+      "escrow_account": "EscrowListingDirect000004",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "direct-sale",
+        "company"
+      ],
+      "views": 29,
+      "favorites": 309
+    }
+  },
+  {
+    "listing_id": "listing_direct_000005",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit3000premiumeconomyVariant3MintAddr3ssS01analldtw9",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001 #3",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "listing_price_usd": 2801,
+      "discount_percentage": 6.624763754669978
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T07:17:11.469Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000005",
+      "escrow_account": "EscrowListingDirect000005",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 1534,
+      "favorites": 382
+    }
+  },
+  {
+    "listing_id": "listing_direct_000006",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant17MintAddr3ssS01anayiqcnf",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #17",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 4273,
+      "discount_percentage": 14.523305591376785
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T07:05:37.340Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000006",
+      "escrow_account": "EscrowListingDirect000006",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 5258,
+      "favorites": 32
+    }
+  },
+  {
+    "listing_id": "listing_direct_000007",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinesstransatlanticVariant20MintAddr3ssS01ana14cat6",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-transatlantic.json",
+      "name": "Business Class 🌊 🌊 Transatlantic #20",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/transatlantic-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 13.918385599343472
+    },
+    "timeline": {
+      "listed_at": "2025-11-03T10:10:37.528Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000007",
+      "escrow_account": "EscrowListingDirect000007",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 4152,
+      "favorites": 20
+    }
+  },
+  {
+    "listing_id": "listing_direct_000008",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit5000luxuryVariant5MintAddr3ssS01ana7p001r",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-5000-luxury.json",
+      "name": "$5000 Luxury Hotel Credit - 5-Star Properties #5",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-5000-luxury.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 4336,
+      "discount_percentage": 13.261233062429719
+    },
+    "timeline": {
+      "listed_at": "2025-11-10T16:55:32.489Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-12T15:14:11.614Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000008",
+      "escrow_account": "EscrowListingDirect000008",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "direct-sale",
+        "company"
+      ],
+      "views": 460,
+      "favorites": 170
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect7Wa11etAddr3ssS01ana0glb",
+      "username": "Buyer_e1etdl"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000009",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant18MintAddr3ssS01ananea5ef",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #18",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 14.395324703188617
+    },
+    "timeline": {
+      "listed_at": "2025-11-02T19:40:00.820Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000009",
+      "escrow_account": "EscrowListingDirect000009",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 2133,
+      "favorites": 130
+    }
+  },
+  {
+    "listing_id": "listing_direct_000010",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit8000businessVariant2MintAddr3ssS01anapcokii",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-8000-business.json",
+      "name": "$8000 Business Class Credit #2",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 7126,
+      "discount_percentage": 10.919214557628234
+    },
+    "timeline": {
+      "listed_at": "2025-11-06T14:29:27.023Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000010",
+      "escrow_account": "EscrowListingDirect000010",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 325,
+      "favorites": 41
+    }
+  },
+  {
+    "listing_id": "listing_direct_000011",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit500anyVariant15MintAddr3ssS01anal5zzfv",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-500-any.json",
+      "name": "$500 Flight Credit - Any Airline #15",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-500.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 500,
+      "listing_price_usd": 414,
+      "discount_percentage": 17.146177088474758
+    },
+    "timeline": {
+      "listed_at": "2025-11-06T02:34:30.492Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000011",
+      "escrow_account": "EscrowListingDirect000011",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 6770,
+      "favorites": 210
+    }
+  },
+  {
+    "listing_id": "listing_direct_000012",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftfirstclass15000Variant9MintAddr3ssS01anapzn5jx",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-first-class-15000.json",
+      "name": "$15000 First Class Credit - Premium Airlines #9",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-15000-first.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 12383,
+      "discount_percentage": 17.44098547573667
+    },
+    "timeline": {
+      "listed_at": "2025-11-02T00:19:51.013Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-11T19:37:16.125Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000012",
+      "escrow_account": "EscrowListingDirect000012",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 4651,
+      "favorites": 313
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect11Wa11etAddr3ssS01anab3jz",
+      "username": "Buyer_ps6y43"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000013",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1qatarbusinessroundtripVariant21MintAddr3ssS01ana6bjzra",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-qatar-business-roundtrip.json",
+      "name": "🇶🇦 Qatar Airways Business Round Trip - 🇶🇦 DOH to 🇬🇧 LHR #21",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-doh-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 7057,
+      "discount_percentage": 11.778507828902196
+    },
+    "timeline": {
+      "listed_at": "2025-11-06T06:21:30.246Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-07T05:45:29.944Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000013",
+      "escrow_account": "EscrowListingDirect000013",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 613,
+      "favorites": 170
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect12Wa11etAddr3ssS01ananqkl",
+      "username": "Buyer_rvb6el"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000014",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1credit5000businessVariant26MintAddr3ssS01ana8bz3k9",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001 #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 4629,
+      "discount_percentage": 7.4076883142797145
+    },
+    "timeline": {
+      "listed_at": "2025-11-03T02:09:42.717Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-05T13:36:22.278Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000014",
+      "escrow_account": "EscrowListingDirect000014",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 7853,
+      "favorites": 232
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect13Wa11etAddr3ssS01anahusr",
+      "username": "Buyer_a2qzyb"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000015",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1emiratesfirstdxbjfkVariant27MintAddr3ssS01anaedhyxh",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-emirates-first-dxb-jfk.json",
+      "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK #27",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 12471,
+      "discount_percentage": 16.85615594430066
+    },
+    "timeline": {
+      "listed_at": "2025-11-10T16:49:32.875Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000015",
+      "escrow_account": "EscrowListingDirect000015",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 7136,
+      "favorites": 214
+    }
+  },
+  {
+    "listing_id": "listing_direct_000016",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinesstransatlanticVariant11MintAddr3ssS01anassryeo",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-transatlantic.json",
+      "name": "Business Class 🌊 🌊 Transatlantic #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/transatlantic-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 9.991435405622063
+    },
+    "timeline": {
+      "listed_at": "2025-11-07T17:36:19.691Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000016",
+      "escrow_account": "EscrowListingDirect000016",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 3118,
+      "favorites": 132
+    }
+  },
+  {
+    "listing_id": "listing_direct_000017",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyasiaexcludechinaVariant8MintAddr3ssS01ana462g8h",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-asia-exclude-china.json",
+      "name": "Economy 🌏 🌏 Asia - Exclude China #8",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 17.351758349147094
+    },
+    "timeline": {
+      "listed_at": "2025-11-10T04:05:34.702Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000017",
+      "escrow_account": "EscrowListingDirect000017",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 4646,
+      "favorites": 11
+    }
+  },
+  {
+    "listing_id": "listing_direct_000018",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyasiaexcludechinaVariant25MintAddr3ssS01ana00vmkj",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-asia-exclude-china.json",
+      "name": "Economy 🌏 🌏 Asia - Exclude China #25",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/asia-economy-no-china.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 17.621282099564944
+    },
+    "timeline": {
+      "listed_at": "2025-11-02T19:19:45.985Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000018",
+      "escrow_account": "EscrowListingDirect000018",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 2820,
+      "favorites": 364
+    }
+  },
+  {
+    "listing_id": "listing_direct_000019",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant30MintAddr3ssS01anaqcxe26",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #30",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 12530,
+      "discount_percentage": 16.465707105664706
+    },
+    "timeline": {
+      "listed_at": "2025-11-04T02:59:43.000Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000019",
+      "escrow_account": "EscrowListingDirect000019",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 4891,
+      "favorites": 298
+    }
+  },
+  {
+    "listing_id": "listing_direct_000020",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "sftcredit1000anyVariant28MintAddr3ssS01ana26rolc",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/sft-credit-1000-any.json",
+      "name": "$1000 Hotel Credit - Any Property #28",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/credit-1000.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 1000,
+      "listing_price_usd": 909,
+      "discount_percentage": 9.055698865439027
+    },
+    "timeline": {
+      "listed_at": "2025-11-06T22:48:15.450Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-08T23:46:26.768Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000020",
+      "escrow_account": "EscrowListingDirect000020",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "direct-sale",
+        "company"
+      ],
+      "views": 5301,
+      "favorites": 273
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect19Wa11etAddr3ssS01ana0qm6",
+      "username": "Buyer_8on98s"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000021",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1singaporesuitessinlaxVariant23MintAddr3ssS01anaodtbnp",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX #23",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 12082,
+      "discount_percentage": 19.449083263744996
+    },
+    "timeline": {
+      "listed_at": "2025-11-05T16:17:57.837Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000021",
+      "escrow_account": "EscrowListingDirect000021",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 7412,
+      "favorites": 310
+    }
+  },
+  {
+    "listing_id": "listing_direct_000022",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1credit10000firstVariant27MintAddr3ssS01anae5bmlw",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-10000-first.json",
+      "name": "$10000 First Class Credit - Voucher #001 #27",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-10000-first-001.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 10000,
+      "listing_price_usd": 9180,
+      "discount_percentage": 8.197979983009747
+    },
+    "timeline": {
+      "listed_at": "2025-11-03T19:29:58.230Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000022",
+      "escrow_account": "EscrowListingDirect000022",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 4021,
+      "favorites": 99
+    }
+  },
+  {
+    "listing_id": "listing_direct_000023",
+    "type": "direct_from_company",
+    "status": "sold",
+    "nft": {
+      "mint_address": "1of1burjalarabroyalsuiteVariant23MintAddr3ssS01ana5yjh0j",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-burj-al-arab-royal-suite.json",
+      "name": "Burj Al Arab - Royal Suite 3 Nights #23",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal.png",
+      "collection_address": "CollectionhotelsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 45000,
+      "listing_price_usd": 36213,
+      "discount_percentage": 19.525521496974562
+    },
+    "timeline": {
+      "listed_at": "2025-11-03T16:09:44.627Z",
+      "expires_at": "2026-01-14T00:00:00.000Z",
+      "sold_at": "2025-11-05T03:25:00.205Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000023",
+      "escrow_account": "EscrowListingDirect000023",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "hotels",
+      "tags": [
+        "hotels",
+        "direct-sale",
+        "company"
+      ],
+      "views": 5957,
+      "favorites": 200
+    },
+    "buyer": {
+      "wallet_address": "BuyerDirect22Wa11etAddr3ssS01anavshp",
+      "username": "Buyer_1cc34n"
+    }
+  },
+  {
+    "listing_id": "listing_direct_000024",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit8000businessVariant6MintAddr3ssS01anaqgbez0",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-8000-business.json",
+      "name": "$8000 Business Class Credit #6",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 7584,
+      "discount_percentage": 5.199496582275481
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T23:39:10.295Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000024",
+      "escrow_account": "EscrowListingDirect000024",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 2231,
+      "favorites": 380
+    }
+  },
+  {
+    "listing_id": "listing_direct_000025",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant1MintAddr3ssS01ana97xr05",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #1",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 14014,
+      "discount_percentage": 6.572713050076426
+    },
+    "timeline": {
+      "listed_at": "2025-11-09T07:30:45.830Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000025",
+      "escrow_account": "EscrowListingDirect000025",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 2512,
+      "favorites": 223
+    }
+  },
+  {
+    "listing_id": "listing_direct_000026",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftcredit8000businessVariant29MintAddr3ssS01anapac914",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-8000-business.json",
+      "name": "$8000 Business Class Credit #29",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "listing_price_usd": 6577,
+      "discount_percentage": 17.78128349626966
+    },
+    "timeline": {
+      "listed_at": "2025-11-04T07:18:14.410Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000026",
+      "escrow_account": "EscrowListingDirect000026",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 181,
+      "favorites": 281
+    }
+  },
+  {
+    "listing_id": "listing_direct_000027",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "1of1anafirstnrtlhrVariant11MintAddr3ssS01anazxvq69",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-ana-first-nrt-lhr.json",
+      "name": "ANA First Class - Tokyo to London #11",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/ana-first-nrt-lhr.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "listing_price_usd": 12890,
+      "discount_percentage": 14.0613531884705
+    },
+    "timeline": {
+      "listed_at": "2025-11-04T07:43:43.738Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000027",
+      "escrow_account": "EscrowListingDirect000027",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 868,
+      "favorites": 106
+    }
+  },
+  {
+    "listing_id": "listing_direct_000028",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomydomesticindonesiaVariant26MintAddr3ssS01anarm8wjd",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-domestic-indonesia.json",
+      "name": "Economy Domestic 🇮🇩 Indonesia - Any Price #26",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/indonesia-economy.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 5.148609535999589
+    },
+    "timeline": {
+      "listed_at": "2025-11-08T15:01:14.206Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000028",
+      "escrow_account": "EscrowListingDirect000028",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 1128,
+      "favorites": 191
+    }
+  },
+  {
+    "listing_id": "listing_direct_000029",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sftbusinesstransatlanticVariant2MintAddr3ssS01ana6qxaa9",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-business-transatlantic.json",
+      "name": "Business Class 🌊 🌊 Transatlantic #2",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/transatlantic-business.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 7.187872574551235
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T14:56:21.544Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000029",
+      "escrow_account": "EscrowListingDirect000029",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 6467,
+      "favorites": 75
+    }
+  },
+  {
+    "listing_id": "listing_direct_000030",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "sfteconomyexcludeusachinaVariant19MintAddr3ssS01anag3yp5e",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-economy-exclude-usa-china.json",
+      "name": "Economy 🌍 Worldwide - Exclude 🇺🇸 USA & China #19",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/worldwide-economy-exclude.png",
+      "collection_address": "CollectionflightsAddr3ssS01ana",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": null,
+      "listing_price_usd": null,
+      "discount_percentage": 13.41677315242254
+    },
+    "timeline": {
+      "listed_at": "2025-11-01T01:26:58.541Z",
+      "expires_at": "2026-01-14T00:00:00.000Z"
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDADirect000030",
+      "escrow_account": "EscrowListingDirect000030",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "flights",
+      "tags": [
+        "flights",
+        "direct-sale",
+        "company"
+      ],
+      "views": 848,
+      "favorites": 371
+    }
+  }
+]

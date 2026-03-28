@@ -1,0 +1,319 @@
+[
+  {
+    "batch_raffle_id": "batch_raffle_001_business_8k",
+    "type": "batch",
+    "status": "active",
+    "batch_config": {
+      "total_batches": 8,
+      "current_batch": 2,
+      "completed_batches": 1,
+      "nft_per_batch": 1,
+      "same_nft_type": true
+    },
+    "nft_template": {
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/sft-credit-8000-business.json",
+      "name": "$8000 Business Class Credit (SFT)",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-8000-business.png",
+      "collection_address": "Emi1essCreditCo11ectionAddr3ssS01ana789",
+      "supply_per_batch": 1,
+      "total_supply": 8
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_per_nft_usd": 8000,
+      "ticket_price_moga": 5,
+      "tickets_per_batch": 2000,
+      "total_pot_per_batch_moga": 10000
+    },
+    "batches": [
+      {
+        "batch_number": 1,
+        "status": "completed",
+        "mint_address": "Credit8kBusinessBatch1MintAddr3ssS01ana",
+        "raffle_pda": "Raff1ePDAAddr3ssBatch001_1",
+        "escrow_account": "EscrowAcctAddr3ssBatch001_1",
+        "timeline": {
+          "start_time": "2025-11-01T10:00:00Z",
+          "end_time": "2025-11-08T23:59:59Z",
+          "completed_at": "2025-11-08T23:59:59Z"
+        },
+        "tickets_sold": 2000,
+        "tickets_remaining": 0,
+        "participants_count": 456,
+        "winner": {
+          "wallet_address": "BatchWinner1Wa11etAddr3ssS01ana111",
+          "winning_ticket_number": 1567,
+          "tickets_owned": 25,
+          "claimed": true,
+          "claimed_at": "2025-11-09T09:00:00Z"
+        }
+      },
+      {
+        "batch_number": 2,
+        "status": "active",
+        "mint_address": "Credit8kBusinessBatch2MintAddr3ssS01ana",
+        "raffle_pda": "Raff1ePDAAddr3ssBatch001_2",
+        "escrow_account": "EscrowAcctAddr3ssBatch001_2",
+        "timeline": {
+          "start_time": "2025-11-09T00:00:00Z",
+          "end_time": "2025-11-23T23:59:59Z",
+          "time_remaining_hours": 190
+        },
+        "tickets_sold": 1234,
+        "tickets_remaining": 766,
+        "participants_count": 289,
+        "winner": null
+      },
+      {
+        "batch_number": 3,
+        "status": "pending",
+        "mint_address": "Credit8kBusinessBatch3MintAddr3ssS01ana",
+        "raffle_pda": "Raff1ePDAAddr3ssBatch001_3",
+        "escrow_account": "EscrowAcctAddr3ssBatch001_3",
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "tickets_sold": 0,
+        "tickets_remaining": 2000,
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 4,
+        "status": "pending",
+        "mint_address": "Credit8kBusinessBatch4MintAddr3ssS01ana",
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "tickets_sold": 0,
+        "tickets_remaining": 2000,
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 5,
+        "status": "pending",
+        "mint_address": "Credit8kBusinessBatch5MintAddr3ssS01ana",
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "tickets_sold": 0,
+        "tickets_remaining": 2000,
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 6,
+        "status": "pending",
+        "mint_address": "Credit8kBusinessBatch6MintAddr3ssS01ana",
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "tickets_sold": 0,
+        "tickets_remaining": 2000,
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 7,
+        "status": "pending",
+        "mint_address": "Credit8kBusinessBatch7MintAddr3ssS01ana",
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "tickets_sold": 0,
+        "tickets_remaining": 2000,
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 8,
+        "status": "pending",
+        "mint_address": "Credit8kBusinessBatch8MintAddr3ssS01ana",
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "tickets_sold": 0,
+        "tickets_remaining": 2000,
+        "participants_count": 0,
+        "winner": null
+      }
+    ],
+    "program_data": {
+      "batch_raffle_pda": "BatchRaff1ePDAAddr3ssBusiness8k001",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "travel",
+      "tags": ["batch-raffle", "business-class", "flight-credit", "sft"],
+      "views": 12456,
+      "favorites": 678,
+      "description": "8 consecutive raffles for $8000 business class credits. Each batch activates after the previous one completes."
+    }
+  },
+  {
+    "batch_raffle_id": "batch_raffle_002_mixed_luxury",
+    "type": "batch_mixed",
+    "status": "active",
+    "batch_config": {
+      "total_batches": 5,
+      "current_batch": 1,
+      "completed_batches": 0,
+      "nft_per_batch": 1,
+      "same_nft_type": false
+    },
+    "creator": {
+      "company_id": "company_tiamond_001",
+      "company_name": "Tiamond",
+      "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+      "is_verified": true
+    },
+    "batches": [
+      {
+        "batch_number": 1,
+        "status": "active",
+        "nft": {
+          "mint_address": "RolexDaytonaMixedBatch1MintAddr3ssS01ana",
+          "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+          "name": "Rolex Daytona Platinum",
+          "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+          "estimated_value_usd": 75000
+        },
+        "pricing": {
+          "ticket_price_moga": 50,
+          "total_tickets": 2000,
+          "tickets_sold": 678,
+          "tickets_remaining": 1322,
+          "total_pot_moga": 100000
+        },
+        "timeline": {
+          "start_time": "2025-11-14T10:00:00Z",
+          "end_time": "2025-12-14T23:59:59Z",
+          "time_remaining_hours": 694
+        },
+        "participants_count": 123,
+        "winner": null
+      },
+      {
+        "batch_number": 2,
+        "status": "pending",
+        "nft": {
+          "mint_address": "PatekNautilusMixedBatch2MintAddr3ssS01ana",
+          "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-patek-philippe-nautilus.json",
+          "name": "Patek Philippe Nautilus Blue Dial",
+          "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-nautilus-blue.png",
+          "estimated_value_usd": 150000
+        },
+        "pricing": {
+          "ticket_price_moga": 100,
+          "total_tickets": 2000,
+          "tickets_sold": 0,
+          "tickets_remaining": 2000,
+          "total_pot_moga": 200000
+        },
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 3,
+        "status": "pending",
+        "nft": {
+          "mint_address": "DiamondNecklaceMixedBatch3MintAddr3ssS01ana",
+          "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-diamond-necklace-5ct.json",
+          "name": "5 Carat Diamond Necklace",
+          "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/diamond-necklace-5ct.png",
+          "estimated_value_usd": 125000
+        },
+        "pricing": {
+          "ticket_price_moga": 80,
+          "total_tickets": 2000,
+          "tickets_sold": 0,
+          "tickets_remaining": 2000,
+          "total_pot_moga": 160000
+        },
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 4,
+        "status": "pending",
+        "nft": {
+          "mint_address": "HermesBirkinMixedBatch4MintAddr3ssS01ana",
+          "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-hermes-birkin-35.json",
+          "name": "Hermès Birkin 35 Crocodile",
+          "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/hermes-birkin-35.png",
+          "estimated_value_usd": 95000
+        },
+        "pricing": {
+          "ticket_price_moga": 60,
+          "total_tickets": 2000,
+          "tickets_sold": 0,
+          "tickets_remaining": 2000,
+          "total_pot_moga": 120000
+        },
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "participants_count": 0,
+        "winner": null
+      },
+      {
+        "batch_number": 5,
+        "status": "pending",
+        "nft": {
+          "mint_address": "RolexDaytona2MixedBatch5MintAddr3ssS01ana",
+          "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+          "name": "Rolex Daytona Platinum #2",
+          "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+          "estimated_value_usd": 75000
+        },
+        "pricing": {
+          "ticket_price_moga": 50,
+          "total_tickets": 2000,
+          "tickets_sold": 0,
+          "tickets_remaining": 2000,
+          "total_pot_moga": 100000
+        },
+        "timeline": {
+          "start_time": null,
+          "end_time": null
+        },
+        "participants_count": 0,
+        "winner": null
+      }
+    ],
+    "program_data": {
+      "batch_raffle_pda": "BatchRaff1ePDAAddr3ssMixedLuxury002",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "luxury",
+      "tags": ["batch-raffle", "mixed", "luxury", "watches", "jewelry"],
+      "views": 18934,
+      "favorites": 1234,
+      "description": "5 different luxury items raffled sequentially. Each raffle activates after the previous winner is selected."
+    }
+  }
+]

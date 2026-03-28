@@ -3,19 +3,29 @@ import fs from "node:fs";
 import path from "node:path";
 
 async function main() {
-  const rpcUrl = process.env.SEPOLIA_RPC_URL;
-  const pk = process.env.SEPOLIA_PRIVATE_KEY || process.env.PRIVATE_KEY_ETH;
-  if (!rpcUrl) throw new Error("SEPOLIA_RPC_URL env var is required");
+  const target = process.env.TARGET_NETWORK || "sepolia";
+
+  let rpcUrl: string | undefined;
+  if (target === "polygonAmoy") {
+    rpcUrl = process.env.POLYGON_AMOY_RPC_URL;
+  } else if (target === "arbitrumSepolia") {
+    rpcUrl = process.env.ARBITRUM_SEPOLIA_RPC_URL;
+  } else if (target === "polkadotTestnet") {
+    rpcUrl = process.env.POLKADOT_TESTNET_RPC_URL;
+  } else {
+    rpcUrl = process.env.SEPOLIA_RPC_URL;
+  }
+
+  const pk = process.env.PRIVATE_KEY_ETH || process.env.PRIVATE_KEY_ETH_2;
+  if (!rpcUrl) throw Error("RPC URL env var is required for target network");
   if (!pk)
-    throw new Error(
-      "SEPOLIA_PRIVATE_KEY or PRIVATE_KEY_ETH env var is required"
-    );
+    throw Error("PRIVATE_KEY_ETH or PRIVATE_KEY_ETH_2 env var is required");
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const deployer = new ethers.Wallet(pk, provider);
   console.log(
     "Deploying AuthorityMintGateway with:",
-    await deployer.getAddress()
+    await deployer.getAddress(),
   );
 
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
@@ -25,14 +35,14 @@ async function main() {
     "artifacts",
     "contracts",
     "AuthorityMintGateway.sol",
-    "AuthorityMintGateway.json"
+    "AuthorityMintGateway.json",
   );
   const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
 
   const factory = new ethers.ContractFactory(
     artifact.abi,
     artifact.bytecode,
-    deployer
+    deployer,
   );
   const gateway = await factory.deploy();
   const receipt = await gateway.deploymentTransaction()?.wait();

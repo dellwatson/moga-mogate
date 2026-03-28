@@ -16,21 +16,23 @@ async function main() {
     rpcUrl = process.env.SEPOLIA_RPC_URL;
   }
 
-  const pk = process.env.PRIVATE_KEY_ETH || process.env.PRIVATE_KEY_ETH_2;
-  if (!rpcUrl) throw Error("RPC URL env var is required for target network");
-  if (!pk)
-    throw Error("PRIVATE_KEY_ETH or PRIVATE_KEY_ETH_2 env var is required");
+  const pk =
+    process.env.PRIVATE_KEY_ETH ||
+    process.env.SEPOLIA_PRIVATE_KEY ||
+    process.env.PRIVATE_KEY_ETH_2;
+
+  if (!rpcUrl) {
+    throw new Error("RPC URL env var is required for target network");
+  }
+  if (!pk) {
+    throw new Error(
+      "PRIVATE_KEY_ETH / PRIVATE_KEY_ETH_2 or SEPOLIA_PRIVATE_KEY env var is required",
+    );
+  }
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const deployer = new ethers.Wallet(pk, provider);
-  console.log("Deploying AuthorityMint with:", await deployer.getAddress());
-
-  const collectionAddress = process.env.COLLECTION_ADDRESS;
-  if (!collectionAddress) {
-    throw new Error(
-      "COLLECTION_ADDRESS env var must be set to the deployed Collection address",
-    );
-  }
+  console.log("Deploying RaffleDarkpoolV2 with:", await deployer.getAddress());
 
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
   const repoRoot = path.join(__dirname, "..", "..");
@@ -38,8 +40,8 @@ async function main() {
     repoRoot,
     "artifacts",
     "contracts",
-    "AuthorityMint.sol",
-    "AuthorityMint.json",
+    "Raffle.darkpool.v2.sol",
+    "RaffleDarkpoolV2.json",
   );
   const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
 
@@ -48,18 +50,14 @@ async function main() {
     artifact.bytecode,
     deployer,
   );
-  const authorityMint = await factory.deploy(collectionAddress);
-  const receipt = await authorityMint.deploymentTransaction()?.wait();
+  const raffle = await factory.deploy();
+  const receipt = await raffle.deploymentTransaction()?.wait();
 
-  const address = await authorityMint.getAddress();
-
-  console.log("AuthorityMint deployed to:", address);
+  const address = await raffle.getAddress();
+  console.log("RaffleDarkpoolV2 deployed to:", address);
   if (receipt) {
     console.log("Deploy tx:", receipt.hash, "block:", receipt.blockNumber);
   }
-  console.log(
-    "Remember to whitelist this address as a minter in Collection.setMinter",
-  );
 }
 
 main().catch((error) => {

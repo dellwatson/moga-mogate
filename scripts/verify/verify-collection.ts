@@ -13,23 +13,29 @@ async function main() {
     polygonAmoy: "80002",
     arbitrumSepolia: "421614",
     sepolia: "11155111",
+    polkadotTestnet: "420420417",
   };
 
   const chainId = chainIds[network];
   if (!chainId) throw new Error(`Unsupported network: ${network}`);
 
-  const apiUrl = `https://api.etherscan.io/v2/api?chainid=${chainId}`;
+  const apiUrls: Record<string, string> = {
+    polygonAmoy: "https://api-amoy.polygonscan.com/api",
+    arbitrumSepolia: "https://api-sepolia.arbiscan.io/api",
+    sepolia: "https://api-sepolia.etherscan.io/api",
+    polkadotTestnet:
+      "https://api.routescan.io/v2/network/testnet/evm/420420417/etherscan",
+  };
+
+  const apiUrl = apiUrls[network];
+  if (!apiUrl) throw new Error(`Unsupported network: ${network}`);
 
   console.log(`Verifying Collection at ${address} on ${network}...`);
 
   // Read contract source
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
   const repoRoot = path.join(__dirname, "..", "..");
-  const contractPath = path.join(
-    repoRoot,
-    "contracts",
-    "Collection.sol",
-  );
+  const contractPath = path.join(repoRoot, "contracts", "Collection.sol");
   const contractSource = fs.readFileSync(contractPath, "utf8");
 
   // Read ERC721URIStorage dependency
@@ -282,6 +288,7 @@ async function main() {
     polygonAmoy: "https://amoy.polygonscan.com",
     arbitrumSepolia: "https://sepolia.arbiscan.io",
     sepolia: "https://sepolia.etherscan.io",
+    polkadotTestnet: "https://testnet-explorer.polkadot.io",
   };
 
   const explorerUrl = explorerUrls[network];
@@ -300,7 +307,10 @@ async function main() {
       guid: result.result,
     });
 
-    const statusUrl = `https://api.etherscan.io/v2/api?chainid=${chainId}`;
+    const statusUrl =
+      network === "polkadotTestnet"
+        ? "https://api.routescan.io/v2/network/testnet/evm/420420417/etherscan"
+        : `https://api.etherscan.io/v2/api?chainid=${chainId}`;
     const statusResponse = await fetch(
       `${statusUrl}&${statusParams.toString()}`,
     );

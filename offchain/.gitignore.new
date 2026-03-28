@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+bun.lockb
+
+# Output
+out/
+*.log
+
+# Environment
+.env
+.env.local
+
+# Old files (to be removed after migration)
+server.ts
+shared.ts
+worker.ts
+organizer_db.ts
+permit_example.ts
+sign-host-permit.ts
+sign-join-permit.ts
+submit-host-permit.ts
+submit-join-permit.ts
+README.old.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,203 @@
+[
+  {
+    "id": "company_tixia_001",
+    "name": "Tixia",
+    "legal_name": "Tixia OTA Indonesia Corporate",
+    "type": "OTA",
+    "country": "Indonesia",
+    "registration": {
+      "country": "ID",
+      "registration_number": "ID-OTA-2023-001",
+      "incorporation_date": "2023-01-15"
+    },
+    "description": "Leading Online Travel Agency in Indonesia, specializing in domestic and Southeast Asian travel packages, flights, and hotel bookings.",
+    "kyc_level": "VERIFIED_CORPORATE",
+    "kyc_documents": {
+      "business_license": "verified",
+      "tax_id": "verified",
+      "bank_account": "verified",
+      "director_id": "verified"
+    },
+    "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+    "collections": [
+      {
+        "collection_address": "TixiaTrave1Co11ectionAddr3ssS01ana123",
+        "collection_name": "Tixia Travel Credits",
+        "collection_type": "SFT",
+        "program_id": "rwa_raffle_program_v1",
+        "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/collections/travel-sft.json"
+      }
+    ],
+    "contact": {
+      "email": "corporate@tixia.com",
+      "phone": "+62-21-5555-1234",
+      "support_email": "support@tixia.com"
+    },
+    "socials": {
+      "website": "https://tixia.com",
+      "twitter": "https://twitter.com/tixia_official",
+      "instagram": "https://instagram.com/tixia.id",
+      "linkedin": "https://linkedin.com/company/tixia",
+      "telegram": "https://t.me/tixia_official"
+    },
+    "verified": true,
+    "verified_at": "2024-03-15T10:30:00Z",
+    "created_at": "2024-01-10T08:00:00Z",
+    "updated_at": "2025-11-10T14:20:00Z",
+    "status": "active",
+    "total_raffles_created": 45,
+    "total_volume_usd": 1250000,
+    "rating": 4.8,
+    "total_reviews": 342
+  },
+  {
+    "id": "company_emiless_001",
+    "name": "Emiless",
+    "legal_name": "Emiless Flight Ticket Delaware Corporate",
+    "type": "Flight_Booking_Platform",
+    "country": "United States",
+    "registration": {
+      "country": "US",
+      "state": "Delaware",
+      "registration_number": "DE-CORP-2022-8765",
+      "incorporation_date": "2022-08-20"
+    },
+    "description": "Premium flight booking platform specializing in business and first-class tickets worldwide. Partner with major airlines including Emirates, Singapore Airlines, Qatar Airways, and ANA.",
+    "kyc_level": "VERIFIED_CORPORATE_PLUS",
+    "kyc_documents": {
+      "business_license": "verified",
+      "tax_id": "verified",
+      "bank_account": "verified",
+      "director_id": "verified",
+      "airline_partnerships": "verified",
+      "insurance": "verified"
+    },
+    "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+    "collections": [
+      {
+        "collection_address": "Emi1essTrave1Co11ectionAddr3ssS01ana456",
+        "collection_name": "Emiless Premium Flights",
+        "collection_type": "1of1",
+        "program_id": "rwa_raffle_program_v1",
+        "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/collections/travel-1of1.json"
+      },
+      {
+        "collection_address": "Emi1essCreditCo11ectionAddr3ssS01ana789",
+        "collection_name": "Emiless Flight Credits",
+        "collection_type": "SFT",
+        "program_id": "rwa_raffle_program_v1",
+        "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/collections/shared-sft.json"
+      }
+    ],
+    "contact": {
+      "email": "corporate@emiless.com",
+      "phone": "+1-302-555-9876",
+      "support_email": "support@emiless.com"
+    },
+    "socials": {
+      "website": "https://emiless.com",
+      "twitter": "https://twitter.com/emiless",
+      "instagram": "https://instagram.com/emiless.official",
+      "linkedin": "https://linkedin.com/company/emiless",
+      "facebook": "https://facebook.com/emiless"
+    },
+    "verified": true,
+    "verified_at": "2024-02-20T11:45:00Z",
+    "created_at": "2023-11-05T09:30:00Z",
+    "updated_at": "2025-11-12T16:10:00Z",
+    "status": "active",
+    "total_raffles_created": 128,
+    "total_volume_usd": 4850000,
+    "rating": 4.9,
+    "total_reviews": 891
+  },
+  {
+    "id": "company_tiamond_001",
+    "name": "Tiamond",
+    "legal_name": "Tiamond Luxury Diamonds & Jewelry Inc.",
+    "type": "Luxury_Goods",
+    "country": "Switzerland",
+    "registration": {
+      "country": "CH",
+      "registration_number": "CH-LUX-2021-4532",
+      "incorporation_date": "2021-05-10"
+    },
+    "description": "Certified luxury diamond and jewelry company. Specializing in investment-grade diamonds, luxury watches, and high-end jewelry. All items come with GIA/IGI certification.",
+    "kyc_level": "VERIFIED_CORPORATE_PREMIUM",
+    "kyc_documents": {
+      "business_license": "verified",
+      "tax_id": "verified",
+      "bank_account": "verified",
+      "director_id": "verified",
+      "gemological_certification": "verified",
+      "insurance": "verified",
+      "customs_license": "verified"
+    },
+    "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+    "collections": [
+      {
+        "collection_address": "TiamondLuxuryCo11ectionAddr3ssS01ana321",
+        "collection_name": "Tiamond Luxury Collection",
+        "collection_type": "1of1",
+        "program_id": "rwa_raffle_program_v1",
+        "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/collections/luxury.json"
+      }
+    ],
+    "contact": {
+      "email": "corporate@tiamond.ch",
+      "phone": "+41-22-555-7890",
+      "support_email": "concierge@tiamond.ch"
+    },
+    "socials": {
+      "website": "https://tiamond.ch",
+      "twitter": "https://twitter.com/tiamond_luxury",
+      "instagram": "https://instagram.com/tiamond.official",
+      "linkedin": "https://linkedin.com/company/tiamond",
+      "youtube": "https://youtube.com/@tiamond"
+    },
+    "verified": true,
+    "verified_at": "2024-01-10T13:20:00Z",
+    "created_at": "2023-10-01T10:00:00Z",
+    "updated_at": "2025-11-14T12:30:00Z",
+    "status": "active",
+    "total_raffles_created": 67,
+    "total_volume_usd": 8920000,
+    "rating": 5,
+    "total_reviews": 234
+  },
+  {
+    "company_id": "company_dojo_001",
+    "legal_name": "DOJO Luxury Timepieces Inc.",
+    "display_name": "DOJO",
+    "country": "Switzerland",
+    "country_code": "CH",
+    "kyc_level": "corporate_verified",
+    "wallet_address": "DojoWa11etAddr3ssS01anaDev3692581470",
+    "collections": [
+      {
+        "collection_address": "DojoWatchCo11ectionAddr3ssS01ana456",
+        "collection_name": "DOJO Luxury Watches",
+        "category": "luxury-watches"
+      }
+    ],
+    "contact": {
+      "email": "hello@dojo.watch",
+      "website": "https://dojo.watch",
+      "support": "support@dojo.watch"
+    },
+    "social_media": {
+      "twitter": "@dojo_watches",
+      "instagram": "@dojo.watches",
+      "discord": "dojo-watches"
+    },
+    "description": "Premium luxury timepiece marketplace specializing in authenticated Rolex, Patek Philippe, Audemars Piguet, and other high-end watches.",
+    "verified_at": "2024-08-15T10:00:00Z",
+    "stats": {
+      "total_volume_usd": 2850000,
+      "total_raffles": 38,
+      "total_direct_sales": 12,
+      "average_rating": 4.9,
+      "total_reviews": 156
+    }
+  }
+]

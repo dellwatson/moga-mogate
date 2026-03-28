@@ -1,0 +1,202 @@
+[
+  {
+    "raffle_id": "raffle_001_emirates_first",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "EmiratesFirstDXBJFKMintAddr3ssS01ana001",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-emirates-first-dxb-jfk.json",
+      "name": "Emirates First Class - 🇦🇪 DXB to 🇺🇸 JFK",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/emirates-first-dxb-jfk.png",
+      "collection_address": "Emi1essTrave1Co11ectionAddr3ssS01ana456",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 15000,
+      "ticket_requirement": 18000,
+      "tickets_sold": 1847,
+      "tickets_remaining": 16153,
+      "total_pot_usd": 1847
+    },
+    "timeline": {
+      "created_at": "2025-11-10T08:00:00Z",
+      "start_time": "2025-11-10T10:00:00Z",
+      "end_time": "2025-11-25T23:59:59Z",
+      "duration_days": 15,
+      "time_remaining_hours": 238
+    },
+    "participants": {
+      "total_unique_users": 342,
+      "top_buyers": [
+        {
+          "wallet": "User1Wa11etAddr3ssS01ana111",
+          "tickets_count": 150,
+          "ticket_numbers": [
+            1,
+            2,
+            3,
+            "...",
+            150
+          ]
+        },
+        {
+          "wallet": "User2Wa11etAddr3ssS01ana222",
+          "tickets_count": 120,
+          "ticket_numbers": [
+            151,
+            152,
+            "...",
+            270
+          ]
+        }
+      ]
+    },
+    "winner": null,
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssEmiratesDXBJFK001",
+      "escrow_account": "EscrowAcctAddr3ssEmiratesDXBJFK001",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "travel",
+      "tags": [
+        "first-class",
+        "emirates",
+        "luxury",
+        "dubai",
+        "new-york"
+      ],
+      "views": 8934,
+      "favorites": 456
+    }
+  },
+  {
+    "raffle_id": "raffle_002_rolex_daytona",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "RolexDaytonaPlatinumMintAddr3ssS01ana002",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-rolex-daytona-platinum.json",
+      "name": "Rolex Daytona Platinum",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/rolex-daytona-platinum.png",
+      "collection_address": "TiamondLuxuryCo11ectionAddr3ssS01ana321",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tiamond_001",
+      "company_name": "Tiamond",
+      "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 75000,
+      "ticket_requirement": 90000,
+      "tickets_sold": 892,
+      "tickets_remaining": 89108,
+      "total_pot_usd": 892
+    },
+    "timeline": {
+      "created_at": "2025-11-12T09:00:00Z",
+      "start_time": "2025-11-12T12:00:00Z",
+      "end_time": "2025-12-12T23:59:59Z",
+      "duration_days": 30,
+      "time_remaining_hours": 646
+    },
+    "participants": {
+      "total_unique_users": 178,
+      "top_buyers": [
+        {
+          "wallet": "User3Wa11etAddr3ssS01ana333",
+          "tickets_count": 80,
+          "ticket_numbers": [
+            1,
+            2,
+            "...",
+            80
+          ]
+        }
+      ]
+    },
+    "winner": null,
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssRolexDaytona002",
+      "escrow_account": "EscrowAcctAddr3ssRolexDaytona002",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "luxury",
+      "tags": [
+        "rolex",
+        "watch",
+        "platinum",
+        "investment"
+      ],
+      "views": 12456,
+      "favorites": 789
+    }
+  },
+  {
+    "raffle_id": "raffle_003_singapore_suites",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "SingaporeSuitesSINLAXMintAddr3ssS01ana003",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-singapore-suites-sin-lax.json",
+      "name": "🇸🇬 Singapore Airlines Suites - 🇸🇬 SIN to 🇺🇸 LAX",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/singapore-suites-sin-lax.png",
+      "collection_address": "Emi1essTrave1Co11ectionAddr3ssS01ana456",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 18000,
+      "ticket_requirement": 21600,
+      "tickets_sold": 1456,
+      "tickets_remaining": 20144,
+      "total_pot_usd": 1456
+    },
+    "timeline": {
+      "created_at": "2025-11-08T07:00:00Z",
+      "start_time": "2025-11-08T10:00:00Z",
+      "end_time": "2025-11-28T23:59:59Z",
+      "duration_days": 20,
+      "time_remaining_hours": 310
+    },
+    "participants": {
+      "total_unique_users": 289,
+      "top_buyers": []
+    },
+    "winner": null,
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssSingaporeSuites003",
+      "escrow_account": "EscrowAcctAddr3ssSingaporeSuites003",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "travel",
+      "tags": [
+        "singapore-airlines",
+        "suites",
+        "first-class",
+        "asia",
+        "usa"
+      ],
+      "views": 6723,
+      "favorites": 312
+    }
+  }
+]

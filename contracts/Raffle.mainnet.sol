@@ -187,38 +187,38 @@ contract Raffle is Ownable, EIP712 {
     // External host/join (unsafe variants - no signature)
     // =============================================================
 
-    /// @notice Create a new raffle with the specified parameters (unsafe, no signature).
-    /// @dev Reverts if a raffle with the same `raffleId` already exists.
-    /// Sets status to OPEN and resets counters.
-    function unsafeHostRaffle(
-        string calldata raffleId,
-        uint256 totalSlots,
-        uint256 maxSlotsPerAddress,
-        string calldata metadataUri,
-        address collection,
-        bool premintContract,
-        bool premint,
-        PrizeTokenType prizeType,
-        uint256 prizeAmount,
-        bool autoDraw,
-        bool autoClaim,
-        uint64 expiresAt
-    ) external returns (bytes32 id) {
-        id = _createRaffle(
-            raffleId,
-            totalSlots,
-            maxSlotsPerAddress,
-            metadataUri,
-            collection,
-            premintContract,
-            premint,
-            prizeType,
-            prizeAmount,
-            autoDraw,
-            autoClaim,
-            expiresAt
-        );
-    }
+    // /// @notice Create a new raffle with the specified parameters (unsafe, no signature).
+    // /// @dev Reverts if a raffle with the same `raffleId` already exists.
+    // /// Sets status to OPEN and resets counters.
+    // function unsafeHostRaffle(
+    //     string calldata raffleId,
+    //     uint256 totalSlots,
+    //     uint256 maxSlotsPerAddress,
+    //     string calldata metadataUri,
+    //     address collection,
+    //     bool premintContract,
+    //     bool premint,
+    //     PrizeTokenType prizeType,
+    //     uint256 prizeAmount,
+    //     bool autoDraw,
+    //     bool autoClaim,
+    //     uint64 expiresAt
+    // ) external returns (bytes32 id) {
+    //     id = _createRaffle(
+    //         raffleId,
+    //         totalSlots,
+    //         maxSlotsPerAddress,
+    //         metadataUri,
+    //         collection,
+    //         premintContract,
+    //         premint,
+    //         prizeType,
+    //         prizeAmount,
+    //         autoDraw,
+    //         autoClaim,
+    //         expiresAt
+    //     );
+    // }
 
     /// @notice Join an existing raffle by purchasing specific slot IDs (safe variant).
     function joinRaffle(
@@ -258,37 +258,37 @@ contract Raffle is Ownable, EIP712 {
         _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
     }
 
-    /// @notice Join an existing raffle by purchasing specific slot IDs (unsafe, no signature).
-    /// @dev Payment amount and token are provided by the off-chain backend.
-    /// Reverts if raffle is not OPEN, expired, or any slot is invalid/taken.
-    function unsafeJoinRaffle(
-        string calldata raffleId,
-        uint256[] calldata slotIds,
-        uint256 amount,
-        address token
-    ) external payable {
-        require(slotIds.length > 0, "NoSlots");
+    // /// @notice Join an existing raffle by purchasing specific slot IDs (unsafe, no signature).
+    // /// @dev Payment amount and token are provided by the off-chain backend.
+    // /// Reverts if raffle is not OPEN, expired, or any slot is invalid/taken.
+    // function unsafeJoinRaffle(
+    //     string calldata raffleId,
+    //     uint256[] calldata slotIds,
+    //     uint256 amount,
+    //     address token
+    // ) external payable {
+    //     require(slotIds.length > 0, "NoSlots");
 
-        bytes32 id = keccak256(bytes(raffleId));
-        MultiRaffle storage r = _multiRaffles[id];
-        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
-        require(r.status == MultiRaffleStatus.OPEN, "NotOpen");
-        if (r.expiresAt != 0) {
-            require(block.timestamp <= r.expiresAt, "RaffleExpired");
-        }
+    //     bytes32 id = keccak256(bytes(raffleId));
+    //     MultiRaffle storage r = _multiRaffles[id];
+    //     require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+    //     require(r.status == MultiRaffleStatus.OPEN, "NotOpen");
+    //     if (r.expiresAt != 0) {
+    //         require(block.timestamp <= r.expiresAt, "RaffleExpired");
+    //     }
 
-        if (amount > 0) {
-            if (token == address(0)) {
-                _handleNativePayment(id, msg.sender, amount);
-            } else {
-                // TODO: support ERC20 tokens in the future
-                // IERC20(token).transferFrom(msg.sender, address(this), amount);
-                revert("ERC20Disabled");
-            }
-        }
+    //     if (amount > 0) {
+    //         if (token == address(0)) {
+    //             _handleNativePayment(id, msg.sender, amount);
+    //         } else {
+    //             // TODO: support ERC20 tokens in the future
+    //             // IERC20(token).transferFrom(msg.sender, address(this), amount);
+    //             revert("ERC20Disabled");
+    //         }
+    //     }
 
-        _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
-    }
+    //     _joinRaffle(id, r, slotIds, msg.sender, 0, amount);
+    // }
 
     /// @notice Host and join a raffle in a single call (safe variant).
     function hostAndJoinRaffle(
@@ -359,55 +359,55 @@ contract Raffle is Ownable, EIP712 {
         _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
     }
 
-    /// @notice Convenience helper that both hosts and joins a raffle in one tx (unsafe, no signature).
-    /// @dev The first `min(bonusFreeSlots, slotIds.length)` slots are treated as free off-chain.
-    function unsafeHostAndJoinRaffle(
-        string calldata raffleId,
-        uint256 totalSlots,
-        uint256 maxSlotsPerAddress,
-        string calldata metadataUri,
-        address collection,
-        bool premintContract,
-        bool premint,
-        PrizeTokenType prizeType,
-        uint256 prizeAmount,
-        bool autoDraw,
-        bool autoClaim,
-        uint64 expiresAt,
-        uint256[] calldata slotIds,
-        uint256 amount,
-        address token,
-        uint256 bonusFreeSlots
-    ) external payable returns (bytes32 id) {
-        id = _createRaffle(
-            raffleId,
-            totalSlots,
-            maxSlotsPerAddress,
-            metadataUri,
-            collection,
-            premintContract,
-            premint,
-            prizeType,
-            prizeAmount,
-            autoDraw,
-            autoClaim,
-            expiresAt
-        );
+    // /// @notice Convenience helper that both hosts and joins a raffle in one tx (unsafe, no signature).
+    // /// @dev The first `min(bonusFreeSlots, slotIds.length)` slots are treated as free off-chain.
+    // function unsafeHostAndJoinRaffle(
+    //     string calldata raffleId,
+    //     uint256 totalSlots,
+    //     uint256 maxSlotsPerAddress,
+    //     string calldata metadataUri,
+    //     address collection,
+    //     bool premintContract,
+    //     bool premint,
+    //     PrizeTokenType prizeType,
+    //     uint256 prizeAmount,
+    //     bool autoDraw,
+    //     bool autoClaim,
+    //     uint64 expiresAt,
+    //     uint256[] calldata slotIds,
+    //     uint256 amount,
+    //     address token,
+    //     uint256 bonusFreeSlots
+    // ) external payable returns (bytes32 id) {
+    //     id = _createRaffle(
+    //         raffleId,
+    //         totalSlots,
+    //         maxSlotsPerAddress,
+    //         metadataUri,
+    //         collection,
+    //         premintContract,
+    //         premint,
+    //         prizeType,
+    //         prizeAmount,
+    //         autoDraw,
+    //         autoClaim,
+    //         expiresAt
+    //     );
 
-        MultiRaffle storage r = _multiRaffles[id];
+    //     MultiRaffle storage r = _multiRaffles[id];
 
-        if (amount > 0) {
-            if (token == address(0)) {
-                _handleNativePayment(id, msg.sender, amount);
-            } else {
-                // TODO: support ERC20 tokens in the future
-                // IERC20(token).transferFrom(msg.sender, address(this), amount);
-                revert("ERC20Disabled");
-            }
-        }
+    //     if (amount > 0) {
+    //         if (token == address(0)) {
+    //             _handleNativePayment(id, msg.sender, amount);
+    //         } else {
+    //             // TODO: support ERC20 tokens in the future
+    //             // IERC20(token).transferFrom(msg.sender, address(this), amount);
+    //             revert("ERC20Disabled");
+    //         }
+    //     }
 
-        _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
-    }
+    //     _joinRaffle(id, r, slotIds, msg.sender, bonusFreeSlots, amount);
+    // }
 
     // =============================================================
     // External prize + treasury + refund

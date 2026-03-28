@@ -1,128 +1,168 @@
-# Offchain Worker & Organizer Management
+# Offchain Services
 
-This directory contains offchain services for the RWA raffle system:
+Modular offchain services for the RWA Raffle system, including:
 
-1. **Organizer Management** (`organizer_db.ts`, `permit_example.ts`)
-2. **Worker Service** (`worker.ts`)
+- **API Server**: Bun-native HTTP server for EIP-712 permit signing
+- **Core Utilities**: Reusable modules for environment, network, crypto, and parsing
+- **Services**: Business logic for permit generation and validation
+- **Scripts**: Executable scripts for signing and submitting permits
 
----
+## Project Structure
 
-## 1. Organizer Management (Off-chain)
+```
+offchain/
+├── src/
+│   ├── core/           # Core utilities (reusable across scripts and SDK)
+│   │   ├── env.ts      # Environment variable utilities
+│   │   ├── network.ts  # Network configuration
+│   │   ├── crypto.ts   # Cryptographic utilities
+│   │   ├── file.ts     # File system utilities
+│   │   ├── parsers.ts  # Input parsing utilities
+│   │   └── index.ts    # Barrel export
+│   ├── services/       # Business logic services
+│   │   ├── permit.ts   # Permit signing service
+│   │   └── index.ts    # Barrel export
+│   └── api/            # API server
+│       ├── utils.ts    # API utilities
+│       └── server.ts   # Bun HTTP server
+└── out/                # Output directory for generated permits
+```
 
-### Files
-- **`organizer_db.ts`**: In-memory organizer registry (replace with PostgreSQL/MongoDB in production)
-- **`permit_example.ts`**: Demo script to issue permits for organizers
+## Features
 
-### How it works
-- Backend maintains an allowlist of approved organizers (business partners)
-- Each organizer has:
-  - `publicKey`: Wallet address
-  - `enterpriseId`: Business partner ID
-  - `tier`: Subscription level (free/pro/enterprise)
-  - `allowedCollections`: RWA NFT collections they can use as prizes
-  - `active`: Admin can enable/disable
+### ✅ Modular Architecture
 
-- When an organizer wants to create a raffle:
-  1. Frontend requests a permit from backend API
-  2. Backend validates organizer is active
-  3. Backend builds canonical message and signs with ed25519
-  4. Frontend calls `createRaffleWithPermitTx()` with permit signature
-  5. Program verifies ed25519 signature in `initialize_raffle_with_permit()`
+- **Core utilities** are reusable across scripts, services, and the ts-sdk
+- **Services** encapsulate business logic for permit operations
+- **API** uses Bun's native HTTP server (no Express needed)
 
-### Run permit example
+### ✅ Clean Dependencies
+
+- Only essential dependencies: `ethers` and `dotenv`
+- No Solana dependencies (EVM-focused)
+- No Express (Bun native server)
+
+## Environment Variables
+
+### Common
+
+- `TARGET_NETWORK` - Network target: `sepolia`, `arbitrumSepolia`, or `polygonAmoy` (default: `sepolia`)
+- `RAFFLE_ADDRESS` - Raffle contract address (or network-specific `RAFFLE_ADDRESS_*`)
+- `COLLECTION_ADDRESS` - Collection address (or network-specific `COLLECTION_ADDRESS_*`)
+- `CHAIN_ID` - Chain ID (optional, avoids RPC lookup)
+- `RPC_URL` - RPC URL (or network-specific RPC var)
+
+### Backend Signing
+
+- `BACKEND_SIGNER_PRIVATE_KEY` - Backend signer private key
+
+### Frontend Submit
+
+- `ORGANIZER_PRIVATE_KEY` - Organizer private key for host submit
+- `PAYER_PRIVATE_KEY` - Payer private key for join submit
+
+### Server Configuration
+
+- `EVM_PERMIT_SERVER_PORT` - Server port (default: `3011`)
+- `EVM_PERMIT_SERVER_HOST` - Server host (default: `127.0.0.1`)
+- `EVM_PERMIT_SERVER_API_KEY` - API key for authentication (optional)
+
+## Usage
+
+### Start API Server
+
 ```bash
-bun run offchain/permit_example.ts
+bun run server
+# or
+bun run dev
 ```
 
-### Future: On-chain registry
-- Commented-out code in `organizer_db.ts` shows how to add `OrganizerProfile` PDA
-- When ready, uncomment and add `register_organizer()` instruction to program
-- This enables decentralized verification and on-chain proof of organizer status
+Server runs on `http://127.0.0.1:3011` by default.
 
----
+**Endpoints:**
 
-## 2. Worker Service
+- `GET /health` - Health check
+- `POST /evm/permit/host` - Sign host permit
+- `POST /evm/permit/join` - Sign join permit
+- `POST /evm/permit/host-and-join` - Sign host-and-join permit
 
-### Responsibilities
+### Use Permit Services
 
-#### Draw scheduling and execution
-- Watch `ThresholdReached` events (raffle full) or scheduled reveal time
-- Call `request_draw_arcium()` when `raffle.status == Drawing`
-- Wait for `draw_callback()` to set `winner_ticket` and mark `Completed`
-- Fallback: call `settle_draw(winner_ticket)` for dev/test
+The offchain package provides reusable services for permit signing. See the root `/scripts/permits/` directory for usage examples.
 
-#### Automatic refunds (no user action)
-- At deadline, if raffle not full, call `refund_batch()` in chunks
-- Listen to `RefundTicketsRequested` events
-- Mint refund NFTs (compressed, 1 per slot) via Bubblegum to each user
+## API Examples
 
-#### Notifications (optional)
-- Email/push to winners
-- Inform participants of refund NFTs minted
+### Health Check
 
-### Configuration
-- Copy `.env.example` to `.env` and set:
-  - `SOLANA_RPC_URL`
-  - `RWA_RAFFLE_PROGRAM_ID`
-  - `WORKER_KEYPAIR_PATH`
-  - `HELIUS_DAS_RPC` (for compressed NFT minting)
-
-### Run (dev)
 ```bash
-bun run offchain/worker.ts
+curl http://127.0.0.1:3011/health
 ```
 
-### Notes
-- Draw is permissionless: any payer can call `request_draw_arcium` when `status == Drawing`
-- Refunds are idempotent: `refund_batch` and events can be replayed safely
-- Worker automates these flows for better UX
+### Sign Host Permit
 
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Frontend (Next.js)                        │
-│  - Request permit from backend API                           │
-│  - Call createRaffleWithPermitTx() with signature            │
-│  - Join raffle (MOGA/USDC/MRFT)                              │
-│  - Claim win/refund                                          │
-└───────────────────────┬─────────────────────────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Backend API (Express/Fastify)                   │
-│  - organizer_db.ts: Manage organizer allowlist               │
-│  - Issue permits (ed25519 signature)                         │
-│  - Validate organizer tier and collections                   │
-└───────────────────────┬─────────────────────────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────────────┐
-│           Solana Program (rwa_raffle)                        │
-│  - initialize_raffle_with_permit() verifies ed25519          │
-│  - join_with_moga() / join_with_ticket()                     │
-│  - Emit events: ThresholdReached, RefundTicketsRequested     │
-└───────────────────────┬─────────────────────────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────────────┐
-│                 Offchain Worker (worker.ts)                  │
-│  - Listen to events                                          │
-│  - Auto-draw via request_draw_arcium()                       │
-│  - Auto-refund via refund_batch()                            │
-│  - Mint MRFT (compressed NFTs) via Bubblegum                 │
-│  - Send notifications                                        │
-└─────────────────────────────────────────────────────────────┘
+```bash
+curl -X POST http://127.0.0.1:3011/evm/permit/host \
+  -H "content-type: application/json" \
+  -d '{
+    "chainId": "11155111",
+    "raffleAddress": "0x1111111111111111111111111111111111111111",
+    "organizer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "raffleId": "safe-host-api-1",
+    "totalSlots": "10",
+    "maxSlotsPerAddress": "3",
+    "metadataUri": "https://example.com/raffle.json",
+    "collection": "0x0000000000000000000000000000000000000000",
+    "prizeType": 1,
+    "prizeAmount": "1",
+    "autoDraw": true,
+    "expiresAt": "1772285000"
+  }'
 ```
 
----
+### Sign Join Permit
 
-## Next Steps
+```bash
+curl -X POST http://127.0.0.1:3011/evm/permit/join \
+  -H "content-type: application/json" \
+  -d '{
+    "chainId": "11155111",
+    "raffleAddress": "0x1111111111111111111111111111111111111111",
+    "raffleId": "safe-host-api-1",
+    "slotIds": ["1","2"],
+    "amount": "20000000000000000",
+    "token": "0x0000000000000000000000000000000000000000",
+    "payer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+  }'
+```
 
-1. **Production DB**: Replace in-memory `organizerDb` with PostgreSQL/MongoDB
-2. **Secure key management**: Use AWS KMS / HashiCorp Vault for backend signing key
-3. **API endpoints**: Add REST/GraphQL endpoints for permit issuance
-4. **Worker deployment**: Deploy worker as a long-running service (Docker/K8s)
-5. **On-chain registry** (optional): Uncomment `OrganizerProfile` PDA code and add to program
+## Reusability
+
+The modular structure allows easy reuse:
+
+```typescript
+// In your ts-sdk or other scripts
+import {
+  resolveNetworkTarget,
+  resolveRaffleAddress,
+  parseAddress,
+  parseBigIntLike,
+} from "@moga/rwa-raffle-offchain/src/core";
+
+import { signHostPermit } from "@moga/rwa-raffle-offchain/src/services";
+```
+
+## Development
+
+Install dependencies:
+
+```bash
+bun install
+```
+
+Run server in development:
+
+```bash
+bun run dev
+```
+
+The server uses Bun's native HTTP capabilities for optimal performance.

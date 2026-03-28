@@ -1,0 +1,272 @@
+[
+  {
+    "listing_id": "listing_001_credit_10k_resale",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "Credit10kFirstMintAddr3ssS01ana201",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-10000-first.json",
+      "name": "$10000 First Class Credit - Voucher #001",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-10000-first-001.png",
+      "collection_address": "Emi1essCreditCo11ectionAddr3ssS01ana789",
+      "supply": 1
+    },
+    "seller": {
+      "wallet_address": "WinnerUserAWa11etAddr3ssS01anaAAA",
+      "username": "CryptoTrader_A",
+      "verified": true,
+      "rating": 4.7,
+      "total_sales": 12
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_201_credit_10k_first",
+      "won_at": "2025-11-10T23:59:59Z",
+      "winning_ticket_number": 1234,
+      "tickets_owned": 3,
+      "total_spent_moga": 18
+    },
+    "pricing": {
+      "estimated_value_usd": 10000,
+      "listing_price_usd": 3000,
+      "listing_price_moga": 3000,
+      "discount_percentage": 70,
+      "original_cost_moga": 18,
+      "profit_potential_moga": 2982
+    },
+    "timeline": {
+      "listed_at": "2025-11-11T10:00:00Z",
+      "expires_at": "2025-12-11T23:59:59Z",
+      "time_remaining_days": 26
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDAAddr3ssListing001",
+      "escrow_account": "EscrowAcctAddr3ssListing001",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "travel",
+      "tags": ["flight-credit", "first-class", "resale", "quick-sell"],
+      "views": 2345,
+      "favorites": 156,
+      "reason": "Quick sale - need liquidity. Great deal for buyers!"
+    }
+  },
+  {
+    "listing_id": "listing_002_patek_resale",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "PatekNautilusBlueMintAddr3ssS01ana202",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-patek-philippe-nautilus.json",
+      "name": "Patek Philippe Nautilus Blue Dial",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-nautilus-blue.png",
+      "collection_address": "TiamondLuxuryCo11ectionAddr3ssS01ana321",
+      "supply": 1
+    },
+    "seller": {
+      "wallet_address": "WinnerUserBWa11etAddr3ssS01anaBBB",
+      "username": "LuxuryCollector_B",
+      "verified": true,
+      "rating": 4.9,
+      "total_sales": 8
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_202_patek_nautilus",
+      "won_at": "2025-11-05T23:59:59Z",
+      "winning_ticket_number": 127,
+      "tickets_owned": 50,
+      "total_spent_moga": 5000
+    },
+    "pricing": {
+      "estimated_value_usd": 150000,
+      "listing_price_usd": 4000,
+      "listing_price_moga": 4000,
+      "discount_percentage": 97.3,
+      "original_cost_moga": 5000,
+      "profit_potential_moga": -1000
+    },
+    "timeline": {
+      "listed_at": "2025-11-12T14:30:00Z",
+      "expires_at": "2025-12-12T23:59:59Z",
+      "time_remaining_days": 27
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDAAddr3ssListing002",
+      "escrow_account": "EscrowAcctAddr3ssListing002",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "luxury",
+      "tags": ["patek-philippe", "watch", "resale", "competitive-price"],
+      "views": 5678,
+      "favorites": 432,
+      "reason": "Competing with another winner selling at $5k. Priced to sell fast!"
+    },
+    "competing_listings": [
+      {
+        "listing_id": "listing_003_patek_resale_alt",
+        "seller_wallet": "AnotherWinnerWa11etAddr3ssS01anaDDD",
+        "price_usd": 5000,
+        "listed_at": "2025-11-11T12:00:00Z"
+      }
+    ]
+  },
+  {
+    "listing_id": "listing_004_burj_resale",
+    "type": "resale",
+    "status": "active",
+    "nft": {
+      "mint_address": "BurjAlArabRoyalSuiteMintAddr3ssS01ana102",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-burj-al-arab-royal-suite.json",
+      "name": "Burj Al Arab - Royal Suite 3 Nights",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal.png",
+      "collection_address": "TixiaTrave1Co11ectionAddr3ssS01ana123",
+      "supply": 1
+    },
+    "seller": {
+      "wallet_address": "User11Wa11etAddr3ssS01ana1111",
+      "username": "TravelEnthusiast_11",
+      "verified": true,
+      "rating": 4.5,
+      "total_sales": 3
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_102_burj_royal",
+      "won_at": "2025-11-17T12:00:00Z",
+      "winning_ticket_number": 876,
+      "tickets_owned": 100,
+      "total_spent_moga": 3000
+    },
+    "pricing": {
+      "estimated_value_usd": 45000,
+      "listing_price_usd": 8000,
+      "listing_price_moga": 8000,
+      "discount_percentage": 82.2,
+      "original_cost_moga": 3000,
+      "profit_potential_moga": 5000
+    },
+    "timeline": {
+      "listed_at": "2025-11-18T09:00:00Z",
+      "expires_at": "2026-01-18T23:59:59Z",
+      "time_remaining_days": 61
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDAAddr3ssListing004",
+      "escrow_account": "EscrowAcctAddr3ssListing004",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "travel",
+      "tags": ["hotel", "luxury", "dubai", "burj-al-arab", "resale"],
+      "views": 1234,
+      "favorites": 89,
+      "reason": "Can't travel in 2025. Selling at profit but still great deal!"
+    }
+  },
+  {
+    "listing_id": "listing_005_company_direct",
+    "type": "direct_from_company",
+    "status": "active",
+    "nft": {
+      "mint_address": "FourSeasonsMaldivesDirectMintAddr3ssS01ana",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-four-seasons-maldives-7nights.json",
+      "name": "Four Seasons Maldives - 7 Nights Overwater Villa",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/four-seasons-maldives.png",
+      "collection_address": "TixiaTrave1Co11ectionAddr3ssS01ana123",
+      "supply": 1
+    },
+    "seller": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 35000,
+      "listing_price_usd": 32000,
+      "listing_price_moga": 32000,
+      "discount_percentage": 8.6
+    },
+    "timeline": {
+      "listed_at": "2025-11-10T08:00:00Z",
+      "expires_at": "2025-12-31T23:59:59Z",
+      "time_remaining_days": 46
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDAAddr3ssListing005",
+      "escrow_account": "EscrowAcctAddr3ssListing005",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "travel",
+      "tags": ["hotel", "maldives", "luxury", "direct-sale", "company"],
+      "views": 8934,
+      "favorites": 567,
+      "reason": "Direct sale from Tixia. Skip the raffle, buy now!"
+    }
+  },
+  {
+    "listing_id": "listing_006_credit_5k_resale",
+    "type": "resale",
+    "status": "sold",
+    "nft": {
+      "mint_address": "Credit5kBusinessMintAddr3ssS01ana301",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-5000-business.json",
+      "name": "$5000 Business Class Credit - Voucher #001",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-5000-business-001.png",
+      "collection_address": "Emi1essCreditCo11ectionAddr3ssS01ana789",
+      "supply": 1
+    },
+    "seller": {
+      "wallet_address": "PreviousWinnerWa11etAddr3ssS01anaEEE",
+      "username": "QuickFlip_E",
+      "verified": true,
+      "rating": 4.8,
+      "total_sales": 15
+    },
+    "buyer": {
+      "wallet_address": "BuyerUserWa11etAddr3ssS01anaFFF",
+      "username": "TravelLover_F",
+      "verified": true
+    },
+    "original_raffle": {
+      "raffle_id": "raffle_301_credit_5k",
+      "won_at": "2025-11-01T23:59:59Z",
+      "winning_ticket_number": 567,
+      "tickets_owned": 10,
+      "total_spent_moga": 30
+    },
+    "pricing": {
+      "estimated_value_usd": 5000,
+      "listing_price_usd": 1500,
+      "listing_price_moga": 1500,
+      "sold_price_moga": 1500,
+      "discount_percentage": 70,
+      "original_cost_moga": 30,
+      "profit_moga": 1470
+    },
+    "timeline": {
+      "listed_at": "2025-11-02T10:00:00Z",
+      "sold_at": "2025-11-03T14:30:00Z",
+      "expires_at": "2025-12-02T23:59:59Z",
+      "time_to_sell_hours": 28
+    },
+    "program_data": {
+      "listing_pda": "DirectSe11PDAAddr3ssListing006",
+      "escrow_account": "EscrowAcctAddr3ssListing006",
+      "program_id": "direct_sell_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "travel",
+      "tags": ["flight-credit", "business-class", "resale", "sold"],
+      "views": 3456,
+      "favorites": 234,
+      "reason": "Quick flip for profit. Sold in 28 hours!"
+    }
+  }
+]

@@ -1,0 +1,251 @@
+[
+  {
+    "raffle_id": "raffle_201_credit_10k_first",
+    "type": "single",
+    "status": "completed",
+    "nft": {
+      "mint_address": "Credit10kFirstMintAddr3ssS01ana201",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-10000-first.json",
+      "name": "$10000 First Class Credit - Voucher #001",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-10000-first-001.png",
+      "collection_address": "Emi1essCreditCo11ectionAddr3ssS01ana789",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 10000,
+      "ticket_requirement": 12000,
+      "tickets_sold": 2000,
+      "tickets_remaining": 10000,
+      "total_pot_usd": 2000
+    },
+    "timeline": {
+      "created_at": "2025-10-20T08:00:00Z",
+      "start_time": "2025-10-20T10:00:00Z",
+      "end_time": "2025-11-10T23:59:59Z",
+      "completed_at": "2025-11-10T23:59:59Z",
+      "duration_days": 21,
+      "time_remaining_hours": 0
+    },
+    "participants": {
+      "total_unique_users": 567,
+      "top_buyers": [
+        {
+          "wallet": "WinnerUserAWa11etAddr3ssS01anaAAA",
+          "tickets_count": 3,
+          "ticket_numbers": [
+            456,
+            789,
+            1234
+          ]
+        },
+        {
+          "wallet": "User20Wa11etAddr3ssS01ana2020",
+          "tickets_count": 150,
+          "ticket_numbers": [
+            1,
+            2,
+            "...",
+            150
+          ]
+        }
+      ]
+    },
+    "winner": {
+      "wallet_address": "WinnerUserAWa11etAddr3ssS01anaAAA",
+      "winning_ticket_number": 1234,
+      "tickets_owned": 3,
+      "win_probability": 0.15,
+      "claimed": true,
+      "claimed_at": "2025-11-11T08:30:00Z",
+      "nft_transferred_to": "WinnerUserAWa11etAddr3ssS01anaAAA"
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssCredit10kFirst201",
+      "escrow_account": "EscrowAcctAddr3ssCredit10kFirst201",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "travel",
+      "tags": [
+        "flight-credit",
+        "first-class",
+        "completed"
+      ],
+      "views": 8934,
+      "favorites": 456,
+      "result": "max_tickets_reached"
+    }
+  },
+  {
+    "raffle_id": "raffle_202_patek_nautilus",
+    "type": "single",
+    "status": "completed",
+    "nft": {
+      "mint_address": "PatekNautilusBlueMintAddr3ssS01ana202",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-patek-philippe-nautilus.json",
+      "name": "Patek Philippe Nautilus Blue Dial",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/patek-nautilus-blue.png",
+      "collection_address": "TiamondLuxuryCo11ectionAddr3ssS01ana321",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tiamond_001",
+      "company_name": "Tiamond",
+      "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 150000,
+      "ticket_requirement": 180000,
+      "tickets_sold": 2000,
+      "tickets_remaining": 178000,
+      "total_pot_usd": 2000
+    },
+    "timeline": {
+      "created_at": "2025-10-15T09:00:00Z",
+      "start_time": "2025-10-15T12:00:00Z",
+      "end_time": "2025-11-05T23:59:59Z",
+      "completed_at": "2025-11-05T23:59:59Z",
+      "duration_days": 21,
+      "time_remaining_hours": 0
+    },
+    "participants": {
+      "total_unique_users": 234,
+      "top_buyers": [
+        {
+          "wallet": "WinnerUserBWa11etAddr3ssS01anaBBB",
+          "tickets_count": 50,
+          "ticket_numbers": [
+            100,
+            101,
+            "...",
+            149
+          ]
+        },
+        {
+          "wallet": "User21Wa11etAddr3ssS01ana2121",
+          "tickets_count": 200,
+          "ticket_numbers": [
+            1,
+            2,
+            "...",
+            200
+          ]
+        }
+      ]
+    },
+    "winner": {
+      "wallet_address": "WinnerUserBWa11etAddr3ssS01anaBBB",
+      "winning_ticket_number": 127,
+      "tickets_owned": 50,
+      "win_probability": 2.5,
+      "claimed": true,
+      "claimed_at": "2025-11-06T10:15:00Z",
+      "nft_transferred_to": "WinnerUserBWa11etAddr3ssS01anaBBB"
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssPatekNautilus202",
+      "escrow_account": "EscrowAcctAddr3ssPatekNautilus202",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "luxury",
+      "tags": [
+        "patek-philippe",
+        "watch",
+        "investment",
+        "completed"
+      ],
+      "views": 23456,
+      "favorites": 1234,
+      "result": "max_tickets_reached"
+    }
+  },
+  {
+    "raffle_id": "raffle_203_qatar_business",
+    "type": "single",
+    "status": "completed",
+    "nft": {
+      "mint_address": "QatarBusinessDOHLHRMintAddr3ssS01ana203",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-qatar-business-roundtrip.json",
+      "name": "Qatar Airways Business - DOH to LHR Roundtrip",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/qatar-business-doh-lhr.png",
+      "collection_address": "Emi1essTrave1Co11ectionAddr3ssS01ana456",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 8000,
+      "ticket_requirement": 9600,
+      "tickets_sold": 1456,
+      "tickets_remaining": 8144,
+      "total_pot_usd": 1456
+    },
+    "timeline": {
+      "created_at": "2025-10-25T07:00:00Z",
+      "start_time": "2025-10-25T10:00:00Z",
+      "end_time": "2025-11-14T23:59:59Z",
+      "completed_at": "2025-11-14T23:59:59Z",
+      "duration_days": 20,
+      "time_remaining_hours": 0
+    },
+    "participants": {
+      "total_unique_users": 389,
+      "top_buyers": [
+        {
+          "wallet": "WinnerUserCWa11etAddr3ssS01anaCCC",
+          "tickets_count": 8,
+          "ticket_numbers": [
+            234,
+            567,
+            890,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005
+          ]
+        }
+      ]
+    },
+    "winner": {
+      "wallet_address": "WinnerUserCWa11etAddr3ssS01anaCCC",
+      "winning_ticket_number": 1003,
+      "tickets_owned": 8,
+      "win_probability": 0.55,
+      "claimed": false,
+      "claimed_at": null,
+      "nft_transferred_to": null
+    },
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssQatarBusiness203",
+      "escrow_account": "EscrowAcctAddr3ssQatarBusiness203",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": false,
+      "category": "travel",
+      "tags": [
+        "qatar-airways",
+        "business-class",
+        "completed"
+      ],
+      "views": 6789,
+      "favorites": 345,
+      "result": "time_expired_partial"
+    }
+  }
+]

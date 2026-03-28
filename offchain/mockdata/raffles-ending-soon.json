@@ -1,0 +1,203 @@
+[
+  {
+    "raffle_id": "raffle_101_credit_3k_premium",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "Credit3kPremiumEcoMintAddr3ssS01ana101",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/flights/1of1-credit-3000-premium-economy.json",
+      "name": "$3000 Premium Economy Credit - Voucher #001",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/flights/credit-3000-premium-001.png",
+      "collection_address": "Emi1essCreditCo11ectionAddr3ssS01ana789",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_emiless_001",
+      "company_name": "Emiless",
+      "wallet_address": "Emi1essWa11etAddr3ssS01anaDev1234567890",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 3000,
+      "ticket_requirement": 3600,
+      "tickets_sold": 1923,
+      "tickets_remaining": 1677,
+      "total_pot_usd": 1923
+    },
+    "timeline": {
+      "created_at": "2025-11-05T08:00:00Z",
+      "start_time": "2025-11-05T10:00:00Z",
+      "end_time": "2025-11-16T23:59:59Z",
+      "duration_days": 11,
+      "time_remaining_hours": 18
+    },
+    "participants": {
+      "total_unique_users": 456,
+      "top_buyers": [
+        {
+          "wallet": "User10Wa11etAddr3ssS01ana1010",
+          "tickets_count": 45,
+          "ticket_numbers": [
+            1,
+            2,
+            "...",
+            45
+          ]
+        }
+      ]
+    },
+    "winner": null,
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssCredit3kPremium101",
+      "escrow_account": "EscrowAcctAddr3ssCredit3kPremium101",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "travel",
+      "tags": [
+        "flight-credit",
+        "premium-economy",
+        "ending-soon"
+      ],
+      "views": 5234,
+      "favorites": 267,
+      "urgency": "high"
+    }
+  },
+  {
+    "raffle_id": "raffle_102_burj_royal",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "BurjAlArabRoyalSuiteMintAddr3ssS01ana102",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/hotels/1of1-burj-al-arab-royal-suite.json",
+      "name": "Burj Al Arab - Royal Suite 3 Nights",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/hotels/burj-al-arab-royal.png",
+      "collection_address": "TixiaTrave1Co11ectionAddr3ssS01ana123",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tixia_001",
+      "company_name": "Tixia",
+      "wallet_address": "TixiaWa11etAddr3ssS01anaDev9876543210",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 45000,
+      "ticket_requirement": 54000,
+      "tickets_sold": 1867,
+      "tickets_remaining": 52133,
+      "total_pot_usd": 1867
+    },
+    "timeline": {
+      "created_at": "2025-11-01T09:00:00Z",
+      "start_time": "2025-11-01T12:00:00Z",
+      "end_time": "2025-11-17T12:00:00Z",
+      "duration_days": 16,
+      "time_remaining_hours": 36
+    },
+    "participants": {
+      "total_unique_users": 234,
+      "top_buyers": [
+        {
+          "wallet": "User11Wa11etAddr3ssS01ana1111",
+          "tickets_count": 100,
+          "ticket_numbers": [
+            1,
+            2,
+            "...",
+            100
+          ]
+        }
+      ]
+    },
+    "winner": null,
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssBurjRoyal102",
+      "escrow_account": "EscrowAcctAddr3ssBurjRoyal102",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "travel",
+      "tags": [
+        "hotel",
+        "luxury",
+        "dubai",
+        "burj-al-arab",
+        "ending-soon"
+      ],
+      "views": 9876,
+      "favorites": 543,
+      "urgency": "high"
+    }
+  },
+  {
+    "raffle_id": "raffle_103_diamond_necklace",
+    "type": "single",
+    "status": "active",
+    "nft": {
+      "mint_address": "DiamondNecklace5ctMintAddr3ssS01ana103",
+      "metadata_uri": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/nfts/luxury/1of1-diamond-necklace-5ct.json",
+      "name": "5 Carat Diamond Necklace",
+      "image": "https://raw.githubusercontent.com/dellwatson/moga-mogate/refs/heads/master/metadata/images/luxury/diamond-necklace-5ct.png",
+      "collection_address": "TiamondLuxuryCo11ectionAddr3ssS01ana321",
+      "supply": 1
+    },
+    "creator": {
+      "company_id": "company_tiamond_001",
+      "company_name": "Tiamond",
+      "wallet_address": "TiamondWa11etAddr3ssS01anaDev2468013579",
+      "is_verified": true
+    },
+    "pricing": {
+      "estimated_value_usd": 125000,
+      "ticket_requirement": 150000,
+      "tickets_sold": 1789,
+      "tickets_remaining": 148211,
+      "total_pot_usd": 1789
+    },
+    "timeline": {
+      "created_at": "2025-10-28T10:00:00Z",
+      "start_time": "2025-10-28T14:00:00Z",
+      "end_time": "2025-11-18T23:59:59Z",
+      "duration_days": 21,
+      "time_remaining_hours": 82
+    },
+    "participants": {
+      "total_unique_users": 145,
+      "top_buyers": [
+        {
+          "wallet": "User12Wa11etAddr3ssS01ana1212",
+          "tickets_count": 200,
+          "ticket_numbers": [
+            1,
+            2,
+            "...",
+            200
+          ]
+        }
+      ]
+    },
+    "winner": null,
+    "program_data": {
+      "raffle_pda": "Raff1ePDAAddr3ssDiamondNecklace103",
+      "escrow_account": "EscrowAcctAddr3ssDiamondNecklace103",
+      "program_id": "rwa_raffle_program_v1"
+    },
+    "metadata": {
+      "featured": true,
+      "category": "luxury",
+      "tags": [
+        "diamond",
+        "jewelry",
+        "investment",
+        "ending-soon"
+      ],
+      "views": 15234,
+      "favorites": 892,
+      "urgency": "medium"
+    }
+  }
+]
