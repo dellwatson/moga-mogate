@@ -9,11 +9,26 @@ interface ICollectionMintV2 {
     function mintTo(address to, string calldata uri) external returns (uint256);
 }
 
+/// @notice Minimal interface for Mogate's ERC721 vault.
+interface IMogateERC721VaultV2 {
+    function finalizeReceivedERC721(
+        address collection,
+        uint256 tokenId,
+        bytes calldata encryptedOwner
+    ) external;
+
+    function unsafeFinalizeReceivedERC721(
+        address collection,
+        uint256 tokenId,
+        address plaintextOwner
+    ) external;
+}
+
 /// @title Mogate Raffle V2 (Darkpool Foundation on Fhenix/CoFHE)
 /// @notice New version contract: keeps V1 raffle mechanics and adds encrypted mirrors
 /// for ticket counts, sold slots, and winner slot.
 /// @dev Slot IDs remain plaintext in this V2 foundation for deterministic validation.
-contract RaffleDarkpoolV2 is Ownable {
+contract RaffleDarkpoolV2WithVault is Ownable {
     constructor() Ownable(msg.sender) {}
 
     enum RaffleStatus {
@@ -198,6 +213,85 @@ contract RaffleDarkpoolV2 is Ownable {
 
         r.claimed = true;
         _mintPrize(id, r, msg.sender);
+    }
+
+    /// @notice Claim the prize directly into a vault (NFT owner becomes the vault; beneficial owner is encrypted).
+    /// @dev Requires `encryptedOwner` compatible with `FHE.asEaddress(bytes)` inside the vault.
+    function claimToVault(
+        string calldata raffleId,
+        address vault,
+        bytes calldata encryptedOwner
+    ) external {
+        require(vault != address(0), "BadVault");
+
+        bytes32 id = keccak256(bytes(raffleId));
+        DarkpoolRaffle storage r = _raffles[id];
+        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+        require(r.status == RaffleStatus.DRAWN, "NotDrawn");
+        require(!r.claimed, "AlreadyClaimed");
+        require(msg.sender == r.winner, "NotWinner");
+
+        r.claimed = true;
+
+        require(r.collection != address(0), "NoCollection");
+
+        PrizeTokenType prizeType = r.prizeType == PrizeTokenType.NONE
+            ? PrizeTokenType.ERC721
+            : r.prizeType;
+        uint256 amountToMint = r.prizeAmount == 0 ? 1 : r.prizeAmount;
+
+        if (prizeType != PrizeTokenType.ERC721) {
+            revert("OnlyERC721ToVault");
+        }
+
+        for (uint256 i = 0; i < amountToMint; i++) {
+            uint256 mintedId = ICollectionMintV2(r.collection).mintTo(vault, r.metadataUri);
+            IMogateERC721VaultV2(vault).finalizeReceivedERC721(
+                r.collection,
+                mintedId,
+                encryptedOwner
+            );
+            emit DarkpoolRafflePrizeMinted(id, vault, mintedId, r.metadataUri);
+        }
+    }
+
+    /// @notice Unsafe dev helper: claim to vault while setting a public plaintext beneficial owner.
+    /// @dev This is NOT privacy-preserving (plaintext owner appears in calldata).
+    function unsafeClaimToVault(
+        string calldata raffleId,
+        address vault,
+        address plaintextOwner
+    ) external {
+        require(vault != address(0), "BadVault");
+        require(plaintextOwner != address(0), "BadOwner");
+
+        bytes32 id = keccak256(bytes(raffleId));
+        DarkpoolRaffle storage r = _raffles[id];
+        require(bytes(r.raffleId).length != 0, "RaffleNotFound");
+        require(r.status == RaffleStatus.DRAWN, "NotDrawn");
+        require(!r.claimed, "AlreadyClaimed");
+        require(msg.sender == r.winner, "NotWinner");
+
+        r.claimed = true;
+
+        PrizeTokenType prizeType = r.prizeType == PrizeTokenType.NONE
+            ? PrizeTokenType.ERC721
+            : r.prizeType;
+        uint256 amountToMint = r.prizeAmount == 0 ? 1 : r.prizeAmount;
+
+        if (prizeType != PrizeTokenType.ERC721) {
+            revert("OnlyERC721ToVault");
+        }
+
+        for (uint256 i = 0; i < amountToMint; i++) {
+            uint256 mintedId = ICollectionMintV2(r.collection).mintTo(vault, r.metadataUri);
+            IMogateERC721VaultV2(vault).unsafeFinalizeReceivedERC721(
+                r.collection,
+                mintedId,
+                plaintextOwner
+            );
+            emit DarkpoolRafflePrizeMinted(id, vault, mintedId, r.metadataUri);
+        }
     }
 
     function claimRefund(string calldata raffleId) external {
