@@ -1,34 +1,50 @@
-# Mogate RWA Platform - Multi-chain RWA Raffle
+# Mogate RWA Raffle (EVM) + Privacy (coFHE)
 
-This monorepo contains the Mogate RWA raffle platform across multiple chains. Each network has its own git branch with network-specific programs, SDKs, and offchain workers.
+This repo contains the EVM raffle contracts + scripts, plus privacy extensions built with **Fhenix coFHE**:
 
-## Network Branches
+- **V1 (Transparent Raffle):** classic on-chain raffle (slot ownership is public).
+- **V2 (Darkpool Raffle + Relayer):** slot ownership is stored **encrypted**, and a **relayer** is the visible sender on explorers.
+- **Private Vault (ERC721):** NFTs sit in a public vault address, while the _real owner_ is tracked as an **encrypted address**.
 
-This is a cross-chain project. Each blockchain has its own branch:
+More details: `docs/VAULT_FLOW.md`
 
-- **`solana-network`** — Solana implementation
-- **`evm-network`** — EVM implementation (LISK, polygon, base, etc )
+## Relationship To The Older “v0” Repo
 
-**Switch branches to view network-specific code and documentation.**
+If your earlier EVM implementation lived in the `moga-mogate` repo on the `evm-network` branch, this repo is the focused continuation/extraction of that work, with the privacy roadmap added (Darkpool raffle + coFHE vault).
 
----
+Reference (v0):
 
-## iExec + Privacy 2.0 (References)
+```text
+https://github.com/dellwatson/moga-mogate/tree/evm-network
+```
 
-This repo includes iExec integration references for Privacy 2.0 work:
+## User Flows (Simple)
 
-- **Privacy contracts** live under `contracts/RaffleTEE.sol`
-- **Scripts** live under `scripts/tee`
-- **TypeScript SDK** support lives under `ts-sdk/iexec`
+### A) Private Vault (User View)
 
-These are references for the integration and are meant to be explored within their respective folders.
+![vault-user-flow](./docs/images/vault-user-flow.png)
 
-## Transparent Raffle Contract
+### B) Darkpool Raffle V2 + Relayer (User View)
 
-The transparent raffle implementation is in `contracts/Raffle.sol`. This is the on-chain raffle logic and serves as the source of truth for the transparent raffle flow.
+![dp-raffle-user-flow](./docs/images/dp-raffle-user-flow.png)
 
-## Offchain, SDK, and Scripts (How They Relate)
+## Key Contracts
 
-- **Offchain** (`offchain/`): the off-chain service layer.
-- **TS SDK** (`ts-sdk/`): the client application SDK used to interact with on-chain and off-chain components.
-- **Scripts** (`scripts/`): utility scripts that can pull and process data via the TS SDK (client-app) and related services.
+- Transparent raffle (V1): `contracts/Raffle.sol`
+- Darkpool raffle foundation (V2): `contracts/Raffle.darkpool.v2.sol`
+- Darkpool raffle + vault claim: `contracts/Raffle.darkpool.v2.vault.sol`
+- Vault (ERC721): `contracts/Vault.erc721.sol`
+
+## Scripts (EVM)
+
+- Compile: `bun run evm:compile`
+- Deploy vault: `bun run evm:deploy:vault:erc721`
+- Deploy raffle V2 (darkpool): `bun run evm:deploy:raffle:v2-darkpool`
+- Deploy raffle V2 (darkpool + vault): `bun run evm:deploy:raffle:v2-darkpool-vault`
+
+See `package.json` for the full list.
+
+## Notes About Privacy
+
+- On EVM, tx senders still exist. Privacy here means: observers can’t learn the _real owner / slot owner / positions_ from on-chain state or calldata because those values are ciphertext.
+- The **relayer** improves sender privacy (explorer shows relayer), while coFHE protects the sensitive state.
