@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 import { FHE, euint128, InEuint128 } from "@fhenixprotocol/cofhe-contracts/FHE.sol";
 
@@ -58,6 +59,9 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         operators[operator] = allowed;
     }
 
+    /// @notice Manage addresses allowed to mint giftcode NFTs.
+    /// @dev This role is only for issuance control and is independent from
+    ///      FHE decrypt permissions (granted on redeem).
     function setMinter(address minter, bool allowed) external onlyOwnerOrOperator {
         minters[minter] = allowed;
     }
@@ -81,10 +85,10 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        euint128 sealed = FHE.asEuint128(encKey);
-        FHE.allowThis(sealed);
+        euint128 keyHandle = FHE.asEuint128(encKey);
+        FHE.allowThis(keyHandle);
 
-        _encKey[tokenId] = sealed;
+        _encKey[tokenId] = keyHandle;
         _cipherRef[tokenId] = cipherRef;
     }
 
@@ -99,10 +103,10 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        euint128 sealed = FHE.asEuint128(encKey);
-        FHE.allowThis(sealed);
+        euint128 keyHandle = FHE.asEuint128(encKey);
+        FHE.allowThis(keyHandle);
 
-        _encKey[tokenId] = sealed;
+        _encKey[tokenId] = keyHandle;
         _cipherRef[tokenId] = cipherRef;
 
         if (tokenId > _nextTokenId) {
@@ -117,20 +121,20 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     // =============================================================
 
     function cipherRef(uint256 tokenId) external view returns (string memory) {
-        require(_exists(tokenId), "Nonexistent");
+        require(_ownerOf(tokenId) != address(0), "Nonexistent");
         return _cipherRef[tokenId];
     }
 
     /// @notice Return the encrypted key handle for this token.
     /// @dev The handle is safe to expose; only addresses granted by FHE ACL
-    ///      can decrypt it using @cofhe/sdk.
+    ///      can decrypt it using cofhe SDK.
     function encryptedKey(uint256 tokenId) external view returns (euint128) {
-        require(_exists(tokenId), "Nonexistent");
+        require(_ownerOf(tokenId) != address(0), "Nonexistent");
         return _encKey[tokenId];
     }
 
     function isRedeemed(uint256 tokenId) external view returns (bool) {
-        require(_exists(tokenId), "Nonexistent");
+        require(_ownerOf(tokenId) != address(0), "Nonexistent");
         return _redeemed[tokenId];
     }
 
@@ -139,18 +143,18 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     // =============================================================
 
     /// @notice Redeem a giftcode NFT into a soulbound token and grant
-    ///         the current holder FHE read access to the encrypted key.
+    ///         the redeemer (current holder) FHE read access.
     function redeemToSoulbound(uint256 tokenId) external {
         require(ownerOf(tokenId) == msg.sender, "NotOwner");
         require(!_redeemed[tokenId], "AlreadyRedeemed");
 
         _redeemed[tokenId] = true;
 
-        euint128 sealed = _encKey[tokenId];
-        require(FHE.isInitialized(sealed), "CodeMissing");
+        euint128 keyHandle = _encKey[tokenId];
+        require(FHE.isInitialized(keyHandle), "CodeMissing");
 
-        // Allow this holder to decrypt via @cofhe/sdk decryptForView.
-        FHE.allow(sealed, msg.sender);
+        // Allow this holder to decrypt via cofhe SDK decryptForView.
+        FHE.allow(keyHandle, msg.sender);
     }
 
     // =============================================================
@@ -181,7 +185,7 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         address from,
         address to,
         uint256 tokenId
-    ) public override {
+    ) public override(ERC721, IERC721) {
         _requireNotSoulbound(tokenId);
         super.transferFrom(from, to, tokenId);
     }
@@ -189,18 +193,9 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     function safeTransferFrom(
         address from,
         address to,
-        uint256 tokenId
-    ) public override {
-        _requireNotSoulbound(tokenId);
-        super.safeTransferFrom(from, to, tokenId);
-    }
-
-    function safeTransferFrom(
-        address from,
-        address to,
         uint256 tokenId,
         bytes memory data
-    ) public override {
+    ) public override(ERC721, IERC721) {
         _requireNotSoulbound(tokenId);
         super.safeTransferFrom(from, to, tokenId, data);
     }
