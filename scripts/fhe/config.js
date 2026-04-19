@@ -50,7 +50,10 @@ export const fheNftConfig = {
       cipherRef: "",
     },
     decrypt: {
-      tokenId: lastTokenId,
+      tokenId: 3,
+      cipherRef: "giftcode_1776618540095.bin",
+      giftcode: "MOGATE_TEST_GIFTCODE_540094", // For testing only
+      aesKeyHex: "0x16c906e990ef08c2ac500f8744231540", // For testing only
     },
   },
   vault: {

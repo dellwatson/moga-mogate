@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
-import { createPublicClient, createWalletClient, custom, http } from "viem";
+import { createPublicClient, createWalletClient, http } from "viem";
 import { sepolia } from "viem/chains";
+import { privateKeyToAccount } from "viem/accounts";
 import {
   createCofheConfig,
   createCofheClient,
@@ -92,21 +93,13 @@ async function main() {
     chain: sepolia,
     transport: http(rpcUrl),
   });
-
-  // Wallet client used only for signing permits; here we use a viem walletClient
+  const account = privateKeyToAccount(
+    pk.startsWith("0x") ? (pk as `0x${string}`) : (`0x${pk}` as `0x${string}`),
+  );
   const walletClient = createWalletClient({
+    account,
     chain: sepolia,
-    transport: custom({
-      request: async ({ method, params }) => {
-        // Delegate to ethers signer for signing
-        if (method === "eth_sign" || method === "personal_sign") {
-          const [msg, addr] = params as [string, string];
-          const sig = await signer.signMessage(ethers.getBytes(msg));
-          return sig as any;
-        }
-        throw new Error(`Unsupported method for walletClient: ${method}`);
-      },
-    } as any),
+    transport: http(rpcUrl),
   });
 
   const cofheConfig = createCofheConfig({
@@ -114,7 +107,7 @@ async function main() {
   });
   const cofheClient = createCofheClient(cofheConfig);
 
-  await cofheClient.connect(publicClient, walletClient as any);
+  await cofheClient.connect(publicClient, walletClient);
 
   // Ensure we have a permit for this account
   await cofheClient.permits.getOrCreateSelfPermit();

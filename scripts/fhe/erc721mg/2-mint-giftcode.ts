@@ -1,13 +1,17 @@
 import fs from "node:fs";
-import path from "node:path";
+import * as path from "path";
 import { ethers } from "ethers";
 import { createPublicClient, createWalletClient, http } from "viem";
 import { sepolia } from "viem/chains";
 import { privateKeyToAccount } from "viem/accounts";
-import { createCofheConfig, createCofheClient } from "@cofhe/sdk/node";
-import { Encryptable } from "@cofhe/sdk";
+import {
+  createCofheConfig,
+  createCofheClient,
+  Encryptable,
+} from "@cofhe/sdk/node";
 import { chains } from "@cofhe/sdk/chains";
 import { fheNftConfig } from "../config.js";
+import type { InEuint128Input } from "@cofhe/sdk";
 
 type InEuint128Input = {
   ctHash: bigint;
@@ -26,7 +30,7 @@ async function main() {
   const collectionAddress = erc721mg.collectionAddress;
   const to = mint.to;
   const uri = mint.uri;
-  const cipherRef = mint.cipherRef || "";
+  const existingCipherRef = mint.cipherRef || "";
   const plaintextGiftcode = mint.plaintextGiftcode;
 
   if (!rpcUrl)
@@ -80,6 +84,45 @@ async function main() {
   const aesKeyBigInt = BigInt("0x" + aesKeyHex);
 
   console.log("Generated AES key (hex):", "0x" + aesKeyHex);
+
+  // ACTUALLY ENCRYPT THE GIFTCODE WITH AES
+  const giftcode = `MOGATE_TEST_GIFTCODE_${Date.now().toString().slice(-6)}`;
+  console.log("Giftcode (plaintext):", giftcode);
+
+  // Simple AES encryption using Web Crypto API
+  const encoder = new TextEncoder();
+  const giftcodeData = encoder.encode(giftcode);
+
+  // Import AES key
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    aesKeyBytes,
+    { name: "AES-GCM" },
+    false,
+    ["encrypt"],
+  );
+
+  // Encrypt giftcode
+  const iv = crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV for AES-GCM
+  const encryptedGiftcode = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    cryptoKey,
+    giftcodeData,
+  );
+
+  // Store encrypted giftcode and IV together
+  const encryptedPayload = new Uint8Array(
+    iv.length + encryptedGiftcode.byteLength,
+  );
+  encryptedPayload.set(iv);
+  encryptedPayload.set(new Uint8Array(encryptedGiftcode), iv.length);
+
+  // Save to local file (in production, use IPFS)
+  const cipherRef = `giftcode_${Date.now()}.bin`;
+  const fs = await import("fs/promises");
+  await fs.writeFile(cipherRef, encryptedPayload);
+  console.log("Encrypted giftcode saved to:", cipherRef);
+
   console.log("Encrypting AES key with CoFHE...");
   const [encKey] = await cofheClient
     .encryptInputs([Encryptable.uint128(aesKeyBigInt)])
@@ -174,10 +217,25 @@ async function main() {
   if (mintedTokenId !== null) {
     console.log("Minted tokenId:", mintedTokenId.toString());
 
-    // Write lastTokenId to the same state file used by scripts/fhe/config.ts
+    // Update config with new token info
     const __dirname = path.dirname(new URL(import.meta.url).pathname);
-    const statePath = path.join(__dirname, "..", "erc721mg_state.json");
+    const configPath = path.join(__dirname, "..", "config.js");
+
     try {
+      // Read current config
+      const configContent = fs.readFileSync(configPath, "utf8");
+
+      // Update the decrypt section with new token info
+      const updatedConfig = configContent.replace(
+        /decrypt: \{[\s\S]*?tokenId: \d+[\s\S]*?\}/,
+        `decrypt: {\n    tokenId: ${mintedTokenId},\n    cipherRef: "${cipherRef}",\n    giftcode: "${giftcode}", // For testing only\n    aesKeyHex: "0x${aesKeyHex}" // For testing only\n  }`,
+      );
+
+      fs.writeFileSync(configPath, updatedConfig, "utf8");
+      console.log("Updated config with new token info");
+
+      // Also update the state file
+      const statePath = path.join(__dirname, "..", "erc721mg_state.json");
       fs.writeFileSync(
         statePath,
         JSON.stringify({ lastTokenId: mintedTokenId.toString() }, null, 2),
@@ -185,7 +243,7 @@ async function main() {
       );
       console.log("Updated state file:", statePath);
     } catch (err) {
-      console.error("Failed to write state file", err);
+      console.error("Failed to update config", err);
     }
   } else {
     console.warn(

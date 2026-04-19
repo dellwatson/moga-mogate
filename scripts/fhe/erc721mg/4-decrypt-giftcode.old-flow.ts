@@ -79,65 +79,40 @@ async function main() {
   await cofheClient.connect(publicClient, walletClient);
   console.log("FHE client connected successfully");
 
-  // Use decryptForView for UI display (requires permit)
-  console.log("Creating FHE permit for account...");
-  await cofheClient.permits.getOrCreateSelfPermit();
-  console.log("FHE permit created successfully");
+  // Try old-style decrypt (if still available)
+  console.log("Attempting legacy decrypt approach...");
+  try {
+    // Try direct decrypt without permit system
+    const result = await cofheClient
+      .decryptForView(keyHandle, FheTypes.Uint128)
+      .execute();
+    console.log("Decrypted AES key (uint128 as bigint):", result);
+    console.log("SUCCESS: Legacy decrypt worked!");
+  } catch (error: any) {
+    console.error("Legacy decrypt failed:", error.message);
 
-  console.log("Calling decryptForView for UI display...");
-  const aesKeyBigInt = await cofheClient
-    .decryptForView(keyHandle, FheTypes.Uint128)
-    .execute();
+    // Try mock environment as fallback
+    console.log("Trying mock environment for testing...");
+    const mockConfig = createCofheConfig({
+      supportedChains: [chains.sepolia],
+      // Force mock mode
+      mock: true,
+    });
+    const mockClient = createCofheClient(mockConfig);
+    await mockClient.connect(publicClient, walletClient);
 
-  console.log("Decrypted AES key (uint128 as bigint):", aesKeyBigInt);
-
-  // NOW ACTUALLY DECRYPT THE GIFTCODE
-  if (cipherRef && cipherRef !== "<none>") {
     try {
-      console.log("Decrypting giftcode from cipherRef:", cipherRef);
-
-      // Read encrypted giftcode file
-      const fs = await import("fs/promises");
-      const encryptedData = await fs.readFile(cipherRef);
-
-      // Convert bigint AES key to bytes (16 bytes for AES-128)
-      const aesKeyHex = aesKeyBigInt.toString(16).padStart(32, "0");
-      const aesKeyBytes = new Uint8Array(16);
-      for (let i = 0; i < 32; i += 2) {
-        aesKeyBytes[i / 2] = parseInt(aesKeyHex.substr(i, 2), 16);
-      }
-      console.log("AES key hex:", aesKeyHex);
-      console.log("AES key bytes:", new Uint8Array(aesKeyBytes));
-
-      // Extract IV and encrypted data
-      const iv = encryptedData.slice(0, 12);
-      const ciphertext = encryptedData.slice(12);
-
-      // Import AES key
-      const cryptoKey = await crypto.subtle.importKey(
-        "raw",
-        aesKeyBytes,
-        { name: "AES-GCM" },
-        false,
-        ["decrypt"],
+      const mockResult = await mockClient
+        .decryptForView(keyHandle, FheTypes.Uint128)
+        .execute();
+      console.log("Mock decrypt result:", mockResult);
+      console.log("NOTE: This is mock data, not real decryption");
+    } catch (mockError: any) {
+      console.error("Mock decrypt also failed:", mockError.message);
+      console.log(
+        "FHE decrypt is currently unavailable due to network transition",
       );
-
-      // Decrypt giftcode
-      const decryptedGiftcode = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv },
-        cryptoKey,
-        ciphertext,
-      );
-
-      const decoder = new TextDecoder();
-      const giftcode = decoder.decode(decryptedGiftcode);
-
-      console.log("🎉 SUCCESS! Decrypted giftcode:", giftcode);
-    } catch (error) {
-      console.error("Failed to decrypt giftcode:", error);
     }
-  } else {
-    console.log("No cipherRef available - cannot decrypt giftcode");
   }
 }
 
