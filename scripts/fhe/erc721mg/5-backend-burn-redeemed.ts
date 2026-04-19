@@ -1,34 +1,20 @@
-import { config as loadEnv } from "dotenv";
 import { ethers } from "ethers";
-
-loadEnv();
+import { fheNftConfig } from "../config.js";
 
 async function main() {
-  const target = process.env.TARGET_NETWORK || "sepolia";
+  const { network, erc721mg } = fheNftConfig;
 
-  let rpcUrl: string | undefined;
-  if (target === "polygonAmoy") {
-    rpcUrl = process.env.POLYGON_AMOY_RPC_URL;
-  } else if (target === "arbitrumSepolia") {
-    rpcUrl = process.env.ARBITRUM_SEPOLIA_RPC_URL;
-  } else if (target === "polkadotTestnet") {
-    rpcUrl = process.env.POLKADOT_TESTNET_RPC_URL;
-  } else {
-    rpcUrl = process.env.SEPOLIA_RPC_URL;
-  }
+  const rpcUrl = network.rpcUrls[network.target];
+  const pk = network.backendPrivateKey;
 
-  const pk = process.env.BACKEND_PRIVATE_KEY || process.env.PRIVATE_KEY_ETH;
-  const collectionAddress = process.env.ERC721MG_ADDRESS;
-  const tokenIdRaw = process.env.GIFTCODE_TOKEN_ID;
+  const collectionAddress = erc721mg.collectionAddress;
+  const tokenId = erc721mg.decrypt.tokenId;
 
   if (!rpcUrl)
     throw new Error("RPC URL env var is required for target network");
   if (!pk)
     throw new Error("BACKEND_PRIVATE_KEY or PRIVATE_KEY_ETH is required");
   if (!collectionAddress) throw new Error("ERC721MG_ADDRESS is required");
-  if (!tokenIdRaw) throw new Error("GIFTCODE_TOKEN_ID is required");
-
-  const tokenId = BigInt(tokenIdRaw);
 
   const provider = new ethers.JsonRpcProvider(rpcUrl);
   const signer = new ethers.Wallet(pk, provider);

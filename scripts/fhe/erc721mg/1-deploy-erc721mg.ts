@@ -1,27 +1,18 @@
 import { ethers } from "ethers";
 import fs from "node:fs";
 import path from "node:path";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import { fheNftConfig } from "../config.js";
 
 async function main() {
-  const target = process.env.TARGET_NETWORK || "sepolia";
+  const { network, deploy } = fheNftConfig;
 
-  let rpcUrl: string | undefined;
-  if (target === "polygonAmoy") {
-    rpcUrl = process.env.POLYGON_AMOY_RPC_URL;
-  } else if (target === "arbitrumSepolia") {
-    rpcUrl = process.env.ARBITRUM_SEPOLIA_RPC_URL;
-  } else if (target === "polkadotTestnet") {
-    rpcUrl = process.env.POLKADOT_TESTNET_RPC_URL;
-  } else {
-    rpcUrl = process.env.SEPOLIA_RPC_URL;
-  }
+  const rpcUrl = network.rpcUrls[network.target];
+  const pk = network.privateKey;
 
-  const pk = process.env.PRIVATE_KEY_ETH || process.env.PRIVATE_KEY_ETH_2;
   if (!rpcUrl)
-    throw new Error("RPC URL env var is required for target network");
+    throw new Error(
+      `RPC URL for target network '${network.target}' is required`,
+    );
   if (!pk)
     throw new Error("PRIVATE_KEY_ETH or PRIVATE_KEY_ETH_2 env var is required");
 
@@ -30,8 +21,8 @@ async function main() {
 
   console.log("Deploying ERC721MG with:", await deployer.getAddress());
 
-  const name = process.env.ERC721MG_NAME || "Mogate Giftcode";
-  const symbol = process.env.ERC721MG_SYMBOL || "MGC";
+  const name = deploy.name;
+  const symbol = deploy.symbol;
 
   const __dirname = path.dirname(new URL(import.meta.url).pathname);
   const repoRoot = path.join(__dirname, "..", "..", "..");

@@ -1,15 +1,14 @@
-import { config as loadEnv } from "dotenv";
 import { ethers } from "ethers";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, createWalletClient, http } from "viem";
 import { sepolia } from "viem/chains";
+import { privateKeyToAccount } from "viem/accounts";
 import {
   createCofheConfig,
   createCofheClient,
   Encryptable,
 } from "@cofhe/sdk/node";
 import { chains } from "@cofhe/sdk/chains";
-
-loadEnv();
+import { fheNftConfig } from "../config.js";
 
 /**
  * Simple encoder: convert a string giftcode to a uint128
@@ -32,24 +31,16 @@ function encodeGiftcodeToUint128(code: string): bigint {
 }
 
 async function main() {
-  const target = process.env.TARGET_NETWORK || "sepolia";
+  const { network, erc721mg } = fheNftConfig;
+  const { mint } = erc721mg;
 
-  let rpcUrl: string | undefined;
-  if (target === "polygonAmoy") {
-    rpcUrl = process.env.POLYGON_AMOY_RPC_URL;
-  } else if (target === "arbitrumSepolia") {
-    rpcUrl = process.env.ARBITRUM_SEPOLIA_RPC_URL;
-  } else if (target === "polkadotTestnet") {
-    rpcUrl = process.env.POLKADOT_TESTNET_RPC_URL;
-  } else {
-    rpcUrl = process.env.SEPOLIA_RPC_URL;
-  }
+  const rpcUrl = network.rpcUrls[network.target];
+  const pk = network.privateKey;
 
-  const pk = process.env.PRIVATE_KEY_ETH || process.env.PRIVATE_KEY_ETH_2;
-  const collectionAddress = process.env.ERC721MG_ADDRESS;
-  const to = process.env.GIFTCODE_TO;
-  const uri = process.env.GIFTCODE_URI;
-  const giftcodePlain = process.env.GIFTCODE_PLAIN;
+  const collectionAddress = erc721mg.collectionAddress;
+  const to = mint.to;
+  const uri = mint.uri;
+  const giftcodePlain = mint.plaintextGiftcode;
 
   if (!rpcUrl)
     throw new Error("RPC URL env var is required for target network");
@@ -81,32 +72,64 @@ async function main() {
     chain: sepolia,
     transport: http(rpcUrl),
   });
+  const account = privateKeyToAccount(
+    pk.startsWith("0x") ? (pk as `0x${string}`) : (`0x${pk}` as `0x${string}`),
+  );
+  const walletClient = createWalletClient({
+    account,
+    chain: sepolia,
+    transport: http(rpcUrl),
+  });
 
   const cofheConfig = createCofheConfig({
     supportedChains: [chains.sepolia],
   });
   const cofheClient = createCofheClient(cofheConfig);
 
-  await cofheClient.connect(publicClient, null as any);
+  await cofheClient.connect(publicClient, walletClient);
 
   console.log("Encrypting giftcode with CoFHE (pure-FHE mode)...");
   const [encGiftcode] = await cofheClient
     .encryptInputs([Encryptable.uint128(codeBigInt)])
     .execute();
+  if (encGiftcode.ctHash === undefined || !encGiftcode.signature) {
+    throw new Error(
+      "Invalid CoFHE encrypted input: missing ctHash/signature. Ensure the wallet used for encryption is connected and signs input proofs.",
+    );
+  }
 
   const collection = new ethers.Contract(
     collectionAddress,
     [
       "function setMinter(address minter, bool allowed) external",
-      "function mintGiftcode(address to, string uri, (bytes data,int32 securityZone,uint8 utype,bytes signature) encKey, string cipherRef) external returns (uint256)",
+      "function owner() view returns (address)",
+      "function operators(address) view returns (bool)",
+      "function minters(address) view returns (bool)",
+      "function mintGiftcode(address to, string uri, (uint256 ctHash,uint8 securityZone,uint8 utype,bytes signature) encKey, string cipherRef) external returns (uint256)",
     ],
     signer,
   );
 
-  // Ensure signer is a minter
-  const txRole = await collection.setMinter(signer.address, true);
-  console.log("setMinter tx:", txRole.hash);
-  await txRole.wait();
+  // Ensure signer is a minter. Only owner/operator can grant this role.
+  const isMinter = await collection.minters(signer.address);
+  if (!isMinter) {
+    const [ownerAddress, isOperator] = await Promise.all([
+      collection.owner(),
+      collection.operators(signer.address),
+    ]);
+    const canGrantRole =
+      ownerAddress.toLowerCase() === signer.address.toLowerCase() || isOperator;
+    if (!canGrantRole) {
+      throw new Error(
+        `Signer ${signer.address} is not a minter and cannot call setMinter. Ask owner/operator to whitelist this wallet first.`,
+      );
+    }
+    const txRole = await collection.setMinter(signer.address, true);
+    console.log("setMinter tx:", txRole.hash);
+    await txRole.wait();
+  } else {
+    console.log("Signer already has minter role; skipping setMinter.");
+  }
 
   console.log("Calling mintGiftcode (pure-FHE mode)...");
   // In pure-FHE mode, cipherRef is empty since we store everything in the FHE ciphertext
