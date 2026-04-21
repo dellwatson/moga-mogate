@@ -2,6 +2,8 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
@@ -9,9 +11,9 @@ import { FHE, euint128, InEuint128 } from "@fhenixprotocol/cofhe-contracts/FHE.s
 
 /// @title ERC721MG - Mogate Giftcode NFT with FHE-encrypted voucher codes
 /// @notice Standard ERC721 compatible collection that stores an encrypted
-///         giftcode handle per token, supports one-way redeem to soulbound,
+///         giftcode handle per token, supports one-way unwrap to soulbound,
 ///         and backend-only burn/cleanup.
-contract ERC721MG is ERC721URIStorage, Ownable {
+contract ERC721MG is ERC721URIStorage, ERC721Enumerable, ERC721Burnable, Ownable {
     mapping(address => bool) public operators;
     mapping(address => bool) public minters;
 
@@ -29,8 +31,8 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     ///      HTTPS URL, or on-chain hex-encoded blob).
     mapping(uint256 => string) private _cipherRef;
 
-    /// @dev Tracks whether a token has been redeemed and is now soulbound.
-    mapping(uint256 => bool) private _redeemed;
+    /// @dev Tracks whether a token has been unwrapped and is now soulbound.
+    mapping(uint256 => bool) private _unwrapped;
 
     // =============================================================
     // Modifiers & roles
@@ -41,6 +43,7 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         _;
     }
 
+    // this meant to be for cross-call contract
     modifier onlyMinter() {
         require(minters[msg.sender], "Not minter");
         _;
@@ -75,13 +78,18 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     /// @param uri Public metadata URI (visible to everyone).
     /// @param encKey Encrypted key produced by @cofhe/sdk (InEuint128).
     /// @param cipherRef Reference to ciphertext payload (IPFS CID, URL, or hex string).
-    function mintGiftcode(
+    function mint(
         address to,
         string calldata uri,
         InEuint128 calldata encKey,
         string calldata cipherRef
     ) external onlyMinter returns (uint256 tokenId) {
-        tokenId = ++_nextTokenId;
+        // Find next available tokenId, skipping any that already exist
+        tokenId = _nextTokenId;
+        while (_ownerOf(tokenId) != address(0)) {
+            tokenId++;
+        }
+        
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
@@ -90,10 +98,23 @@ contract ERC721MG is ERC721URIStorage, Ownable {
 
         _encKey[tokenId] = keyHandle;
         _cipherRef[tokenId] = cipherRef;
+        
+        // Update _nextTokenId to the last minted + 1 for efficiency
+        _nextTokenId = tokenId + 1;
     }
 
-    /// @notice Optional variant that mints with an explicit tokenId.
-    function mintGiftcodeWithTokenId(
+    /// @notice Mint with an explicit tokenId (advanced use case).
+    /// @dev WARNING: If tokenId already exists, this transaction will REVERT.
+    ///      The _safeMint function includes an existence check that prevents
+    ///      overwriting existing tokens. Use with caution and ensure tokenId
+    ///      uniqueness in your application logic.
+    /// @param to Recipient of the NFT.
+    /// @param tokenId Specific token ID to mint (must be unique).
+    /// @param uri Public metadata URI.
+    /// @param encKey Encrypted key handle.
+    /// @param cipherRef Reference to ciphertext payload.
+    /// @return The same tokenId that was minted.
+    function mintWithTokenId(
         address to,
         uint256 tokenId,
         string calldata uri,
@@ -109,8 +130,9 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         _encKey[tokenId] = keyHandle;
         _cipherRef[tokenId] = cipherRef;
 
-        if (tokenId > _nextTokenId) {
-            _nextTokenId = tokenId;
+        // Update nextTokenId to maintain sequential numbering
+        if (tokenId >= _nextTokenId) {
+            _nextTokenId = tokenId + 1;
         }
 
         return tokenId;
@@ -133,22 +155,22 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         return _encKey[tokenId];
     }
 
-    function isRedeemed(uint256 tokenId) external view returns (bool) {
+    function isUnwrapped(uint256 tokenId) external view returns (bool) {
         require(_ownerOf(tokenId) != address(0), "Nonexistent");
-        return _redeemed[tokenId];
+        return _unwrapped[tokenId];
     }
 
     // =============================================================
-    // Redeem → Soulbound + FHE unlock (no backend)
+    // Unwrap → Soulbound + FHE unlock (no backend)
     // =============================================================
 
-    /// @notice Redeem a giftcode NFT into a soulbound token and grant
-    ///         the redeemer (current holder) FHE read access.
-    function redeemToSoulbound(uint256 tokenId) external {
+    /// @notice Unwrap a giftcode NFT into a soulbound token and grant
+    ///         the holder FHE read access to decrypt the giftcode.
+    function unwrap(uint256 tokenId) external {
         require(ownerOf(tokenId) == msg.sender, "NotOwner");
-        require(!_redeemed[tokenId], "AlreadyRedeemed");
+        require(!_unwrapped[tokenId], "AlreadyUnwrapped");
 
-        _redeemed[tokenId] = true;
+        _unwrapped[tokenId] = true;
 
         euint128 keyHandle = _encKey[tokenId];
         require(FHE.isInitialized(keyHandle), "CodeMissing");
@@ -161,11 +183,11 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     // Backend-only burn / cleanup
     // =============================================================
 
-    /// @notice Burn a redeemed (soulbound) token and clear encrypted data.
+    /// @notice Burn a wrapped (soulbound) token and clear encrypted data.
     /// @dev Intended to be called by backend after the off-chain giftcode
-    ///      has been invalidated/consumed at the merchant.
-    function backendBurnRedeemed(uint256 tokenId) external onlyOwnerOrOperator {
-        require(_redeemed[tokenId], "NotRedeemed");
+    ///      has been used/consumed at the merchant.
+    function burn(uint256 tokenId) public override onlyOwnerOrOperator {
+        require(_unwrapped[tokenId], "NotWrapped");
         _burn(tokenId);
 
         _encKey[tokenId] = euint128.wrap(0);
@@ -177,8 +199,13 @@ contract ERC721MG is ERC721URIStorage, Ownable {
     // Soulbound behaviour
     // =============================================================
 
+    /// @dev Internal check to ensure token is not soulbound (unwrapped).
+    ///      Once a token is unwrapped, it becomes permanently non-transferable.
+    ///      This function is called before any transfer operation to prevent
+    ///      moving soulbound tokens, which would break the giftcode system.
+    /// @param tokenId The token ID to check.
     function _requireNotSoulbound(uint256 tokenId) internal view {
-        require(!_redeemed[tokenId], "Soulbound");
+        require(!_unwrapped[tokenId], "Token is soulbound and cannot be transferred");
     }
 
     function transferFrom(
@@ -200,23 +227,104 @@ contract ERC721MG is ERC721URIStorage, Ownable {
         super.safeTransferFrom(from, to, tokenId, data);
     }
 
+
     // =============================================================
-    // Optional user burn (pre-redeem only)
+    // Batch operations
     // =============================================================
 
-    /// @notice Allow holder/approved to burn a non-redeemed NFT.
-    function burn(uint256 tokenId) external {
-        address owner_ = ownerOf(tokenId);
-        require(!_redeemed[tokenId], "Soulbound");
-        require(
-            msg.sender == owner_ ||
-                isApprovedForAll(owner_, msg.sender) ||
-                getApproved(tokenId) == msg.sender,
-            "Not owner/approved"
-        );
-        _burn(tokenId);
+    /// @notice Mint multiple giftcode NFTs in a single transaction.
+    function batchMint(
+        address[] calldata to,
+        string[] calldata uris,
+        InEuint128[] calldata encKeys,
+        string[] calldata cipherRefs
+    ) external onlyMinter returns (uint256[] memory tokenIds) {
+        require(to.length == uris.length && uris.length == encKeys.length && encKeys.length == cipherRefs.length, "Array length mismatch");
+        
+        tokenIds = new uint256[](to.length);
+        for (uint256 i = 0; i < to.length; i++) {
+            // Find next available tokenId, skipping any that already exist
+            uint256 tokenId = _nextTokenId;
+            while (_ownerOf(tokenId) != address(0)) {
+                tokenId++;
+            }
+            
+            tokenIds[i] = tokenId;
+            _safeMint(to[i], tokenId);
+            _setTokenURI(tokenId, uris[i]);
 
-        _encKey[tokenId] = euint128.wrap(0);
-        _cipherRef[tokenId] = "";
+            euint128 keyHandle = FHE.asEuint128(encKeys[i]);
+            FHE.allowThis(keyHandle);
+
+            _encKey[tokenId] = keyHandle;
+            _cipherRef[tokenId] = cipherRefs[i];
+            
+            // Update _nextTokenId for next iteration
+            _nextTokenId = tokenId + 1;
+        }
+    }
+
+    /// @notice Unwrap multiple giftcode NFTs into soulbound tokens.
+    function batchUnwrap(uint256[] calldata tokenIds) external {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            require(ownerOf(tokenIds[i]) == msg.sender, "NotOwner");
+            require(!_unwrapped[tokenIds[i]], "AlreadyUnwrapped");
+
+            _unwrapped[tokenIds[i]] = true;
+
+            euint128 keyHandle = _encKey[tokenIds[i]];
+            require(FHE.isInitialized(keyHandle), "CodeMissing");
+
+            FHE.allow(keyHandle, msg.sender);
+        }
+    }
+
+    /// @notice Burn multiple wrapped NFTs in a single transaction.
+    function batchBurn(uint256[] calldata tokenIds) external onlyOwnerOrOperator {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            require(_unwrapped[tokenIds[i]], "NotWrapped");
+            _burn(tokenIds[i]);
+
+            _encKey[tokenIds[i]] = euint128.wrap(0);
+            _cipherRef[tokenIds[i]] = "";
+        }
+    }
+
+
+    // =============================================================
+    // Enumerable overrides
+    // =============================================================
+
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override(ERC721, ERC721Enumerable)
+        returns (address)
+    {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._increaseBalance(account, value);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721URIStorage, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-import "./Vault.erc721.sol";
+import "../vault/Vault.erc721.sol";
 
 /// @title PrivateVaultMarketplace
 /// @notice Minimal marketplace for ERC721 tokens held inside MogateERC721Vault.
@@ -37,7 +37,7 @@ contract PrivateVaultMarketplace is Ownable {
         uint256 priceWei
     );
 
-    constructor(address vaultAddress) {
+    constructor(address vaultAddress) Ownable(msg.sender) {
         require(vaultAddress != address(0), "BadVault");
         vault = MogateERC721Vault(vaultAddress);
     }

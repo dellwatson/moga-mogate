@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import { MessageHashUtils } from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
+import { FHE, InEuint128 } from "@fhenixprotocol/cofhe-contracts/FHE.sol";
 
 interface IFHECollection {
     /// @notice Mint a new giftcode NFT with encrypted key.
@@ -12,7 +13,7 @@ interface IFHECollection {
     /// @param encKey FHE encrypted key handle.
     /// @param cipherRef Reference to ciphertext payload.
     /// @return tokenId The minted token id.
-    function mintGiftcode(address to, string calldata uri, InEuint128 calldata encKey, string calldata cipherRef) external returns (uint256 tokenId);
+    function mint(address to, string calldata uri, InEuint128 calldata encKey, string calldata cipherRef) external returns (uint256 tokenId);
 }
 
 /// @title FHEAuthorityMintWithPermit
@@ -44,7 +45,7 @@ contract FHEAuthorityMintWithPermit is Ownable {
         require(backendSigner_ != address(0), "Invalid signer");
         require(collection_ != address(0), "Invalid collection");
         backendSigner = backendSigner_;
-        collection = ICollectionPermit(collection_);
+        collection = IFHECollection(collection_);
     }
 
     /// @notice Update the backend signer that is allowed to authorize mints.
@@ -64,12 +65,13 @@ contract FHEAuthorityMintWithPermit is Ownable {
     }
 
     /// @notice Mint a new giftcode NFT using a signed backend permit.
-    /// @dev The permit binds (this contract, recipient, uri, encKey, cipherRef, nonce, expiry).
+    /// @dev The permit binds (this contract, recipient, uri, encKey, cipherRef, amount, nonce, expiry).
     /// Reverts if the permit is expired, reused, or not signed by `backendSigner`.
     /// @param to Recipient of the NFT.
     /// @param uri Metadata URI for the NFT.
     /// @param encKey FHE encrypted key handle.
     /// @param cipherRef Reference to ciphertext payload.
+    /// @param amount Payment amount required.
     /// @param nonce Unique nonce to prevent replay.
     /// @param expiry Unix timestamp after which the permit is invalid.
     /// @param signature Backend ECDSA signature over the permit payload.
@@ -78,14 +80,16 @@ contract FHEAuthorityMintWithPermit is Ownable {
         string calldata uri,
         InEuint128 calldata encKey,
         string calldata cipherRef,
+        uint256 amount,
         uint256 nonce,
         uint256 expiry,
         bytes calldata signature
-    ) external returns (uint256 tokenId) {
+    ) external payable returns (uint256 tokenId) {
         require(block.timestamp <= expiry, "Permit expired");
         require(to != address(0), "Invalid recipient");
+        require(amount > 0, "Amount must be greater than 0");
 
-        bytes32 permitId = keccak256(abi.encodePacked(address(this), to, keccak256(bytes(uri)), encKey.ctHash, keccak256(bytes(cipherRef)), nonce, expiry));
+        bytes32 permitId = keccak256(abi.encodePacked(address(this), to, keccak256(bytes(uri)), encKey.ctHash, keccak256(bytes(cipherRef)), amount, nonce, expiry));
         require(!usedPermits[permitId], "Permit used");
 
         bytes32 hash = MessageHashUtils.toEthSignedMessageHash(permitId);
@@ -94,7 +98,7 @@ contract FHEAuthorityMintWithPermit is Ownable {
 
         usedPermits[permitId] = true;
 
-        tokenId = collection.mintGiftcode(to, uri, encKey, cipherRef);
+        tokenId = collection.mint(to, uri, encKey, cipherRef);
 
         emit MintedWithPermit(to, tokenId, nonce, uri);
     }
