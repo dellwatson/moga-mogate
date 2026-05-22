@@ -1,5 +1,5 @@
 {
-  "checkout_id": "78737b03-90fb-4c4c-bb7c-1665c6f94611",
+  "checkout_id": "9b731785-0f32-4de8-8af4-a386459af4f2",
   "flow": "atomic_onchain",
   "flow_resolution": {
     "atomic_eligible": true,
@@ -11,39 +11,39 @@
   },
   "status": "prepared",
   "product_type": "giftcard",
-  "quote_id": "61924216-2d26-4bd5-b4c9-6cdb042f1128",
-  "total_amount": 0.2145,
+  "quote_id": "e67313d9-05c6-432e-ac36-54bee756f42a",
+  "total_amount": 0.00165,
   "currency": "ETH",
   "direct_payment": {
-    "amount": 0.2145,
+    "amount": 0.00165,
     "currency": "ETH",
     "mode": "DIRECT_ONCHAIN",
     "network": "ethereum",
     "receiver_email": null,
-    "receiver_wallet": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A"
+    "receiver_wallet": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a"
   },
   "gateway_payment": null,
   "prepared": {
     "brand_id": "lezgo_travel",
     "code": {
-      "code": "04aad245e2acaa3a7a5e805f",
+      "code": "407627507d3419a4be7ac8b9",
       "detail": {
         "brand_id": "lezgo_travel",
-        "generated_at": "2026-05-21T02:11:40.748Z",
+        "generated_at": "2026-05-22T10:41:18.873Z",
         "mode": "internal",
-        "request_id": "b69ef265-6e1c-4cb1-8f4b-4c02b5429053"
+        "request_id": "26e5c836-76a9-4a82-ac1b-07000d0ee336"
       },
       "provider": "internal",
       "transaction_id": null
     },
     "encryption": {
-      "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779329500776_7cb53fd7-db13-4a8b-84e5-92c4b5066e18.ciphertext",
-      "encrypted_payload": "21e1o6ItBaGYBXsA5CVlMQ06MDJim60SdzlZGV7YeZgnmELEVmukS20AiKQftk5oyeYCsEA5qUeDpA7F+rL4rvJWPuyFODa21hi/Ufka6gI25bRC+lF343XVjg8WxVyR9gpzmcuSkvfpiGu/F5WNgPAwxXomJsTigGTaZqwuyvbtj2BNahzv0+YVimU6f9NSy03sfzFu0z8p0FwqIcF2zxfgaafNmnt99lCZX15Gzwz35o+rI62E6+oJGaBa1tJA2hi6bcyec28kj1hizOMblpxj6X9U0zUKbKbam1mWPPYbF0U8XVIpFk3M6QKKbEptbzAVLrTbT9X/gWckcimUoA==",
+      "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
+      "encrypted_payload": "nTskaNirtitgoyRpb55x5boyZtbbxsBbqHVs1EO36ldvSxEtVYua1v9kMQEMZ8GHJsIzi12nFN31WKDZaF4WyLuzPSTjhRnjBd+pHIIlWeCaVnL/zy0DXVm8ByK86/TRhOepp1UOnQdAejUbN7uVnb/A4/0bIC2zoZOGy/xHi0wXZQX8KxhyTAiHAu/XrPn/XqIwuSt6hFup/2Rnvbqht2VSFo3Xnlkt4NfN2UZmgpTaN19D5xAqavwvvTxNyIY87brQqp2kBK2k3JdAphabXkVhIRA7brQOTAUCzY4RVgQQsGmHNd1xvr+uzPDM6kQrEMg0JAWI62mv0DfFYPMkLA==",
       "encryption_type": "aes-256-gcm",
-      "key_handle": "{\"ctHash\":\"27454072754803575330725029723557922028615730724003649842917465847585011622748\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xe0c302e63b6903332036f49293bcff50a793c29eca6b3eac7be0fca35d5157120b563c393891accda68a0570f4e3d20a7870fe1389fdd092a52f0b1be8bb47401b\"}",
+      "key_handle": "{\"ctHash\":\"113954984778315078015291762214390908105673487648525023596768083906939283335272\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xb8336a91a264fe98f036a04c7c71c26b73eb71fe8456f950a796cdeac344421a75a68b87937ff93dbc288c560e686687f3ad4573a7b1c2c077aa03c5097a74901c\"}",
       "provider": "fhenix"
     },
-    "giftcard_id": "giftc_lezgo-travel-giftcard-aswr",
+    "giftcard_id": "giftc_lezgo-travel-giftcard-zefh",
     "metadata": {
       "payload": {
         "attributes": [
@@ -55,7 +55,7 @@
           {
             "display_type": "number",
             "trait_type": "Credit Amount",
-            "value": 650
+            "value": 5
           },
           { "trait_type": "Network", "value": "ethereum" },
           { "trait_type": "Cluster", "value": "testnet" },
@@ -74,57 +74,57 @@
         "symbol": "GIFT"
       },
       "upload": {
-        "key": "giftcard_lezgo_travel_1779329509765.json",
-        "url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779329509765.json"
+        "key": "giftcard_lezgo_travel_1779446487970.json",
+        "url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json"
       }
     },
     "permit": {
-      "amount": 0.2145,
-      "amount_atomic": "0214499999999999996",
+      "amount": 0.00165,
+      "amount_atomic": "0001650000000000000",
       "brand_id": "lezgo_travel",
-      "checkout_id": "78737b03-90fb-4c4c-bb7c-1665c6f94611",
+      "checkout_id": "9b731785-0f32-4de8-8af4-a386459af4f2",
       "cluster": "testnet",
       "currency": "ETH",
       "execution": {
         "evm": {
-          "amount": "0214499999999999996",
-          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779329500776_7cb53fd7-db13-4a8b-84e5-92c4b5066e18.ciphertext",
-          "enc_key": "{\"ctHash\":\"27454072754803575330725029723557922028615730724003649842917465847585011622748\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xe0c302e63b6903332036f49293bcff50a793c29eca6b3eac7be0fca35d5157120b563c393891accda68a0570f4e3d20a7870fe1389fdd092a52f0b1be8bb47401b\"}",
-          "expiry": 1779331309,
-          "nonce": 1779329509801,
-          "signature": "4352acc58796dd3d2a8a7611ec32de1a9f9ddcd163df35f575a53fd72e52ad46",
-          "to": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A",
+          "amount": "0001650000000000000",
+          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
+          "enc_key": "{\"ctHash\":\"113954984778315078015291762214390908105673487648525023596768083906939283335272\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xb8336a91a264fe98f036a04c7c71c26b73eb71fe8456f950a796cdeac344421a75a68b87937ff93dbc288c560e686687f3ad4573a7b1c2c077aa03c5097a74901c\"}",
+          "expiry": 1779448288,
+          "nonce": 1779446488014,
+          "signature": "b383fe4296bc2b76bce36df201e4b2b663f641d4255d842e6c33d61d314e4a44",
+          "to": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
           "token_address": null,
           "token_type": "native",
-          "uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779329509765.json"
+          "uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json"
         },
         "solana": {
           "backend": 3,
-          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779329500776_7cb53fd7-db13-4a8b-84e5-92c4b5066e18.ciphertext",
-          "key_handle": "{\"ctHash\":\"27454072754803575330725029723557922028615730724003649842917465847585011622748\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xe0c302e63b6903332036f49293bcff50a793c29eca6b3eac7be0fca35d5157120b563c393891accda68a0570f4e3d20a7870fe1389fdd092a52f0b1be8bb47401b\"}",
-          "metadata_uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779329509765.json",
-          "recipient": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A",
-          "signature": "4352acc58796dd3d2a8a7611ec32de1a9f9ddcd163df35f575a53fd72e52ad46",
+          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
+          "key_handle": "{\"ctHash\":\"113954984778315078015291762214390908105673487648525023596768083906939283335272\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xb8336a91a264fe98f036a04c7c71c26b73eb71fe8456f950a796cdeac344421a75a68b87937ff93dbc288c560e686687f3ad4573a7b1c2c077aa03c5097a74901c\"}",
+          "metadata_uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json",
+          "recipient": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
+          "signature": "b383fe4296bc2b76bce36df201e4b2b663f641d4255d842e6c33d61d314e4a44",
           "token_address": null,
           "token_type": "native"
         }
       },
       "expires_at": null,
-      "metadata_url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779329509765.json",
+      "metadata_url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json",
       "network": "ethereum",
-      "permit_id": "533338a0-9915-4195-b6e3-7b58e6cf02d4",
-      "quote_id": "61924216-2d26-4bd5-b4c9-6cdb042f1128",
-      "receiver_wallet": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A",
+      "permit_id": "8f25edf9-331f-430b-8179-76463686a096",
+      "quote_id": "e67313d9-05c6-432e-ac36-54bee756f42a",
+      "receiver_wallet": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
       "scheme": "ed25519",
-      "signature": "4352acc58796dd3d2a8a7611ec32de1a9f9ddcd163df35f575a53fd72e52ad46",
+      "signature": "b383fe4296bc2b76bce36df201e4b2b663f641d4255d842e6c33d61d314e4a44",
       "token_address": null,
       "token_decimals": 18,
       "token_type": "native"
     },
     "provider": "internal",
-    "receiver_wallet": "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A",
+    "receiver_wallet": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
     "region": "GLOBAL",
-    "value_usd": 650
+    "value_usd": 5
   },
   "sponsored_mint": null
 }

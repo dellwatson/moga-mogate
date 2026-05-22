@@ -48,12 +48,20 @@ contract AuthorityMintGateway is Ownable {
         address paymentToken,
         uint256 amount
     );
+    
+    event OrderPaymentReceived(
+        string indexed orderId,
+        address indexed payer,
+        address paymentToken,
+        uint256 amount
+    );
 
     constructor() Ownable(msg.sender) {}
 
     /// @notice Allow or disallow a target collection to be minted into via this gateway.
     /// @param collection The collection contract address.
     /// @param allowed True to allow, false to disallow.
+    // purpose: to easily ban the collection
     function setCollectionAllowed(
         address collection,
         bool allowed
@@ -61,6 +69,51 @@ contract AuthorityMintGateway is Ownable {
         require(collection != address(0), "Invalid collection");
         allowedCollections[collection] = allowed;
         emit CollectionAllowed(collection, allowed);
+    }
+
+        /// @notice Withdraw collected funds to owner.
+    /// @param token Token address (address(0) for native ETH).
+    /// @param amount Amount to withdraw.
+    function withdraw(address token, uint256 amount) external onlyOwner {
+        if (token == address(0)) {
+            // Withdraw native ETH
+            require(address(this).balance >= amount, "Insufficient ETH balance");
+            payable(owner()).transfer(amount);
+        } else {
+            // Withdraw ERC20 tokens
+            IERC20 erc20 = IERC20(token);
+            require(erc20.balanceOf(address(this)) >= amount, "Insufficient token balance");
+            erc20.safeTransfer(owner(), amount);
+        }
+    }
+
+
+
+    /// @notice Mint into an arbitrary allowed collection with specific tokenId.
+    function mintWithTokenId(
+        address collection,
+        address to,
+        uint256 tokenId,
+        string calldata uri,
+        InEuint128 calldata encKey,
+        string calldata cipherRef
+
+        // this is a signature in permit version
+    ) external onlyOwner returns (uint256) {
+        require(collection != address(0), "Invalid collection");
+        // require(allowedCollections[collection], "Collection not allowed");
+        require(to != address(0), "Invalid recipient");
+
+        uint256 mintedId = ICollectionGateway(collection).mintWithTokenId(
+            to,
+            tokenId,
+            uri,
+            encKey,
+            cipherRef
+        );
+
+        emit Minted(collection, mintedId, to, uri);
+        return mintedId;
     }
 
 
@@ -76,7 +129,7 @@ contract AuthorityMintGateway is Ownable {
     /// @param cipherRef Reference to ciphertext payload.
     /// @param paymentToken Payment token (address(0) for native ETH).
     /// @param amount Payment amount required.
-    function unsafePurchase(
+    function unsafeCheckout(
         address collection,
         address to,
         string calldata uri,
@@ -84,9 +137,11 @@ contract AuthorityMintGateway is Ownable {
         string calldata cipherRef,
         address paymentToken,
         uint256 amount
+        // signature here for safe version
+
     ) external payable returns (uint256) {
         require(collection != address(0), "Invalid collection");
-        require(allowedCollections[collection], "Collection not allowed");
+        // require(allowedCollections[collection], "Collection not allowed");
         require(to != address(0), "Invalid recipient");
         require(amount > 0, "Amount must be greater than 0");
         
@@ -111,95 +166,50 @@ contract AuthorityMintGateway is Ownable {
         emit Purchased(collection, msg.sender, tokenId, paymentToken, amount);
         emit Minted(collection, tokenId, to, uri);
         
-        // Refund excess ETH if any
-        if (paymentToken == address(0) && msg.value > amount) {
-            payable(msg.sender).transfer(msg.value - amount);
-        }
-        
         return tokenId;
     }
 
-    /// @notice Withdraw collected funds to owner.
-    /// @param token Token address (address(0) for native ETH).
-    /// @param amount Amount to withdraw.
-    function withdraw(address token, uint256 amount) external onlyOwner {
-        if (token == address(0)) {
-            // Withdraw native ETH
-            require(address(this).balance >= amount, "Insufficient ETH balance");
-            payable(owner()).transfer(amount);
+
+
+
+    function unsafeOrder(
+        string calldata orderId,
+        address paymentToken,
+        uint256 amount
+        // signature here for safe version
+    ) external payable returns (uint256) {
+        require(bytes(orderId).length > 0, "Invalid order ID");
+        require(amount > 0, "Amount must be greater than 0");
+        
+        // Handle payment
+        if (paymentToken == address(0)) {
+            // Native ETH payment
+            require(msg.value >= amount, "Insufficient ETH payment");
         } else {
-            // Withdraw ERC20 tokens
-            IERC20 erc20 = IERC20(token);
-            require(erc20.balanceOf(address(this)) >= amount, "Insufficient token balance");
-            erc20.safeTransfer(owner(), amount);
+            // ERC20 token payment
+            require(msg.value == 0, "ETH not accepted for ERC20 payment");
+            IERC20 token = IERC20(paymentToken);
+            token.safeTransferFrom(msg.sender, address(this), amount);
         }
+        
+        emit OrderPaymentReceived(orderId, msg.sender, paymentToken, amount);
+        return amount;
     }
 
-    /// @notice Mint into an arbitrary allowed collection (owner-only, production-safe path).
-    /// @dev Caller is the Authority owner; the collection contract must treat
-    /// this gateway as a minter (e.g. via setMinter(gateway, true)).
-    /// Used for controlled mints rather than public faucets.
-    function mint(
-        address collection,
-        address to,
-        string calldata uri,
-        InEuint128 calldata encKey,
-        string calldata cipherRef
 
-        // this is a signature in permit version
-    ) external onlyOwner returns (uint256) {
-        require(collection != address(0), "Invalid collection");
-        require(allowedCollections[collection], "Collection not allowed");
-        require(to != address(0), "Invalid recipient");
-
-        uint256 mintedId = ICollectionGateway(collection).mint(
-            to,
-            uri,
-            encKey,
-            cipherRef
-        );
-
-        emit Minted(collection, mintedId, to, uri);
-        return mintedId;
-    }
-
-    /// @notice Mint into an arbitrary allowed collection with specific tokenId.
-    function mintWithTokenId(
-        address collection,
-        address to,
-        uint256 tokenId,
-        string calldata uri,
-        InEuint128 calldata encKey,
-        string calldata cipherRef
-
-        // this is a signature in permit version
-    ) external onlyOwner returns (uint256) {
-        require(collection != address(0), "Invalid collection");
-        require(allowedCollections[collection], "Collection not allowed");
-        require(to != address(0), "Invalid recipient");
-
-        uint256 mintedId = ICollectionGateway(collection).mintWithTokenId(
-            to,
-            tokenId,
-            uri,
-            encKey,
-            cipherRef
-        );
-
-        emit Minted(collection, mintedId, to, uri);
-        return mintedId;
-    }
 
     /// @notice Faucet-style mint helper that skips the allowed-collection check.
     /// @dev Intended only for testing or local faucet flows. Do NOT expose this
     /// in untrusted environments without additional access control.
     /// The target collection must still treat this gateway as a minter.
-    function mint_nft(
+    function unsafeMint(
+        string calldata orderId,
         address collection,
         address to,
         string calldata uri,
         InEuint128 calldata encKey,
         string calldata cipherRef
+        // signature here for safe version
     ) external  returns (uint256) {
         require(collection != address(0), "Invalid collection");
         // require(allowedCollections[collection], "Collection not allowed");
@@ -217,15 +227,16 @@ contract AuthorityMintGateway is Ownable {
     }
 
     /// @notice Batch mint multiple NFTs into an allowed collection.
-    function batchMint(
+    function unsafeBatchMint(
         address collection,
         address[] calldata to,
         string[] calldata uris,
         InEuint128[] calldata encKeys,
         string[] calldata cipherRefs
+        //signature here for safe version
     ) external onlyOwner returns (uint256[] memory tokenIds) {
         require(collection != address(0), "Invalid collection");
-        require(allowedCollections[collection], "Collection not allowed");
+        // require(allowedCollections[collection], "Collection not allowed");
         require(to.length == uris.length && uris.length == encKeys.length && encKeys.length == cipherRefs.length, "Array length mismatch");
         
         tokenIds = new uint256[](to.length);
@@ -239,4 +250,7 @@ contract AuthorityMintGateway is Ownable {
             );
         }
     }
+
+    /// @notice Allow contract to receive ETH
+    receive() external payable {}
 }
