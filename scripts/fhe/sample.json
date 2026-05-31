@@ -1,5 +1,5 @@
 {
-  "checkout_id": "9b731785-0f32-4de8-8af4-a386459af4f2",
+  "checkout_id": "20c954ad-e873-4dd4-b59b-beecd610e7df",
   "flow": "atomic_onchain",
   "flow_resolution": {
     "atomic_eligible": true,
@@ -11,120 +11,180 @@
   },
   "status": "prepared",
   "product_type": "giftcard",
-  "quote_id": "e67313d9-05c6-432e-ac36-54bee756f42a",
-  "total_amount": 0.00165,
+  "provider_capabilities": {
+    "code_reveal_visible": true,
+    "merchant_redemption_visible": false,
+    "note": "Reloadly can expose purchase/order and code-reveal data, but its public gift-card API does not expose downstream merchant redemption details such as store, merchant receipt, or final redeemer identity.",
+    "provider": "reloadly",
+    "purchase_transaction_visible": true,
+    "redemption_scope": "provider_purchase_only"
+  },
+  "quote_id": "d28ac4d4-4c27-48bb-96b1-5591d2edab91",
+  "total_amount": 0.0033,
   "currency": "ETH",
   "direct_payment": {
-    "amount": 0.00165,
+    "amount": 0.0033,
     "currency": "ETH",
     "mode": "DIRECT_ONCHAIN",
     "network": "ethereum",
-    "receiver_email": null,
-    "receiver_wallet": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a"
+    "receiver_email": "tester@example.com",
+    "receiver_wallet": "0x3C2606a73ab9f26b595BD3DD574bfC75f1A79b6f"
   },
   "gateway_payment": null,
   "prepared": {
-    "brand_id": "lezgo_travel",
+    "brand_id": "71",
     "code": {
-      "code": "407627507d3419a4be7ac8b9",
+      "card_number": "yAOeetest",
       "detail": {
-        "brand_id": "lezgo_travel",
-        "generated_at": "2026-05-22T10:41:18.873Z",
-        "mode": "internal",
-        "request_id": "26e5c836-76a9-4a82-ac1b-07000d0ee336"
+        "brand_id": "71",
+        "generated_at": "2026-05-24T18:27:52.036Z",
+        "mode": "reloadly",
+        "request_id": "3ff94a79-9b09-42da-8b2f-bb82af895daa"
       },
-      "provider": "internal",
-      "transaction_id": null
+      "pin_code": "83782test",
+      "provider": "reloadly",
+      "raw_order": {
+        "amount": 10.56,
+        "balanceInfo": {
+          "cost": 10.56,
+          "currencyCode": "USD",
+          "currencyName": "US Dollar",
+          "newBalance": 665.48058,
+          "oldBalance": 676.04058,
+          "updatedAt": "2026-05-24 22:22:28"
+        },
+        "currencyCode": "USD",
+        "customIdentifier": "mogate-reloadly-1779647272036-299",
+        "discount": 0.44,
+        "fee": 1,
+        "preOrdered": false,
+        "product": {
+          "brand": { "brandId": 71, "brandName": "Spotify" },
+          "countryCode": "US",
+          "currencyCode": "USD",
+          "productId": 11827,
+          "productName": "Spotify US",
+          "quantity": 1,
+          "totalPrice": 10,
+          "unitPrice": 10
+        },
+        "recipientEmail": null,
+        "recipientPhone": null,
+        "smsFee": 0,
+        "status": "SUCCESSFUL",
+        "totalFee": 1,
+        "transactionCreatedTime": "2026-05-24 18:27:52",
+        "transactionId": 69768
+      },
+      "raw_redeem_result": [
+        { "cardNumber": "yAOeetest", "pinCode": "83782test" }
+      ],
+      "transaction_id": 69768
     },
     "encryption": {
-      "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
-      "encrypted_payload": "nTskaNirtitgoyRpb55x5boyZtbbxsBbqHVs1EO36ldvSxEtVYua1v9kMQEMZ8GHJsIzi12nFN31WKDZaF4WyLuzPSTjhRnjBd+pHIIlWeCaVnL/zy0DXVm8ByK86/TRhOepp1UOnQdAejUbN7uVnb/A4/0bIC2zoZOGy/xHi0wXZQX8KxhyTAiHAu/XrPn/XqIwuSt6hFup/2Rnvbqht2VSFo3Xnlkt4NfN2UZmgpTaN19D5xAqavwvvTxNyIY87brQqp2kBK2k3JdAphabXkVhIRA7brQOTAUCzY4RVgQQsGmHNd1xvr+uzPDM6kQrEMg0JAWI62mv0DfFYPMkLA==",
+      "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779647273871_01f7e09d-f683-4334-9ca5-57f58e3d7ab8.ciphertext",
+      "encrypted_payload": "zEctGgTBPGkFpA91yJEdCTFfyW2BozJz4EvlJOcVvktwyKutn2cFUNNsSLNVdZboSMuyChizRjjY0Tt3Uz1KtOKKrkEsw+K7m6CiUQ/etRJXh6mSdkjKYxbvTkUmxNBLXTj5SnI0rD+svi3OX/4cqW6cu7rlWicAaBs7UIPR+J5QH9AirNGC6iyRY1X8LSipAp4EwmQmpfrgDMDqtWYwmIA2/sUqy6COUk4EAMw675lMSrz5uW6/Yc7s1Z+G13wI9Bb5shEVoH4HYF9rlbsz9A3IllcuZzuPmhyHHXo9Z1dT0fEw8VkBVT0t5Hf5NRgyLK0xFxGPNDDlRNBGXTxEJsL8N0+Zf1c2P/3jmeR8dIH6t1Qa5x/UD7kDA3rP/693JMT7LFHrqA1Y/zpRCtpP0BZIFHFdKMRr6rAy5zdrTmTI6kUdlOW9yi/kvPtVdOqQO28TQ1hLVNVWWnaYdCIHic5BEq0xWdvplCmH7thE9Vk6uySwKETjLN1qLq8FWbefW2vF43DmnHMhMiFpMnW7CYKmID8myNgUx46huzQLq41WaeH3ikasCtloDLi2p2gdOIKZHw5DR7i+uyLJo+BOryWAGpKfj24T+0Y5nKGVkfRQ5Ku/RJC+tbtaSGya/tl/psMx3h2mW8JuZg74ENjKxwB3rKJXZF6pBpUL6dyyPvZwtCWlbfPbCpqH6cdYfi/LBV6ajUiaOpNfxonRsjVqIQhn/wFb+cJWgJtciSWAdAOHn5Wc3SWsHBon62EJ1oUfjAT245kvFLM9lBy78tnOZ1PMIgagPXKtKajhVezkP1svBxWgi7FFI7pSUJuIYLdrbbcmUuwmsF7ZlotIFkCpWURQmjDhwyMgri/L7IwceGP7PSVtGxTMEmJMiOtJAMHzZSI+/aFHYP0rMhK7zINIhlItTe9GNhPFMr9GVvQA6Uyqt0gH0tqkLXl/aqGCN5lBA72MXxQ4g2LUm+wCO/EQOuRMLRh4Wfjn/pevgqCSBvsatz+ycSv5wqy1YumQB74oAoZvFp1MFgMKV+yt1hBBMuCJoX+g6stBNTjByr3k/lo01Iy1WlLzh0fYiWFl3qsJkYI+D14kmXQWtwoafN6BRo1uFNl62Tl+M0vycn2JuEq2KyR83burvvhl/vOuhb/qrhmVg7DUGrUL1p8LgIoF8824RRtNMiiLEVvJoANQmyvtcKFen+ankmnQmn9A+7houjOWrOMUtWszU8bC0xQHwOMNPj0wvRftSSlv5mLKad/HPnCTejwzrSYQm+gMskff3VLmTgGY3FO2xPbx9befHiuHKPnk3ko=",
       "encryption_type": "aes-256-gcm",
-      "key_handle": "{\"ctHash\":\"113954984778315078015291762214390908105673487648525023596768083906939283335272\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xb8336a91a264fe98f036a04c7c71c26b73eb71fe8456f950a796cdeac344421a75a68b87937ff93dbc288c560e686687f3ad4573a7b1c2c077aa03c5097a74901c\"}",
+      "key_handle": "{\"ctHash\":\"82217376449554648912704184825694514846552473419504034011275189139379857099400\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xe2f70b93f0f648f514e69a11973e50e6f498dcdd89a057585c79358de36e6b6c1259f5bf67b492f028a35351efd2cee311fbb710cc290df8c676fc87c90e517f1b\"}",
       "provider": "fhenix"
     },
-    "giftcard_id": "giftc_lezgo-travel-giftcard-zefh",
+    "giftcard_id": "giftc_spotify-giftcard-n4x5",
     "metadata": {
       "payload": {
         "attributes": [
           { "trait_type": "Product Type", "value": "Giftcard" },
-          { "trait_type": "Brand ID", "value": "lezgo_travel" },
-          { "trait_type": "Brand Name", "value": "Lezgo Travel" },
-          { "trait_type": "Category", "value": "travel" },
+          { "trait_type": "Brand ID", "value": "71" },
+          { "trait_type": "Brand Name", "value": "Spotify" },
+          { "trait_type": "Category", "value": "Entertainment" },
           { "trait_type": "Currency", "value": "USD" },
-          {
-            "display_type": "number",
-            "trait_type": "Credit Amount",
-            "value": 5
-          },
           { "trait_type": "Network", "value": "ethereum" },
           { "trait_type": "Cluster", "value": "testnet" },
-          { "trait_type": "Region", "value": "GLOBAL" }
+          { "trait_type": "Region", "value": "US" },
+          { "trait_type": "Encryption Type", "value": "fhenix" },
+          { "trait_type": "Encryption Site URL", "value": "https://fhenix.io" },
+          { "trait_type": "Giftcard Provider", "value": "reloadly" },
+          { "trait_type": "Purchase Transaction Visible", "value": "yes" },
+          { "trait_type": "Code Reveal Visible", "value": "yes" },
+          { "trait_type": "Merchant Redemption Visible", "value": "no" },
+          {
+            "trait_type": "Redemption Scope",
+            "value": "provider_purchase_only"
+          },
+          {
+            "trait_type": "Redemption Visibility Note",
+            "value": "Reloadly can expose purchase/order and code-reveal data, but its public gift-card API does not expose downstream merchant redemption details such as store, merchant receipt, or final redeemer identity."
+          }
         ],
-        "description": "Lezgo Travel giftcard",
-        "external_url": "https://www.lezgo.travel",
-        "image": "https://www.lezgo.travel/logo.svg",
-        "name": "Lezgo Travel Giftcard",
+        "description": "Spotify giftcard",
+        "external_url": null,
+        "image": "https://cdn.reloadly.com/giftcards/fb55ff74-1542-491a-a271-0730e5069249.png",
+        "name": "Spotify Giftcard",
         "properties": {
-          "brand_id": "lezgo_travel",
-          "category": "travel",
+          "brand_id": "71",
+          "category": "Entertainment",
+          "code_reveal_visible": true,
+          "giftcard_provider": "reloadly",
+          "merchant_redemption_visible": false,
           "metadata_version": "nft-giftcard-v1",
-          "product_type": "giftcard"
+          "product_type": "giftcard",
+          "purchase_transaction_visible": true,
+          "redemption_note": "Reloadly can expose purchase/order and code-reveal data, but its public gift-card API does not expose downstream merchant redemption details such as store, merchant receipt, or final redeemer identity.",
+          "redemption_scope": "provider_purchase_only"
         },
         "symbol": "GIFT"
       },
       "upload": {
-        "key": "giftcard_lezgo_travel_1779446487970.json",
-        "url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json"
+        "key": "giftcard_71_1779647271694.json",
+        "url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_71_1779647271694.json"
       }
     },
     "permit": {
-      "amount": 0.00165,
-      "amount_atomic": "0001650000000000000",
-      "brand_id": "lezgo_travel",
-      "checkout_id": "9b731785-0f32-4de8-8af4-a386459af4f2",
+      "amount": 0.0033,
+      "amount_atomic": "0003300000000000000",
+      "brand_id": "71",
+      "checkout_id": "20c954ad-e873-4dd4-b59b-beecd610e7df",
       "cluster": "testnet",
       "currency": "ETH",
       "execution": {
         "evm": {
-          "amount": "0001650000000000000",
-          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
-          "enc_key": "{\"ctHash\":\"113954984778315078015291762214390908105673487648525023596768083906939283335272\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xb8336a91a264fe98f036a04c7c71c26b73eb71fe8456f950a796cdeac344421a75a68b87937ff93dbc288c560e686687f3ad4573a7b1c2c077aa03c5097a74901c\"}",
-          "expiry": 1779448288,
-          "nonce": 1779446488014,
-          "signature": "b383fe4296bc2b76bce36df201e4b2b663f641d4255d842e6c33d61d314e4a44",
-          "to": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
+          "amount": "0003300000000000000",
+          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779647273871_01f7e09d-f683-4334-9ca5-57f58e3d7ab8.ciphertext",
+          "enc_key": "{\"ctHash\":\"82217376449554648912704184825694514846552473419504034011275189139379857099400\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xe2f70b93f0f648f514e69a11973e50e6f498dcdd89a057585c79358de36e6b6c1259f5bf67b492f028a35351efd2cee311fbb710cc290df8c676fc87c90e517f1b\"}",
+          "expiry": 1779649083,
+          "nonce": 1779647283124,
+          "signature": "73297e3dc52aef76a717e1eb7225dfa145a9d877136ae59fb0cc923f49b5e077",
+          "to": "0x3C2606a73ab9f26b595BD3DD574bfC75f1A79b6f",
           "token_address": null,
           "token_type": "native",
-          "uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json"
+          "uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_71_1779647271694.json"
         },
         "solana": {
           "backend": 3,
-          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
-          "key_handle": "{\"ctHash\":\"113954984778315078015291762214390908105673487648525023596768083906939283335272\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xb8336a91a264fe98f036a04c7c71c26b73eb71fe8456f950a796cdeac344421a75a68b87937ff93dbc288c560e686687f3ad4573a7b1c2c077aa03c5097a74901c\"}",
-          "metadata_uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json",
-          "recipient": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
-          "signature": "b383fe4296bc2b76bce36df201e4b2b663f641d4255d842e6c33d61d314e4a44",
+          "cipher_ref": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779647273871_01f7e09d-f683-4334-9ca5-57f58e3d7ab8.ciphertext",
+          "key_handle": "{\"ctHash\":\"82217376449554648912704184825694514846552473419504034011275189139379857099400\",\"securityZone\":0,\"utype\":6,\"signature\":\"0xe2f70b93f0f648f514e69a11973e50e6f498dcdd89a057585c79358de36e6b6c1259f5bf67b492f028a35351efd2cee311fbb710cc290df8c676fc87c90e517f1b\"}",
+          "metadata_uri": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_71_1779647271694.json",
+          "recipient": "0x3C2606a73ab9f26b595BD3DD574bfC75f1A79b6f",
+          "signature": "73297e3dc52aef76a717e1eb7225dfa145a9d877136ae59fb0cc923f49b5e077",
           "token_address": null,
           "token_type": "native"
         }
       },
       "expires_at": null,
-      "metadata_url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_lezgo_travel_1779446487970.json",
+      "metadata_url": "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-metadata/giftcard_71_1779647271694.json",
       "network": "ethereum",
-      "permit_id": "8f25edf9-331f-430b-8179-76463686a096",
-      "quote_id": "e67313d9-05c6-432e-ac36-54bee756f42a",
-      "receiver_wallet": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
+      "permit_id": "df8c9a05-9918-4329-981a-5efdd7df9a53",
+      "quote_id": "d28ac4d4-4c27-48bb-96b1-5591d2edab91",
+      "receiver_wallet": "0x3C2606a73ab9f26b595BD3DD574bfC75f1A79b6f",
       "scheme": "ed25519",
-      "signature": "b383fe4296bc2b76bce36df201e4b2b663f641d4255d842e6c33d61d314e4a44",
+      "signature": "73297e3dc52aef76a717e1eb7225dfa145a9d877136ae59fb0cc923f49b5e077",
       "token_address": null,
       "token_decimals": 18,
       "token_type": "native"
     },
-    "provider": "internal",
-    "receiver_wallet": "0xa31a54e4c258b1be8ce887a2724906bfce88cc6a",
-    "region": "GLOBAL",
-    "value_usd": 5
+    "provider": "reloadly",
+    "receiver_wallet": "0x3C2606a73ab9f26b595BD3DD574bfC75f1A79b6f",
+    "region": "US",
+    "value_usd": 10
   },
   "sponsored_mint": null
 }

@@ -43,10 +43,17 @@ export const fheNftConfig = {
     symbol: process.env.ERC721MG_SYMBOL || "MGC",
   },
   erc721mg: {
+    //sepolia
     collectionAddress: "0xFBf8608D465D4Aa88b7fDb4Bb76c84cb7037AE55", // old not used anymore overall
     latestCollectionAddress: "0x4cf031C2ecf8ee6b08bF7ab16a49636A0FADBF9D",
-    gatewayAddress: "0x0E6aE325c227355219F31D37039C1bf0BfF0d8a5",
-    FHE_gatewayAddress: "0x0E6aE325c227355219F31D37039C1bf0BfF0d8a5",
+    // gatewayAddress: "0x0E6aE325c227355219F31D37039C1bf0BfF0d8a5", // old gateway
+    gatewayAddress: "0x98f7EBAedE6248a98a7B9107307EA2d56b143759", // updated FHERC20 gateway
+    FHE_gatewayAddress: "0x98f7EBAedE6248a98a7B9107307EA2d56b143759",
+    fherc20: {
+      cUSDC: "0x6bb9EA14E43FfA04F53128723B91f933C86d5e00",
+      decimals: 6,
+      network: "sepolia",
+    },
     mint: {
       // to: "0x72776B37a55d502E81C29103b89e84EcC81BD63d",
       to: "0xA31A54e4C258B1BE8cE887a2724906BfCe88Cc6A",
@@ -54,11 +61,13 @@ export const fheNftConfig = {
       plaintextGiftcode: "other-acc-new-est-test-new-giftcode-uuid-123",
     },
     decrypt: {
-    tokenId: 28,
-    cipherRef: "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779446478909_b9ca8f8d-cd3f-440f-a462-ca73a7cc2274.ciphertext",
-    giftcode: "other-acc-new-est-test-new-giftcode-uuid-123", // For testing only
-    aesKeyHex: "0x5fa2bec145327b5398fb9a4079d55c65" // For testing only
-  },
+      tokenId: 36,
+      cipherRef:
+        "http://127.0.0.1:9800/d3kd1qvkoudjtibpmo20/giftcard-ciphertext/giftcode_1779647273871_01f7e09d-f683-4334-9ca5-57f58e3d7ab8.ciphertext",
+      aesKeyHex: "0x80a3248f7aafe584149e3dcff7e8d645", // For testing only
+      ciphertextHex:
+        "1ae777ddb15f0301047c70b4e1ad92fab1d15a6d150485efdef608953fa7a1d4891548bb15cdd0834b67a27df5173381c4b4b8e12a764130c20564f9d3d3d8e849b0aa4803e59407", // Encrypted giftcode as hex
+    },
   },
   vault: {
     address: process.env.VAULT_ADDRESS,
