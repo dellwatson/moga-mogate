@@ -4,6 +4,11 @@ This repo contains **Fhenix coFHE** powered contracts focused on privacy-preserv
 
 - **ERC721MG Giftcodes:** ERC721-compatible NFTs that carry FHE-encrypted voucher codes which only become readable by the holder after redeeming to a soulbound token (SBT).
 - **Privacy Vault (ERC721):** NFTs sit in a public vault address, while the _real owner_ is tracked as an **encrypted address**.
+- **Invisible Blockahin:** This is aimed at non-crypto users who will receive NFT gift cards via email,
+  log in to the dApp using email or Web2 providers, use encrypted email, and
+  redeem on the merchant platform using a programmable transfer code (users can
+  simply generate a programmable authorization that can later trigger a transfer,
+  redemption, or payment).
 
 ## FHE-Powered Systems Overview
 
@@ -52,6 +57,7 @@ At a high level:
    - Encrypt it:
      - Either AES+FHE (hybrid mode), or
      - Pure-FHE (giftcode directly encrypted).
+   - Caller must have `minters[caller] == true` (`onlyMinter` gate).
    - Call `mintGiftcode(...)` with:
      - `uri` – public metadata URL.
      - `encKey` – FHE ciphertext (`InEuint128`).
@@ -81,6 +87,9 @@ At a high level:
        - Gets the giftcode directly (pure-FHE mode).
 
 Only addresses that have been allowed by `FHE.allow` can successfully decrypt.
+
+`onlyMinter` controls **who may issue new giftcode NFTs**.  
+It does **not** control who can decrypt. Decrypt rights are granted later in `redeemToSoulbound` to the address that redeems (the current holder at that time).
 
 ---
 
